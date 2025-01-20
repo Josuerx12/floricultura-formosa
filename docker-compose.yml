@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "12345678"
+      POSTGRES_DB: "floricultura-formosa"
+    ports:
+      - "5432:5432"
+    volumes:
+      - floricultura_pgsql_data:/var/lib/postgresql/data
+    networks:
+      - floricultora_formosa_network
+volumes:
+  floricultura_pgsql_data:
+    driver: "local"
+networks:
+  floricultora_formosa_network:
