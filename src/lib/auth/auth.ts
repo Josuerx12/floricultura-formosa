@@ -26,20 +26,58 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         });
 
         if (!user) {
-          throw new InvalidLoginError();
+          throw new InvalidLoginError("Nenhum usuário encontrado!");
         }
 
-        const userVerified = compare(
+        if (!user.password) {
+          throw new InvalidLoginError(
+            "Nenhuma senha cadastrada para o usuário até o momento, tente recuperar sua senha para fazer login!"
+          );
+        }
+
+        const userVerified = await compare(
           password as string,
           user.password as string
         );
 
         if (!userVerified) {
-          throw new InvalidLoginError();
+          throw new InvalidLoginError("Credenciais invalidas!");
         }
 
         return user;
       },
     }),
   ],
+  callbacks: {
+    async session({ token, session }) {
+      if (token) {
+        (session.user.id = token.id),
+          (session.user.email = token.email as string),
+          (session.user.image = token.picture),
+          (session.user.phone = token.phone),
+          (session.user.role = token.role);
+      }
+      return session;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id as string;
+      }
+
+      const dbUser = await prisma.user.findUnique({
+        where: { email: token.email as string },
+      });
+
+      if (dbUser) {
+        token.picture = dbUser.image;
+        token.id = dbUser.id;
+        token.name = dbUser.name;
+        token.email = dbUser.email;
+        token.phone = dbUser.phone;
+        token.role = dbUser.role;
+      }
+
+      return token;
+    },
+  },
 });

@@ -45,5 +45,5 @@ export async function signUp(formData: FormData) {
     text: `Seja muito bem vindo ${credentials.name} à floricultura formosa a sua floricultura de confiaça!`,
   });
 
-  return NextResponse.redirect("/account-created");
+  NextResponse.redirect("/account-created");
 }
