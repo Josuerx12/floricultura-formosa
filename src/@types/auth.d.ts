@@ -9,6 +9,11 @@ declare module "next-auth" {
       role: UserRoles | null;
     };
   }
+
+  interface User {
+    phone?: string | null;
+    role: UserRoles | null;
+  }
 }
 
 declare module "next-auth/jwt" {

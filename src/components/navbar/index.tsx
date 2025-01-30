@@ -1,7 +1,9 @@
 import { auth } from "@/lib/auth/auth";
 import Logo from "../logo";
-import Image from "next/image";
+
 import Link from "next/link";
+import UserDropdown from "../user-dropdown";
+import { ShoppingCart } from "lucide-react";
 
 const NavbarDesktop = async () => {
   const session = await auth();
@@ -21,6 +23,7 @@ const NavbarDesktop = async () => {
           <li className="text-primary-foreground relative before:absolute before:w-0 before:h-[2px] before:left-0 before:-bottom-1 hover:before:w-10/12 before:bg-primary-foreground  before:duration-200 cursor-pointer">
             Categorias
           </li>
+
           <li className="text-primary-foreground relative before:absolute before:w-0 before:h-[2px] before:left-0 before:-bottom-1 hover:before:w-10/12 before:bg-primary-foreground  before:duration-200 cursor-pointer">
             Ofertas
           </li>
@@ -31,18 +34,11 @@ const NavbarDesktop = async () => {
       </nav>
 
       {user ? (
-        <div className="flex items-center gap-2">
-          <Image
-            src={user.image ? user.image : "/no-profile.svg"}
-            width={32}
-            height={32}
-            quality={100}
-            alt="profile pic"
-            className="rounded-full"
-          />
-          <p className="max-w-20 text-sm line-clamp-1 text-primary-foreground font-semibold">
-            {user.name}
-          </p>
+        <div className="flex items-center gap-4">
+          <div className="bg-primary-foreground p-2 rounded-full">
+            <ShoppingCart size={16} className="text-primary" />
+          </div>
+          <UserDropdown user={user} />
         </div>
       ) : (
         <div className="flex gap-4 text-sm items-center">
