@@ -1,0 +1,93 @@
+"use client";
+
+import * as React from "react";
+import { ChartLine, Flower, HandCoins, Users } from "lucide-react";
+
+import { NavMain } from "@/components/nav-main";
+import { Sidebar, SidebarContent, SidebarRail } from "@/components/ui/sidebar";
+
+// This is sample data.
+const data = {
+  navMain: [
+    {
+      title: "Produtos e Promoções",
+      url: "#",
+      icon: Flower,
+      isActive: true,
+      items: [
+        {
+          title: "Categorias",
+          url: "/dashboard/categorias",
+        },
+        {
+          title: "Sub-categorias",
+          url: "/dashboard/sub-categorias",
+        },
+        {
+          title: "Produtos",
+          url: "/dashboard/produtos",
+        },
+        {
+          title: "Promoções / Ofertas",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Vendas",
+      url: "#",
+      icon: HandCoins,
+      items: [
+        {
+          title: "Em aprovação",
+          url: "#",
+        },
+        {
+          title: "Em andamento",
+          url: "#",
+        },
+        {
+          title: "Finalizadas / Entregues",
+          url: "#",
+        },
+        {
+          title: "Canceladas",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Usuários",
+      url: "#",
+      icon: Users,
+      items: [
+        {
+          title: "Introduction",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Métricas",
+      url: "#",
+      icon: ChartLine,
+      items: [
+        {
+          title: "Gerais",
+          url: "#",
+        },
+      ],
+    },
+  ],
+};
+
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  return (
+    <Sidebar collapsible="icon" className="absolute" {...props}>
+      <SidebarContent>
+        <NavMain items={data.navMain} />
+      </SidebarContent>
+      <SidebarRail />
+    </Sidebar>
+  );
+}

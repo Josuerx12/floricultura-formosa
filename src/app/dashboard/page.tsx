@@ -1,8 +1,7 @@
 import { auth } from "@/lib/auth/auth";
 import { redirect } from "next/navigation";
-import React from "react";
 
-const page = async () => {
+const DashboardPage = async () => {
   const session = await auth();
   const user = session?.user;
 
@@ -10,7 +9,7 @@ const page = async () => {
     redirect("/");
   }
 
-  return <div>page</div>;
+  return <div>Olá mundo</div>;
 };
 
-export default page;
+export default DashboardPage;

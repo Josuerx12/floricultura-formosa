@@ -90,3 +90,54 @@ model Authenticator {
 
   @@id([userId, credentialID])
 }
+
+model category {
+  id            Int           @id @default(autoincrement())
+  name          String
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+  subcategories subcategory[]
+}
+
+model subcategory {
+  id          Int       @id @default(autoincrement())
+  category_id Int
+  name        String
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  category    category  @relation(fields: [category_id], references: [id])
+  products    product[]
+}
+
+model product {
+  id             Int              @id @default(autoincrement())
+  subcategory_id Int
+  name           String
+  description    String
+  price          Float
+  stock_quantity Int
+  subcategory    subcategory      @relation(fields: [subcategory_id], references: [id])
+  created_at     DateTime         @default(now())
+  updated_at     DateTime         @updatedAt
+  product_images product_images[]
+  promotions     promotions[]
+}
+
+model product_images {
+  id         Int      @id @default(autoincrement())
+  product_id Int
+  url        String
+  created_at DateTime @default(now())
+  product    product  @relation(fields: [product_id], references: [id])
+}
+
+model promotions {
+  id                  Int      @id @default(autoincrement())
+  product_id          Int
+  discount_percentage Decimal
+  start_date          DateTime
+  end_date            DateTime
+  product             product  @relation(fields: [product_id], references: [id])
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+}
