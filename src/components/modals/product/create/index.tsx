@@ -43,6 +43,9 @@ const CreateProductModal = ({
   useEffect(() => {
     if (state?.success) {
       setIsOpen(false);
+      reset();
+      setPhotos([]);
+      setPreviewImages([]);
     }
   }, [state?.success]);
 
