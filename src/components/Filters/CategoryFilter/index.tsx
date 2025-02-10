@@ -4,7 +4,7 @@ import { Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { ChangeEvent, useEffect, useState } from "react";
 
-const CategoryFilter = () => {
+const SearchFilter = ({ placeholder }: { placeholder: string }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [inputValue, setInputValue] = useState(
@@ -27,7 +27,7 @@ const CategoryFilter = () => {
         <input
           value={inputValue ?? ""}
           onChange={handleInputChange}
-          placeholder="Buscar por nome da categoria"
+          placeholder={`Buscar por nome da ${placeholder}`}
           className="bg-transparent flex-grow placeholder:text-neutral-700 outline-none"
           type="text"
         />
@@ -36,4 +36,4 @@ const CategoryFilter = () => {
   );
 };
 
-export default CategoryFilter;
+export default SearchFilter;

@@ -8,36 +8,38 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Info, Settings2, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import DeleteCategoriaModal from "@/components/modals/category/delete";
-import { Category } from "@/lib/actions/category";
-import DetailCategoriaModal from "../modals/category/detail";
+import { Info, PackagePlus, Settings2, Trash2 } from "lucide-react";
+import { Product } from "@/lib/actions/products";
+import DeleteProductModal from "@/components/modals/product/delete";
 
-const ManageCategoryDropdown = ({ category }: { category: Category }) => {
+const ManageProductDropdown = ({ product }: { product: Product }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeletailing, setIsDeletailing] = useState(false);
   return (
     <>
-      <DeleteCategoriaModal
+      <DeleteProductModal
         isOpen={isDeleting}
         handleClose={() => setIsDeleting((prev) => !prev)}
-        category={category}
+        product={product}
       />
-      <DetailCategoriaModal
+      {/* <DetailCategoriaModal
         isOpen={isDeletailing}
         handleClose={() => setIsDeletailing((prev) => !prev)}
         category={category}
-      />
+      /> */}
       <DropdownMenu>
-        <DropdownMenuTrigger>
-          <Button variant={"secondary"}>
-            Gerenciar <Settings2 />
-          </Button>
+        <DropdownMenuTrigger className="w-fit items-center gap-2 inline-flex  flex-grow-0 bg-secondary text-primary-foreground p-2 rounded font-medium text-sm drop-shadow">
+          Gerenciar <Settings2 size={16} />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuLabel>Gerenciar Categoria</DropdownMenuLabel>
+          <DropdownMenuLabel>Gerenciar Produto</DropdownMenuLabel>
           <DropdownMenuSeparator />
+          <DropdownMenuItem
+            className="flex items-center justify-between cursor-pointer"
+            onClick={() => setIsDeletailing((prev) => !prev)}
+          >
+            Adicionar ao estoque <PackagePlus />
+          </DropdownMenuItem>
           <DropdownMenuItem
             className="flex items-center justify-between cursor-pointer"
             onClick={() => setIsDeletailing((prev) => !prev)}
@@ -56,4 +58,4 @@ const ManageCategoryDropdown = ({ category }: { category: Category }) => {
   );
 };
 
-export default ManageCategoryDropdown;
+export default ManageProductDropdown;

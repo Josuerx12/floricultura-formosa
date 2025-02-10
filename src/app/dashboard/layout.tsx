@@ -7,16 +7,26 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import DashboardBreadcrumb from "@/components/DashboardBreadcrumb";
+import { Suspense } from "react";
+import { Loader2 } from "lucide-react";
+import { auth } from "@/lib/auth/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Floricultura Formosa - Dashboard",
 };
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+  const user = session?.user;
+
+  if (user?.role !== "ADMIN" && user?.role !== "SELLER") {
+    redirect("/");
+  }
   return (
     <div className="relative">
       <SidebarProvider>
@@ -29,7 +39,17 @@ export default function DashboardLayout({
               <DashboardBreadcrumb />
             </div>
           </header>
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
+          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+            <Suspense
+              fallback={
+                <div className="w-full h-screen flex justify-center items-center text-3xl bg-primary text-primary-foreground">
+                  Carregando dados <Loader2 className="animate-spin" />
+                </div>
+              }
+            >
+              {children}
+            </Suspense>
+          </div>
         </SidebarInset>
       </SidebarProvider>
     </div>

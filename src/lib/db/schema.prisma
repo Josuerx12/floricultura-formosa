@@ -127,6 +127,8 @@ model product_images {
   id         Int      @id @default(autoincrement())
   product_id Int
   url        String
+  file_key   String
+  bucket     String
   created_at DateTime @default(now())
   product    product  @relation(fields: [product_id], references: [id])
 }

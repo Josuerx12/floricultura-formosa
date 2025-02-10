@@ -7,13 +7,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { CreateCategoryAction } from "@/lib/actions/category";
-import { ListPlus, Loader, Plus } from "lucide-react";
+import { CreateSubCategoryAction } from "@/lib/actions/sub-category";
+import { ListPlus, Loader, Plus, ScrollText } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 
-const CreateCategoriaModal = () => {
+const CreateSubCategoryModal = ({
+  categories,
+}: {
+  categories: { id: number; name: string }[];
+}) => {
   const [state, formAction, isPending] = useActionState(
-    CreateCategoryAction,
+    CreateSubCategoryAction,
     null
   );
   const [isOpen, setIsOpen] = useState(false);
@@ -31,15 +35,15 @@ const CreateCategoriaModal = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Adicionar nova categoria!</DialogTitle>
+          <DialogTitle>Adicionar nova sub categoria!</DialogTitle>
         </DialogHeader>
 
         <form
           action={formAction}
           className="w-full flex flex-col gap-4 mx-auto"
         >
-          <h4 className="text-start text-sm my-6 font-semibold">
-            Preencha o campo abaixo para criar uma nova categoria!
+          <h4 className="text-start text-sm font-semibold">
+            Preencha o campo abaixo para criar uma nova sub categoria!
           </h4>
           <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
             <ListPlus className="text-primary-foreground" size={24} />
@@ -47,16 +51,36 @@ const CreateCategoriaModal = () => {
               required
               className="w-full bg-transparent outline-none placeholder:text-neutral-700"
               type="text"
-              name="category"
-              placeholder="Insira o nome da nova categoria!"
+              name="name"
+              placeholder="Insira o nome da nova sub categoria!"
             />
           </label>
 
-          {state?.errors?.category && (
-            <p className="text-red-600">{state?.errors?.category}</p>
+          {state?.errors?.name && (
+            <p className="text-red-600">{state?.errors?.name}</p>
           )}
-
-          <Button type="submit" className="mt-4">
+          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
+            <ScrollText className="text-primary-foreground" size={24} />
+            <select
+              name="category_id"
+              className="flex-grow bg-transparent outline-none text-neutral-700"
+              required
+              defaultValue={""}
+            >
+              <option disabled value={""}>
+                Selecione uma categoria
+              </option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          {state?.errors?.category_id && (
+            <p className="text-red-600">{state?.errors?.category_id}</p>
+          )}
+          <Button type="submit">
             <div className="flex items-center justify-center gap-2">
               {isPending ? (
                 <>
@@ -75,4 +99,4 @@ const CreateCategoriaModal = () => {
   );
 };
 
-export default CreateCategoriaModal;
+export default CreateSubCategoryModal;

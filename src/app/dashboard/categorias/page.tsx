@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/db/prisma";
-import React from "react";
+import React, { Suspense } from "react";
 import {
   Table,
   TableBody,
@@ -10,8 +10,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import CreateCategoriaModal from "@/components/modals/category/create";
-import ManageCategoryDropdown from "@/components/MenageCategoryDropdown";
-import CategoryFilter from "@/components/Filters/CategoryFilter";
+import SearchFilter from "@/components/Filters/CategoryFilter";
+import ManageCategoryDropdown from "@/components/dropdowns/MenageCategoryDropdown";
 
 const CategoriasPage = async ({ searchParams }: { searchParams: any }) => {
   const { search } = await searchParams;
@@ -36,7 +36,7 @@ const CategoriasPage = async ({ searchParams }: { searchParams: any }) => {
   return (
     <div>
       <div className="flex mb-4 justify-end items-center gap-4">
-        <CategoryFilter />
+        <SearchFilter placeholder="categorias" />
         <CreateCategoriaModal />
       </div>
       <Table>
