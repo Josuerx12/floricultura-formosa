@@ -63,7 +63,6 @@ export default async function Home() {
         <h2 className="text-2xl font-bold mb-4">🔥 Produtos em Promoção</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {promotionsProducts.map((product) => {
-            console.log(product);
             return <ProductCard key={product.id} product={product} />;
           })}
         </div>
