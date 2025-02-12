@@ -23,7 +23,7 @@ import {
   PenBox,
   Plus,
 } from "lucide-react";
-import { useActionState, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const DetailSubCategoriaModal = ({
   subCategory,

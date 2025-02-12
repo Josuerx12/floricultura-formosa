@@ -8,22 +8,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useResetableActionState } from "@/hooks/use-resetable-action-state";
-import {
-  Category,
-  CreateCategoryAction,
-  EditCategoryAction,
-} from "@/lib/actions/category";
 import { SubCategory, EditSubCategoryAction } from "@/lib/actions/sub-category";
-import {
-  Ban,
-  Calendar,
-  ListPlus,
-  Loader,
-  Pen,
-  PenBox,
-  Plus,
-} from "lucide-react";
-import { useActionState, useEffect, useState } from "react";
+import { Ban, Calendar, ListPlus, Loader, Pen, PenBox } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const DetailSubCategoriaModal = ({
   subCategory,

@@ -193,8 +193,7 @@ export async function EditProductAction(
     const images = formData.getAll("photos") as File[];
 
     if (images.length > 0) {
-      for (let image of images) {
-        console.log(image);
+      for (const image of images) {
         const fileData = await uploadFileAWS(image, image.type);
         await prisma.product_images.create({
           data: {

@@ -200,7 +200,7 @@ const DetailProductModal = ({
               className="w-full bg-transparent outline-none  placeholder:text-neutral-700"
               type="text"
               disabled
-              defaultValue={product.created_at.toLocaleString("pt-BR")}
+              defaultValue={product?.created_at?.toLocaleString("pt-BR")}
             />
           </label>
 
