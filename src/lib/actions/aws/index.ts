@@ -8,10 +8,10 @@ import {
 import sharp from "sharp";
 
 const s3 = new S3Client({
-  region: process.env.AWS_REGION as string,
+  region: process.env.FLORICULTURA_AWS_REGION as string,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY as string,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
+    accessKeyId: process.env.FLORICULTURA_AWS_ACCESS_KEY as string,
+    secretAccessKey: process.env.FLORICULTURA_AWS_SECRET_ACCESS_KEY as string,
   },
 });
 
@@ -21,8 +21,8 @@ export async function uploadFileAWS(file: File, type?: string) {
   const fileKey = `${fileNameWithoutExt}.webp`;
   const bucket =
     type === "avatar"
-      ? (process.env.AWS_AVATAR_BUCKET_NAME as string)
-      : (process.env.AWS_PRODUCT_IMAGES_BUCKET_NAME as string);
+      ? (process.env.FLORICULTURA_AWS_AVATAR_BUCKET_NAME as string)
+      : (process.env.FLORICULTURA_AWS_PRODUCT_IMAGES_BUCKET_NAME as string);
 
   const fileBuffer = await file.arrayBuffer();
 
