@@ -1,8 +1,8 @@
 import { auth } from "@/lib/auth/auth";
-import Logo from "../logo";
+import Logo from "../../logo";
 
 import Link from "next/link";
-import UserDropdown from "../user-dropdown";
+import UserDropdown from "../../user-dropdown";
 import { ShoppingCart } from "lucide-react";
 
 const NavbarDesktop = async () => {
