@@ -17,7 +17,8 @@ const s3 = new S3Client({
 
 export async function uploadFileAWS(file: File, type?: string) {
   const fileNameWithoutExt =
-    new Date() + file.name.replace(/\.[^/.]+$/, "").replace(/\s+/g, "-");
+    new Date().getTime() +
+    file.name.replace(/\.[^/.]+$/, "").replace(/\s+/g, "-");
   const fileKey = `${fileNameWithoutExt}.webp`;
   const bucket =
     type === "avatar"
