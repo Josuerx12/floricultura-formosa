@@ -11,6 +11,7 @@ class InvalidLoginError extends CredentialsSignin {
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     Google,
     Credentials({
@@ -80,7 +81,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return token;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
   },
