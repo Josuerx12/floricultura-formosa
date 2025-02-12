@@ -5,6 +5,7 @@ import { z } from "zod";
 import { deleteFileAWS, uploadFileAWS } from "../aws";
 import { SubCategory } from "../sub-category";
 import { ProductSchema } from "@/lib/schemas-validator/product.schema";
+import { Promotion } from "../promotions";
 
 export type ProductErrorsT = {
   name?: string[];
@@ -23,14 +24,15 @@ export type ProductStateActionT = {
 export type Product = {
   id: number;
   name: string;
-  subcategory_id: number;
+  subcategory_id?: number;
   stock_quantity: number;
   price: number;
   description: string;
-  product_image?: any[];
+  product_images?: any[];
+  promotions?: Promotion[];
   subcategory?: SubCategory;
-  created_at: Date;
-  updated_at: Date;
+  created_at?: Date;
+  updated_at?: Date;
 };
 
 export async function CreateProductAction(
@@ -74,6 +76,7 @@ export async function CreateProductAction(
     });
 
     revalidatePath("/dashboard/produtos");
+    revalidatePath("/");
 
     return {
       success: true,
@@ -174,6 +177,9 @@ export async function EditProductAction(
       where: { id: product.id },
       data: {
         name: rawObject.name ? rawObject.name : product.name,
+        subcategory_id: rawObject.subcategory_id
+          ? Number(rawObject.subcategory_id)
+          : product.subcategory_id,
         price: rawObject.price ? parseFloat(rawObject.price) : product.price,
         description: rawObject.description
           ? rawObject.description
@@ -183,6 +189,23 @@ export async function EditProductAction(
           : product.stock_quantity,
       },
     });
+
+    const images = formData.getAll("photos") as File[];
+
+    if (images.length > 0) {
+      for (let image of images) {
+        console.log(image);
+        const fileData = await uploadFileAWS(image, image.type);
+        await prisma.product_images.create({
+          data: {
+            bucket: fileData.bucket,
+            file_key: fileData.fileKey,
+            url: fileData.url,
+            product_id: product.id,
+          },
+        });
+      }
+    }
 
     revalidatePath("/dashboard/produtos");
 

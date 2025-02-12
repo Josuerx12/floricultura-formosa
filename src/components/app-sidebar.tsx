@@ -29,7 +29,7 @@ const data = {
         },
         {
           title: "Promoções / Ofertas",
-          url: "#",
+          url: "/dashboard/ofertas",
         },
       ],
     },

@@ -19,7 +19,9 @@ const DashboardBreadcrumb = () => {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem className="hidden md:block">
-          <Link href={`/${firstRoute}`}>{firstRoute}</Link>
+          <Link className="capitalize" href={`/${firstRoute}`}>
+            {firstRoute}
+          </Link>
         </BreadcrumbItem>
         <BreadcrumbSeparator className="hidden md:block" />
         <BreadcrumbItem>

@@ -22,13 +22,14 @@ import {
   ScrollText,
 } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
+import { useResetableActionState } from "@/hooks/use-resetable-action-state";
 
 const CreateProductModal = ({
   subcategories,
 }: {
   subcategories: SubCategory[];
 }) => {
-  const [state, formAction, isPending] = useActionState(
+  const [state, formAction, isPending, reset] = useResetableActionState(
     CreateProductAction,
     null
   );
@@ -38,12 +39,13 @@ const CreateProductModal = ({
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const { reset, register } = useForm();
+  const { reset: resetForm, register } = useForm();
 
   useEffect(() => {
     if (state?.success) {
       setIsOpen(false);
       reset();
+      resetForm();
       setPhotos([]);
       setPreviewImages([]);
     }
@@ -182,6 +184,7 @@ const CreateProductModal = ({
           )}
 
           <label
+            aria-required
             htmlFor="photos-input"
             className="flex flex-grow cursor-pointer bg-neutral-200 p-2 gap-2 rounded-3xl"
           >
