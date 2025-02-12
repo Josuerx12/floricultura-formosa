@@ -59,16 +59,18 @@ export default async function Home() {
         <HomeSlickSlider />
       </section>
 
-      <section className="w-full max-w-6xl my-8">
-        <h2 className="text-2xl font-bold mb-4">🔥 Produtos em Promoção</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {promotionsProducts.map((product) => {
-            return <ProductCard key={product.id} product={product} />;
-          })}
-        </div>
-      </section>
+      {promotionsProducts && promotionsProducts.length > 0 && (
+        <section className="w-full max-w-6xl my-8">
+          <h2 className="text-2xl font-bold mb-4">🔥 Produtos em Promoção</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {promotionsProducts.map((product) => {
+              return <ProductCard key={product.id} product={product} />;
+            })}
+          </div>
+        </section>
+      )}
 
-      {subCategories.map((category) => (
+      {subCategories?.map((category) => (
         <section key={category.id} className="w-full max-w-6xl my-8">
           <h2 className="text-2xl font-bold mb-4">{category.name}</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -79,14 +81,16 @@ export default async function Home() {
         </section>
       ))}
 
-      <section className="w-full max-w-6xl my-8">
-        <h2 className="text-2xl font-bold mb-4">📦 Todos os Produtos</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {allProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
+      {allProducts && allProducts.length > 0 && (
+        <section className="w-full max-w-6xl my-8">
+          <h2 className="text-2xl font-bold mb-4">📦 Todos os Produtos</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {allProducts?.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </section>
+      )}
     </main>
   );
 }
