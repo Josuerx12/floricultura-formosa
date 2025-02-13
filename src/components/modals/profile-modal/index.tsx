@@ -28,7 +28,7 @@ const ProfileModal = ({
         <form className="w-full mx-auto">
           <div className="flex flex-col w-fit items-center mx-auto">
             <Image
-              src={user.image ? user.image : "/no-profile.svg"}
+              src={user?.image ? user.image : "/no-profile.svg"}
               width={100}
               height={100}
               quality={100}
@@ -58,7 +58,7 @@ const ProfileModal = ({
               <input
                 className="w-full"
                 type="text"
-                defaultValue={user.name ?? "Nome do usuário não identificado!"}
+                defaultValue={user?.name ?? "Nome do usuário não identificado!"}
                 disabled
               />
             </label>
@@ -68,7 +68,7 @@ const ProfileModal = ({
               <input
                 className="w-full"
                 type="email"
-                defaultValue={user.email ?? "Email não identificado!"}
+                defaultValue={user?.email ?? "Email não identificado!"}
                 disabled
               />
             </label>
@@ -78,7 +78,7 @@ const ProfileModal = ({
               <input
                 className="w-full"
                 type="tel"
-                defaultValue={user.phone ?? "Sem numero cadastrado!"}
+                defaultValue={user?.phone ?? "Sem numero cadastrado!"}
                 disabled
               />
             </label>

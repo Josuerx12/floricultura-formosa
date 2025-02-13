@@ -2,7 +2,7 @@
 
 import { signInWithCredentials } from "@/lib/actions/auth";
 import { Loader } from "lucide-react";
-import React, { useActionState } from "react";
+import React, { useActionState, useEffect, useRef } from "react";
 import { BiMailSend, BiKey } from "react-icons/bi";
 
 const LoginForm = () => {
@@ -11,8 +11,17 @@ const LoginForm = () => {
     null
   );
 
+  const formRef = useRef<HTMLFormElement | null>(null);
+
+  useEffect(() => {
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, []);
+
   return (
     <form
+      ref={formRef}
       className="flex flex-col gap-6 max-w-prose mx-auto w-full"
       action={formAction}
     >

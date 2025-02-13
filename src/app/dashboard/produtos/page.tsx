@@ -51,7 +51,7 @@ const ProdutosPage = async ({ searchParams }: { searchParams: any }) => {
       <Table>
         {products?.length <= 0 && (
           <TableCaption>
-            Não foi possivel encontrar produtos cadastrados ou baseado nos
+            Não foi possível encontrar produtos cadastrados ou baseados nos
             filtros.
           </TableCaption>
         )}

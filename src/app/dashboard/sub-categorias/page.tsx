@@ -57,22 +57,22 @@ const SubCategoriasPage = async ({ searchParams }: { searchParams: any }) => {
         <SearchFilter placeholder="sub-categorias" />
         <CreateSubCategoryModal categories={categories} />
       </div>
-      <Table>
+      <Table className="overflow-auto">
         {subCategories?.length <= 0 && (
           <TableCaption>
             Não foi possivel encontrar sub-categorias cadastradas.
           </TableCaption>
         )}
-        <TableHeader>
+        <TableHeader className="overflow-auto">
           <TableRow>
-            <TableHead className="w-[100px]">ID</TableHead>
+            <TableHead>ID</TableHead>
             <TableHead>Nome</TableHead>
             <TableHead>Categoria</TableHead>
             <TableHead>Data criação</TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="overflow-auto">
           {subCategories.map((subCategory) => (
             <TableRow key={subCategory.id}>
               <TableCell className="font-medium">{subCategory.id}</TableCell>

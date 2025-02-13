@@ -3,7 +3,7 @@ import { signUp, UserErrorsT } from "@/lib/actions/auth";
 import { Loader } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import React, { useActionState } from "react";
+import React, { useActionState, useEffect, useRef } from "react";
 import { BiSolidUser, BiMailSend, BiSolidPhone, BiKey } from "react-icons/bi";
 
 const SignUpForm = () => {
@@ -13,8 +13,17 @@ const SignUpForm = () => {
     redirect("/login");
   }
 
+  const formRef = useRef<HTMLFormElement | null>(null);
+
+  useEffect(() => {
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, []);
+
   return (
     <form
+      ref={formRef}
       className="flex flex-col gap-6 max-w-prose mx-auto w-full"
       action={formAction}
     >

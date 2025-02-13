@@ -3,24 +3,29 @@ import { useSession } from "next-auth/react";
 import Logo from "../../logo";
 
 import Link from "next/link";
-import UserDropdown from "../../user-dropdown";
 import {
   LayoutDashboard,
+  LogIn,
   LogOut,
   Menu,
   ShoppingCart,
   User,
+  UserPlus,
   X,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { singOutAction } from "@/lib/actions/auth";
+import { useRouter } from "next/navigation";
+import ProfileModal from "@/components/modals/profile-modal";
 
 const NavbarMobile = () => {
   const { data: session } = useSession();
   const user = session?.user;
 
+  const router = useRouter();
+
   const [isOpen, setIsOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   function handleOpen() {
     setIsOpen((prev) => !prev);
@@ -28,19 +33,30 @@ const NavbarMobile = () => {
 
   return (
     <>
-      <div className="sticky inset-0 z-20">
+      <ProfileModal
+        isOpen={isProfileOpen}
+        onClose={() => setIsProfileOpen((prev) => !prev)}
+        user={user as any}
+      />
+      <div
+        onClick={handleOpen}
+        className={`fixed inset-0 z-10 bg-black/40 backdrop-blur-sm transition-opacity duration-200 ${
+          isOpen ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
+      />
+      <div className="sticky inset-0 z-30">
         <header className="bg-primary flex md:hidden justify-between items-center gap-2 py-6 px-4 md:px-20 ">
           <Link href={"/"}>
             <Logo />
           </Link>
 
           <div className="flex items-center gap-4">
-            <div className="bg-primary-foreground p-2 rounded-full">
-              <ShoppingCart size={16} className="text-primary" />
+            <div className=" p-2 rounded-full">
+              <ShoppingCart className="text-primary-foreground" />
             </div>
             <button
               onClick={handleOpen}
-              className="bg-primary-foreground text-primary p-1 rounded"
+              className=" text-primary-foreground p-1 rounded"
             >
               {isOpen ? <X /> : <Menu />}
             </button>
@@ -60,27 +76,42 @@ const NavbarMobile = () => {
       <div
         className={`fixed h-full ${
           isOpen ? "right-0" : "-right-full"
-        } w-fit p-5 duration-200 top-0 ease-linear bg-primary z-10 flex items-start pt-40 justify-center`}
+        } max-w-[200px] w-full p-5 duration-200 top-0 ease-linear bg-primary z-20 flex items-start pt-40 justify-center`}
       >
-        <ul className="flex flex-col gap-y-5 text-primary-foreground font-semibold">
+        <ul className="flex w-full flex-col gap-y-5 text-primary-foreground text-sm font-semibold">
           {user ? (
             <>
-              <li className="flex items-center justify-between gap-6">
-                Perfil <User />
+              <li
+                onClick={() => {
+                  handleOpen();
+                  setIsProfileOpen((prev) => !prev);
+                }}
+                className="flex items-center justify-between gap-2"
+              >
+                Perfil <User size={18} />
               </li>
-              <li className="flex items-center justify-between gap-6">
-                Dashboard <LayoutDashboard />
+              <li
+                onClick={() => {
+                  handleOpen();
+                  router.push("/dashboard/metricas");
+                }}
+                className="flex items-center justify-between gap-2"
+              >
+                Dashboard <LayoutDashboard size={18} />
               </li>
-              <li className="flex items-center justify-between gap-6">
-                Compras <ShoppingCart />
+              <li
+                onClick={handleOpen}
+                className="flex items-center justify-between gap-2"
+              >
+                Compras <ShoppingCart size={18} />
               </li>
-              <li className="">
+              <li onClick={handleOpen}>
                 <form className="w-full" action={singOutAction}>
                   <button
-                    className="flex w-full items-center justify-between gap-6"
+                    className="flex w-full bg-red-600 text-white p-2 rounded items-center justify-between gap-2"
                     type="submit"
                   >
-                    Sair <LogOut />
+                    Desconectar <LogOut size={18} />
                   </button>
                 </form>
               </li>
@@ -88,18 +119,20 @@ const NavbarMobile = () => {
           ) : (
             <>
               <Link
-                className="font-semibold text-primary-foreground hover:text-primary-foreground/80 duration-200"
+                onClick={handleOpen}
+                className="font-semibold text-sm flex w-full items-center justify-between gap-2 text-primary-foreground hover:text-primary-foreground/80 duration-200"
                 title="Cadastre-se para poder realizar suas compras!"
                 href={"/registre-se"}
               >
-                Registre-se
+                Registre-se <UserPlus />
               </Link>
               <Link
+                onClick={handleOpen}
                 title="Autentique-se para poder realizar suas compras"
-                className="border border-primary-foreground text-primary-foreground rounded-md px-3 py-1 hover:bg-primary-foreground hover:text-primary duration-200"
+                className="border text-sm flex items-center justify-between gap-2  text-primary-foreground hover:bg-primary-foreground hover:text-primary duration-200"
                 href={"/login"}
               >
-                Login
+                Login <LogIn />
               </Link>
             </>
           )}
