@@ -4,10 +4,25 @@ import Logo from "../../logo";
 import Link from "next/link";
 import UserDropdown from "../../user-dropdown";
 import { ShoppingCart } from "lucide-react";
+import CategoryDropdown from "@/components/dropdowns/category-dropdown";
+import { prisma } from "@/lib/db/prisma";
 
 const NavbarDesktop = async () => {
   const session = await auth();
   const user = session?.user;
+
+  const categories = await prisma.category.findMany({
+    select: {
+      name: true,
+      id: true,
+      subcategories: {
+        select: {
+          name: true,
+          id: true,
+        },
+      },
+    },
+  });
 
   return (
     <header className="bg-primary md:flex hidden justify-between items-center gap-2 py-6 px-4 md:px-20">
@@ -16,12 +31,9 @@ const NavbarDesktop = async () => {
       </Link>
 
       <nav>
-        <ul className="flex gap-6 text-sm ">
-          <li className="text-primary-foreground  relative before:absolute before:w-0 before:h-[2px] before:left-0 before:-bottom-1 hover:before:w-10/12 before:bg-primary-foreground  before:duration-200 cursor-pointer">
-            Ocasiões
-          </li>
-          <li className="text-primary-foreground relative before:absolute before:w-0 before:h-[2px] before:left-0 before:-bottom-1 hover:before:w-10/12 before:bg-primary-foreground  before:duration-200 cursor-pointer">
-            Categorias
+        <ul className="flex gap-10 text-sm uppercase">
+          <li>
+            <CategoryDropdown categories={categories} />
           </li>
 
           <li className="text-primary-foreground relative before:absolute before:w-0 before:h-[2px] before:left-0 before:-bottom-1 hover:before:w-10/12 before:bg-primary-foreground  before:duration-200 cursor-pointer">

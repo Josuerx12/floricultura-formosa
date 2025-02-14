@@ -9,9 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import CreateCategoriaModal from "@/components/modals/category/create";
 import SearchFilter from "@/components/Filters/CategoryFilter";
-import ManageCategoryDropdown from "@/components/dropdowns/MenageCategoryDropdown";
 import Image from "next/image";
 import ManageProductDropdown from "@/components/dropdowns/MenageProductDropdown";
 import CreateProductModal from "@/components/modals/product/create";

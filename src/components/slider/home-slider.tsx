@@ -17,7 +17,7 @@ export default function HomeSlider() {
     slidesToScroll: 1,
   };
   return (
-    <Slider {...settings}>
+    <Slider className="-z-20" {...settings}>
       {slides.map((slide) => (
         <Image
           key={slide.id}

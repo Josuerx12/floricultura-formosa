@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db/prisma";
 import { SubCategorySchema } from "@/lib/schemas-validator/sub-category.schema";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { Product } from "../products";
 
 export type SubCategoryErrorsT = {
   name?: string[];
@@ -17,9 +18,11 @@ export type SubCategoryStateActionT = {
 
 export type SubCategory = {
   id: number;
-  category_id: number;
+  category_id?: number;
   name: string;
-  created_at: Date;
+  products?: Product[];
+  created_at?: Date;
+  updated_at?: Date;
 };
 
 export async function CreateSubCategoryAction(

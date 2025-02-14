@@ -34,22 +34,21 @@ export default async function Home() {
     },
   });
 
-  const subCategories = await prisma.subcategory.findMany({
-    where: {
-      products: {
-        some: {},
-      },
-    },
-    include: {
-      products: {
-        include: { product_images: true },
-        take: 5,
-      },
-    },
-  });
-
   const allProducts = await prisma.product.findMany({
-    include: { product_images: true },
+    include: {
+      product_images: true,
+      promotions: {
+        where: {
+          start_date: { lte: new Date() },
+          end_date: { gte: new Date() },
+        },
+        orderBy: { start_date: "asc" },
+        take: 1,
+        select: {
+          discount_percentage: true,
+        },
+      },
+    },
     orderBy: { created_at: "desc" },
   });
 
@@ -70,20 +69,9 @@ export default async function Home() {
         </section>
       )}
 
-      {subCategories?.map((category) => (
-        <section key={category.id} className="w-full max-w-6xl my-8">
-          <h2 className="text-2xl font-bold mb-4">{category.name}</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {category.products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        </section>
-      ))}
-
       {allProducts && allProducts.length > 0 && (
         <section className="w-full max-w-6xl my-8">
-          <h2 className="text-2xl font-bold mb-4">📦 Todos os Produtos</h2>
+          <h2 className="text-2xl font-bold mb-4">🌼 Todos os Produtos</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {allProducts?.map((product) => (
               <ProductCard key={product.id} product={product} />

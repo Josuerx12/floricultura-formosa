@@ -63,7 +63,7 @@ const NavbarMobile = () => {
           </div>
         </header>
 
-        <nav className="bg-primary-foreground text-white">
+        <nav className="md:hidden bg-primary-foreground text-white">
           <ul className="flex items-center justify-between w-full p-2 text-sm tracking-wide">
             <li>Ocasiões</li>
             <li>Categorias</li>
