@@ -29,6 +29,8 @@ export default async function Home() {
         take: 1,
         select: {
           discount_percentage: true,
+          end_date: true,
+          start_date: true,
         },
       },
     },
@@ -46,6 +48,8 @@ export default async function Home() {
         take: 1,
         select: {
           discount_percentage: true,
+          end_date: true,
+          start_date: true,
         },
       },
     },

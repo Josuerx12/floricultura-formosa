@@ -22,7 +22,7 @@ export type PromotionStateActionT = {
 export type Promotion = {
   id?: number;
   product_id?: number;
-  discount_percentage?: Decimal;
+  discount_percentage?: number;
   start_date?: Date;
   end_date?: Date;
 };

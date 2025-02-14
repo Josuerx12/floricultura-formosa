@@ -136,7 +136,7 @@ model product_images {
 model promotions {
   id                  Int      @id @default(autoincrement())
   product_id          Int
-  discount_percentage Decimal
+  discount_percentage Float
   start_date          DateTime
   end_date            DateTime
   product             product  @relation(fields: [product_id], references: [id])
