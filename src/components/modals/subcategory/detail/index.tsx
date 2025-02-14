@@ -75,7 +75,7 @@ const DetailSubCategoriaModal = ({
               className="w-full bg-transparent outline-none  placeholder:text-neutral-700"
               type="text"
               disabled
-              defaultValue={subCategory.created_at.toLocaleString("pt-BR")}
+              defaultValue={subCategory.created_at?.toLocaleString("pt-BR")}
             />
           </label>
 

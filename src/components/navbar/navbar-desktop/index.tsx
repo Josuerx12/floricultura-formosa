@@ -35,13 +35,16 @@ const NavbarDesktop = async () => {
           <li>
             <CategoryDropdown categories={categories} />
           </li>
-
-          <li className="text-primary-foreground relative before:absolute before:w-0 before:h-[2px] before:left-0 before:-bottom-1 hover:before:w-10/12 before:bg-primary-foreground  before:duration-200 cursor-pointer">
-            Ofertas
-          </li>
-          <li className="text-primary-foreground relative before:absolute before:w-0 before:h-[2px] before:left-0 before:-bottom-1 hover:before:w-10/12 before:bg-primary-foreground  before:duration-200 cursor-pointer">
-            Ajuda
-          </li>
+          <Link href={"/ofertas"}>
+            <li className="text-primary-foreground relative before:absolute before:w-0 before:h-[2px] before:left-0 before:-bottom-1 hover:before:w-10/12 before:bg-primary-foreground  before:duration-200 cursor-pointer">
+              Ofertas
+            </li>
+          </Link>
+          <Link href={"/ajuda"}>
+            <li className="text-primary-foreground relative before:absolute before:w-0 before:h-[2px] before:left-0 before:-bottom-1 hover:before:w-10/12 before:bg-primary-foreground  before:duration-200 cursor-pointer">
+              Ajuda
+            </li>
+          </Link>
         </ul>
       </nav>
 

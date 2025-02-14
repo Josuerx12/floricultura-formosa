@@ -44,13 +44,13 @@ export function ProductCard({ product }: { product: Product }) {
       )}
 
       <form>
-        <select defaultValue={""}>
-          <option value={""} disabled>
-            Selecione uma quantidade
+        <select className="w-full text-sm" defaultValue={""}>
+          <option className="w-full" value={""} disabled>
+            Quantidade
           </option>
 
           {Array.from({ length: product.stock_quantity }).map((_, i) => (
-            <option value={i + 1}>
+            <option key={i} value={i + 1}>
               {i + 1} {i + 1 > 1 ? "Unidades" : "Unidade"}
             </option>
           ))}

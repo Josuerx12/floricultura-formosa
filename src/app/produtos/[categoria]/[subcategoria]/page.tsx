@@ -5,7 +5,7 @@ import React from "react";
 const ProdutosSubcategoria = async ({
   params,
 }: {
-  params: { categoria?: string; subcategoria?: string };
+  params: { categoria?: string; subcategoria?: string } & any;
 }) => {
   const { categoria, subcategoria } = await params;
 

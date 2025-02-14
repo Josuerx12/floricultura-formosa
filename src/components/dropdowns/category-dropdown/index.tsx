@@ -30,7 +30,7 @@ const CategoryDropdown = ({ categories }: { categories: Category[] }) => {
           className="outline-none"
           onMouseEnter={() => setIsOpen(true)}
         >
-          <button className="text-primary-foreground z-50 select-none outline-none uppercase flex items-center gap-2 cursor-pointer">
+          <button className="text-white md:text-primary-foreground z-50 select-none outline-none uppercase flex items-center gap-2 cursor-pointer">
             Categorias <ChevronDown />
           </button>
         </DropdownMenuTrigger>
@@ -49,7 +49,7 @@ const CategoryDropdown = ({ categories }: { categories: Category[] }) => {
                   <DropdownMenuItem className="font-semibold cursor-default">
                     {category.name}
                   </DropdownMenuItem>
-                  {category.subcategories.map((sub) => (
+                  {category.subcategories?.map((sub) => (
                     <DropdownMenuItem
                       key={sub.id}
                       onClick={() => handleNavigate(category.name, sub.name)}

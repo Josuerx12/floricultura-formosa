@@ -18,7 +18,7 @@ export type CategoryStateActionT = {
 export type Category = {
   id: number;
   name: string;
-  subcategories: SubCategory[];
+  subcategories?: SubCategory[];
   created_at?: Date;
   updated_at?: Date;
 };
@@ -119,6 +119,23 @@ export async function DeleteCategoryAction(
       error: err.message,
     };
   }
+}
+
+export async function getCategories() {
+  const categories = await prisma.category.findMany({
+    select: {
+      name: true,
+      id: true,
+      subcategories: {
+        select: {
+          name: true,
+          id: true,
+        },
+      },
+    },
+  });
+
+  return categories;
 }
 
 export async function EditCategoryAction(

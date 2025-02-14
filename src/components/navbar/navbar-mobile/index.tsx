@@ -13,10 +13,12 @@ import {
   UserPlus,
   X,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { singOutAction } from "@/lib/actions/auth";
 import { useRouter } from "next/navigation";
 import ProfileModal from "@/components/modals/profile-modal";
+import CategoryDropdown from "@/components/dropdowns/category-dropdown";
+import { Category, getCategories } from "@/lib/actions/category";
 
 const NavbarMobile = () => {
   const { data: session } = useSession();
@@ -30,6 +32,18 @@ const NavbarMobile = () => {
   function handleOpen() {
     setIsOpen((prev) => !prev);
   }
+
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  async function fetchCategoires() {
+    const res = await getCategories();
+
+    setCategories(res);
+  }
+
+  useEffect(() => {
+    fetchCategoires();
+  }, []);
 
   return (
     <>
@@ -63,12 +77,17 @@ const NavbarMobile = () => {
           </div>
         </header>
 
-        <nav className="md:hidden bg-primary-foreground text-white">
-          <ul className="flex items-center justify-between w-full p-2 text-sm tracking-wide">
-            <li>Ocasiões</li>
-            <li>Categorias</li>
-            <li>Ofertas</li>
-            <li>Ajuda</li>
+        <nav className="md:hidden bg-primary-foreground text-white uppercase">
+          <ul className="flex items-center justify-between w-full px-4 py-2 text-sm tracking-wide">
+            <li>
+              <CategoryDropdown categories={categories} />
+            </li>
+            <li>
+              <Link href={"/ofertas"}>Ofertas</Link>
+            </li>
+            <li>
+              <Link href={"/ajuda"}>Ajuda</Link>
+            </li>
           </ul>
         </nav>
       </div>
