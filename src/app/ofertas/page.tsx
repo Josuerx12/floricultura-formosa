@@ -35,10 +35,10 @@ const OfertasPage = async () => {
     },
   });
   return (
-    <div>
+    <div className="flex flex-col">
       <h2 className="text-center text-xl  my-6">Ofertas - Promoções</h2>
 
-      <div className="flex gap-5 justify-between p-2">
+      <div className="max-w-screen-xl w-full mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {productPromotions.length > 0 ? (
           productPromotions.map((p) => <ProductCard key={p.id} product={p} />)
         ) : (

@@ -4,6 +4,7 @@ import "./globals.css";
 import NavbarDesktop from "@/components/navbar/navbar-desktop";
 import NavbarMobile from "@/components/navbar/navbar-mobile";
 import { SessionProvider } from "next-auth/react";
+import { Toaster } from "@/components/ui/toaster";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -27,6 +28,7 @@ export default function RootLayout({
           <NavbarDesktop />
           <NavbarMobile />
           {children}
+          <Toaster />
         </SessionProvider>
       </body>
     </html>

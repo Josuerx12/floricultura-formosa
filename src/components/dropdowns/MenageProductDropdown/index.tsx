@@ -13,13 +13,14 @@ import { Product } from "@/lib/actions/products";
 import DeleteProductModal from "@/components/modals/product/delete";
 import DetailProductModal from "@/components/modals/product/detail";
 import { SubCategory } from "@/lib/actions/sub-category";
+import { Category } from "@/lib/actions/category";
 
 const ManageProductDropdown = ({
   product,
-  subcategories,
+  categories,
 }: {
   product: Product;
-  subcategories: SubCategory[];
+  categories: Category[];
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeletailing, setIsDeletailing] = useState(false);
@@ -34,7 +35,7 @@ const ManageProductDropdown = ({
         isOpen={isDeletailing}
         handleClose={() => setIsDeletailing((prev) => !prev)}
         product={product}
-        subcategories={subcategories}
+        categories={categories}
       />
       <DropdownMenu>
         <DropdownMenuTrigger className="w-fit items-center gap-2 inline-flex  flex-grow-0 bg-secondary text-primary-foreground p-2 rounded font-medium text-sm drop-shadow">

@@ -13,7 +13,12 @@ const ProdutosSubcategoria = async ({
     where: {
       subcategory: {
         name: {
-          contains: subcategoria?.replaceAll("%20", " "),
+          contains: subcategoria?.replaceAll("-", " "),
+        },
+        category: {
+          name: {
+            contains: categoria?.replaceAll("-", " "),
+          },
         },
       },
     },
@@ -47,11 +52,10 @@ const ProdutosSubcategoria = async ({
   return (
     <div className="flex flex-col">
       <h3 className="my-6 text-xl text-center">
-        {categoria?.replaceAll("%20", " ")} |{" "}
-        {subcategoria?.replaceAll("%20", " ")}
+        {categoria?.replaceAll("-", " ")} | {subcategoria?.replaceAll("-", " ")}
       </h3>
 
-      <div className="flex p-2 gap-5">
+      <div className="max-w-screen-xl w-full mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {products?.length > 0 ? (
           products.map((p) => <ProductCard key={p.id} product={p} />)
         ) : (

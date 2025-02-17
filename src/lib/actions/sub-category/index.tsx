@@ -42,7 +42,7 @@ export async function CreateSubCategoryAction(
     });
 
     const subCategory = await prisma.subcategory.findFirst({
-      where: { name: credentials.name },
+      where: { name: credentials.name, category_id: credentials.category_id },
     });
 
     if (subCategory) {

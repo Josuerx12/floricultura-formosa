@@ -6,6 +6,7 @@ import UserDropdown from "../../user-dropdown";
 import { ShoppingCart } from "lucide-react";
 import CategoryDropdown from "@/components/dropdowns/category-dropdown";
 import { prisma } from "@/lib/db/prisma";
+import CartBtn from "@/components/buttons/cart-btn";
 
 const NavbarDesktop = async () => {
   const session = await auth();
@@ -25,7 +26,7 @@ const NavbarDesktop = async () => {
   });
 
   return (
-    <header className="bg-primary md:flex hidden justify-between items-center gap-2 py-6 px-4 md:px-20">
+    <header className="bg-primary drop-shadow sticky z-20 inset-0 md:flex hidden justify-between items-center gap-2 py-6 px-4 md:px-20">
       <Link href={"/"}>
         <Logo />
       </Link>
@@ -50,13 +51,13 @@ const NavbarDesktop = async () => {
 
       {user ? (
         <div className="flex items-center gap-4">
-          <div className="bg-primary-foreground p-2 rounded-full">
-            <ShoppingCart size={16} className="text-primary" />
-          </div>
+          <CartBtn />
+
           <UserDropdown user={user} />
         </div>
       ) : (
         <div className="flex gap-4 text-sm items-center">
+          <CartBtn />
           <Link
             className="font-semibold text-primary-foreground hover:text-primary-foreground/80 duration-200"
             title="Cadastre-se para poder realizar suas compras!"

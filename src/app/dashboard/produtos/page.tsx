@@ -38,13 +38,24 @@ const ProdutosPage = async ({ searchParams }: { searchParams: any }) => {
     },
   });
 
-  const subcategories = await prisma.subcategory.findMany();
+  const categories = await prisma.category.findMany({
+    select: {
+      id: true,
+      name: true,
+      subcategories: {
+        select: {
+          name: true,
+          id: true,
+        },
+      },
+    },
+  });
 
   return (
     <div>
       <div className="flex mb-4 justify-end items-center gap-4">
         <SearchFilter placeholder="produtos" />
-        <CreateProductModal subcategories={subcategories} />
+        <CreateProductModal categories={categories} />
       </div>
       <Table>
         {products?.length <= 0 && (
@@ -92,10 +103,7 @@ const ProdutosPage = async ({ searchParams }: { searchParams: any }) => {
               </TableCell>
               <TableCell>{prod.created_at.toLocaleString("pt-BR")}</TableCell>
               <TableCell className="text-right">
-                <ManageProductDropdown
-                  product={prod}
-                  subcategories={subcategories}
-                />
+                <ManageProductDropdown product={prod} categories={categories} />
               </TableCell>
             </TableRow>
           ))}

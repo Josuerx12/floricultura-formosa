@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import ProfileModal from "@/components/modals/profile-modal";
 import CategoryDropdown from "@/components/dropdowns/category-dropdown";
 import { Category, getCategories } from "@/lib/actions/category";
+import CartBtn from "@/components/buttons/cart-btn";
 
 const NavbarMobile = () => {
   const { data: session } = useSession();
@@ -66,7 +67,7 @@ const NavbarMobile = () => {
 
           <div className="flex items-center gap-4">
             <div className=" p-2 rounded-full">
-              <ShoppingCart className="text-primary-foreground" />
+              <CartBtn />
             </div>
             <button
               onClick={handleOpen}

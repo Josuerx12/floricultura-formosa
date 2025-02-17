@@ -21,14 +21,11 @@ import {
   RectangleEllipsis,
   ScrollText,
 } from "lucide-react";
-import { useActionState, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useResetableActionState } from "@/hooks/use-resetable-action-state";
+import { Category } from "@/lib/actions/category";
 
-const CreateProductModal = ({
-  subcategories,
-}: {
-  subcategories: SubCategory[];
-}) => {
+const CreateProductModal = ({ categories }: { categories: Category[] }) => {
   const [state, formAction, isPending, reset] = useResetableActionState(
     CreateProductAction,
     null
@@ -104,11 +101,13 @@ const CreateProductModal = ({
               <option disabled value={""}>
                 Selecione uma sub categoria!
               </option>
-              {subcategories.map((subc) => (
-                <option key={subc.id} value={subc.id}>
-                  {subc.name}
-                </option>
-              ))}
+              {categories.map((c) =>
+                c.subcategories?.map((sc) => (
+                  <option key={sc.id} value={sc.id}>
+                    {c.name} | {sc.name}
+                  </option>
+                ))
+              )}
             </select>
           </label>
           {state?.errors?.subcategory_id && (

@@ -19,7 +19,12 @@ const CategoryDropdown = ({ categories }: { categories: Category[] }) => {
   const router = useRouter();
 
   const handleNavigate = (category: string, subcategory: string) => {
-    router.push(`/produtos/${category}/${subcategory}`);
+    router.push(
+      `/produtos/${category?.replaceAll(" ", "-")}/${subcategory?.replaceAll(
+        " ",
+        "-"
+      )}`
+    );
     setIsOpen(false);
   };
 
@@ -27,12 +32,10 @@ const CategoryDropdown = ({ categories }: { categories: Category[] }) => {
     <div className="relative">
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
         <DropdownMenuTrigger
-          className="outline-none"
+          className="text-white md:text-primary-foreground z-50 select-none outline-none uppercase flex items-center gap-2 cursor-pointer"
           onMouseEnter={() => setIsOpen(true)}
         >
-          <button className="text-white md:text-primary-foreground z-50 select-none outline-none uppercase flex items-center gap-2 cursor-pointer">
-            Categorias <ChevronDown />
-          </button>
+          Categorias <ChevronDown />
         </DropdownMenuTrigger>
 
         {isOpen && (

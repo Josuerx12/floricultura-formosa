@@ -7,6 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useResetableActionState } from "@/hooks/use-resetable-action-state";
+import { Category } from "@/lib/actions/category";
 import { EditProductAction, Product } from "@/lib/actions/products";
 import { SubCategory } from "@/lib/actions/sub-category";
 import {
@@ -31,12 +32,12 @@ const DetailProductModal = ({
   product,
   isOpen,
   handleClose,
-  subcategories,
+  categories,
 }: {
   isOpen: boolean;
   handleClose: VoidFunction;
   product: Product;
-  subcategories: SubCategory[];
+  categories: Category[];
 }) => {
   const [state, formAction, isPending, reset] = useResetableActionState(
     EditProductAction,
@@ -130,11 +131,13 @@ const DetailProductModal = ({
               <option disabled value={""}>
                 Selecione uma sub categoria!
               </option>
-              {subcategories.map((subc) => (
-                <option key={subc.id} value={subc.id}>
-                  {subc.name}
-                </option>
-              ))}
+              {categories.map((c) =>
+                c.subcategories?.map((sc) => (
+                  <option key={sc.id} value={sc.id}>
+                    {c.name} / {sc.name}
+                  </option>
+                ))
+              )}
             </select>
           </label>
 
