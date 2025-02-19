@@ -10,25 +10,60 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import SearchFilter from "@/components/Filters/CategoryFilter";
+import SearchFilter from "@/components/filters/search-filter";
 import CreateSubCategoryModal from "@/components/modals/subcategory/create";
 import ManageSubCategoryDropdown from "@/components/dropdowns/MenageSubCategoryDropdown";
+import Pagination from "@/components/pagination";
 
 const SubCategoriasPage = async ({ searchParams }: { searchParams: any }) => {
-  const { search } = await searchParams;
+  const { search, page } = await searchParams;
+
+  const perPage = 10;
+
+  const currentPage = page ?? 1;
+
+  const totalCategories = await prisma.subcategory.count({
+    where: {
+      OR: [
+        {
+          name: {
+            contains: search ?? "",
+            mode: "insensitive",
+          },
+        },
+        {
+          category: {
+            name: {
+              contains: search ?? "",
+              mode: "insensitive",
+            },
+          },
+        },
+        !isNaN(Number(search))
+          ? {
+              id: Number(search),
+            }
+          : {},
+      ],
+    },
+  });
+
+  const totalPages = Math.ceil(totalCategories / perPage);
 
   const subCategories = await prisma.subcategory.findMany({
     where: {
       OR: [
         {
           name: {
-            contains: search,
+            contains: search ?? "",
+            mode: "insensitive",
           },
         },
         {
           category: {
             name: {
-              contains: search,
+              contains: search ?? "",
+              mode: "insensitive",
             },
           },
         },
@@ -42,6 +77,9 @@ const SubCategoriasPage = async ({ searchParams }: { searchParams: any }) => {
     include: {
       category: true,
     },
+
+    take: perPage ?? 10,
+    skip: (currentPage - 1) * perPage,
   });
 
   const categories = await prisma.category.findMany({
@@ -88,6 +126,8 @@ const SubCategoriasPage = async ({ searchParams }: { searchParams: any }) => {
           ))}
         </TableBody>
       </Table>
+
+      <Pagination totalPages={totalPages} />
     </div>
   );
 };

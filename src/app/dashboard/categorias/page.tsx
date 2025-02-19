@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/db/prisma";
-import React, { Suspense } from "react";
 import {
   Table,
   TableBody,
@@ -10,18 +9,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import CreateCategoriaModal from "@/components/modals/category/create";
-import SearchFilter from "@/components/Filters/CategoryFilter";
+import SearchFilter from "@/components/filters/search-filter";
 import ManageCategoryDropdown from "@/components/dropdowns/MenageCategoryDropdown";
+import Pagination from "@/components/pagination";
 
 const CategoriasPage = async ({ searchParams }: { searchParams: any }) => {
-  const { search } = await searchParams;
+  const { search, page } = await searchParams;
 
-  const categorias = await prisma.category.findMany({
+  const perPage = 10;
+  const currentPage = page ?? 1;
+
+  const totalCategories = await prisma.category.count({
     where: {
       OR: [
         {
           name: {
-            contains: search,
+            contains: search ?? "",
           },
         },
         !isNaN(Number(search))
@@ -31,6 +34,28 @@ const CategoriasPage = async ({ searchParams }: { searchParams: any }) => {
           : {},
       ],
     },
+  });
+
+  const totalPages = Math.ceil(totalCategories / perPage);
+
+  const categorias = await prisma.category.findMany({
+    where: {
+      OR: [
+        {
+          name: {
+            contains: search ?? "",
+            mode: "insensitive",
+          },
+        },
+        !isNaN(Number(search))
+          ? {
+              id: Number(search),
+            }
+          : {},
+      ],
+    },
+    take: perPage ?? 10,
+    skip: (currentPage - 1) * perPage,
   });
 
   return (
@@ -68,6 +93,8 @@ const CategoriasPage = async ({ searchParams }: { searchParams: any }) => {
           ))}
         </TableBody>
       </Table>
+
+      <Pagination totalPages={totalPages} />
     </div>
   );
 };

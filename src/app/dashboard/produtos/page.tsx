@@ -9,20 +9,44 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import SearchFilter from "@/components/Filters/CategoryFilter";
+import SearchFilter from "@/components/filters/search-filter";
 import Image from "next/image";
 import ManageProductDropdown from "@/components/dropdowns/MenageProductDropdown";
 import CreateProductModal from "@/components/modals/product/create";
+import Pagination from "@/components/pagination";
 
 const ProdutosPage = async ({ searchParams }: { searchParams: any }) => {
-  const { search } = await searchParams;
+  const { search, page } = await searchParams;
+
+  const perPage = 10;
+  const currentPage = page ?? 1;
+
+  const totalProducts = await prisma.product.count({
+    where: {
+      OR: [
+        {
+          name: {
+            contains: search ?? "",
+          },
+        },
+        !isNaN(Number(search))
+          ? {
+              id: Number(search),
+            }
+          : {},
+      ],
+    },
+  });
+
+  const totalPages = Math.ceil(totalProducts / perPage);
 
   const products = await prisma.product.findMany({
     where: {
       OR: [
         {
           name: {
-            contains: search,
+            contains: search ?? "",
+            mode: "insensitive",
           },
         },
         !isNaN(Number(search))
@@ -36,6 +60,8 @@ const ProdutosPage = async ({ searchParams }: { searchParams: any }) => {
       product_images: true,
       subcategory: true,
     },
+    take: perPage,
+    skip: (currentPage - 1) * perPage,
   });
 
   const categories = await prisma.category.findMany({
@@ -109,6 +135,8 @@ const ProdutosPage = async ({ searchParams }: { searchParams: any }) => {
           ))}
         </TableBody>
       </Table>
+
+      <Pagination totalPages={totalPages} />
     </div>
   );
 };

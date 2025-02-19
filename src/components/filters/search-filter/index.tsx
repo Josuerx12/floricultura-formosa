@@ -7,8 +7,9 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 const SearchFilter = ({ placeholder }: { placeholder: string }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+
   const [inputValue, setInputValue] = useState(
-    searchParams.get("search") ? searchParams.get("search") : ""
+    searchParams.get("search") || ""
   );
   const debouncedInputValue = useDebounce(inputValue);
 
@@ -17,7 +18,18 @@ const SearchFilter = ({ placeholder }: { placeholder: string }) => {
   };
 
   useEffect(() => {
-    router.push(`?search=${debouncedInputValue}`);
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (debouncedInputValue) {
+      params.set("search", debouncedInputValue);
+    } else {
+      params.delete("search");
+    }
+
+    // Sempre resetar a paginação ao buscar
+    params.set("page", "1");
+
+    router.push(`?${params.toString()}`);
   }, [debouncedInputValue]);
 
   return (
@@ -25,7 +37,7 @@ const SearchFilter = ({ placeholder }: { placeholder: string }) => {
       <label className="flex gap-2 w-full bg-neutral-200 p-2 rounded-full">
         <Search />
         <input
-          value={inputValue ?? ""}
+          value={inputValue}
           onChange={handleInputChange}
           placeholder={`Buscar por nome da ${placeholder}`}
           className="bg-transparent flex-grow placeholder:text-neutral-700 outline-none"

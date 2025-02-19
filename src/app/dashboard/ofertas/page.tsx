@@ -10,11 +10,42 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import SearchFilter from "@/components/Filters/CategoryFilter";
+import SearchFilter from "@/components/filters/search-filter";
 import CreatePromotionModal from "@/components/modals/promotions/create";
+import Pagination from "@/components/pagination";
 
 const OfertasPage = async ({ searchParams }: { searchParams: any }) => {
-  const { search } = await searchParams;
+  const { search, page } = await searchParams;
+
+  const currentPage = page ?? 1;
+  const perPage = 10;
+
+  const promotionsCount = await prisma.promotions.count({
+    where: {
+      AND: [
+        {
+          start_date: {
+            lte: new Date(),
+          },
+          end_date: {
+            gte: new Date(),
+          },
+        },
+        search
+          ? {
+              product: {
+                name: {
+                  contains: search,
+                  mode: "insensitive",
+                },
+              },
+            }
+          : {},
+      ],
+    },
+  });
+
+  const totalPages = Math.ceil(promotionsCount / perPage);
 
   const promotions = await prisma.promotions.findMany({
     where: {
@@ -42,6 +73,8 @@ const OfertasPage = async ({ searchParams }: { searchParams: any }) => {
     include: {
       product: true,
     },
+    take: perPage,
+    skip: (currentPage - 1) * perPage,
   });
 
   const products = await prisma.product.findMany({
@@ -90,6 +123,8 @@ const OfertasPage = async ({ searchParams }: { searchParams: any }) => {
           ))}
         </TableBody>
       </Table>
+
+      <Pagination totalPages={totalPages} />
     </div>
   );
 };
