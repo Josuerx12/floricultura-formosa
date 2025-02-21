@@ -50,7 +50,7 @@ const ProductsPage = async ({ searchParams }: { searchParams: any }) => {
   });
 
   return (
-    <div className="flex flex-col py-5">
+    <div className="flex flex-col py-5 px-2">
       <h2 className="text-center text-xl my-6">Produtos Disponiveis</h2>
 
       <div className="max-w-screen-xl w-full mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

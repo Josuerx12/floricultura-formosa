@@ -113,7 +113,7 @@ export function ProductCard({ product }: { product: Product }) {
           </p>
         </div>
 
-        <div className="mt-auto flex  gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div className="mt-auto flex  gap-2 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
           <button className="bg-primary-foreground/90 w-full p-2 rounded-md text-white hover:bg-primary-foreground transition duration-200">
             Comprar
           </button>
