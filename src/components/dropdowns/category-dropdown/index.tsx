@@ -32,7 +32,7 @@ const CategoryDropdown = ({ categories }: { categories: Category[] }) => {
     <div className="relative">
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
         <DropdownMenuTrigger
-          className="text-white md:text-primary-foreground z-50 select-none outline-none uppercase flex items-center gap-2 cursor-pointer"
+          className="z-50 select-none outline-none uppercase flex items-center gap-2 cursor-pointer"
           onMouseEnter={() => setIsOpen(true)}
         >
           Categorias <ChevronDown />
@@ -41,7 +41,7 @@ const CategoryDropdown = ({ categories }: { categories: Category[] }) => {
         {isOpen && (
           <DropdownMenuContent
             onMouseLeave={() => setIsOpen(false)}
-            className="w-56 absolute top-full left-0 bg-white shadow-lg rounded-md"
+            className="w-56 absolute top-full left-1/2 -translate-x-1/2 bg-primary text-primary-foreground shadow-lg rounded-md"
           >
             <DropdownMenuLabel>Categorias</DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -49,14 +49,14 @@ const CategoryDropdown = ({ categories }: { categories: Category[] }) => {
             <DropdownMenuGroup>
               {categories.map((category) => (
                 <div key={category.id} className="py-1">
-                  <DropdownMenuItem className="font-semibold cursor-default">
+                  <DropdownMenuItem className="font-semibold cursor-default hover:bg-primary-foreground hover:text-primary">
                     {category.name}
                   </DropdownMenuItem>
                   {category.subcategories?.map((sub) => (
                     <DropdownMenuItem
                       key={sub.id}
                       onClick={() => handleNavigate(category.name, sub.name)}
-                      className="pl-6"
+                      className="pl-6 hover:bg-primary-foreground hover:text-primary cursor-pointer"
                     >
                       {sub.name}
                     </DropdownMenuItem>

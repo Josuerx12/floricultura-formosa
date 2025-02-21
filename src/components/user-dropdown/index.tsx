@@ -31,8 +31,8 @@ const UserDropdown = ({ user }: { user: User }) => {
           <div className="flex items-center gap-1">
             <Image
               src={user.image ? user.image : "/no-profile.svg"}
-              width={32}
-              height={32}
+              width={40}
+              height={40}
               quality={100}
               alt="profile pic"
               className="rounded-full"
@@ -40,26 +40,35 @@ const UserDropdown = ({ user }: { user: User }) => {
             <p className="max-w-20 text-sm line-clamp-1 text-primary-foreground font-semibold">
               {user.name}
             </p>
-            <ChevronDown />
+            <ChevronDown className="text-primary-foreground" />
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent className="w-fit absolute top-full left-1/2 -translate-x-1/2 drop-shadow-md bg-primary text-primary-foreground rounded-md">
           <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setIsProfileOpen((prev) => !prev)}>
+          <DropdownMenuItem
+            className="font-semibold cursor-pointer text-nowrap hover:bg-primary-foreground hover:text-primary duration-100"
+            onClick={() => setIsProfileOpen((prev) => !prev)}
+          >
             Perfil
           </DropdownMenuItem>
           {(user?.role === "ADMIN" || user?.role === "SELLER") && (
-            <DropdownMenuItem onClick={() => router.push("/dashboard")}>
+            <DropdownMenuItem
+              className="font-semibold cursor-pointer text-nowrap hover:bg-primary-foreground hover:text-primary duration-100"
+              onClick={() => router.push("/dashboard")}
+            >
               Dashboard
             </DropdownMenuItem>
           )}
 
-          <DropdownMenuItem onClick={() => router.push("/compras")}>
+          <DropdownMenuItem
+            className="font-semibold cursor-pointer text-nowrap hover:bg-primary-foreground hover:text-primary duration-100"
+            onClick={() => router.push("/compras")}
+          >
             Compras
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem className="font-semibold cursor-pointer text-nowrap hover:bg-red-600 hover:text-primary duration-100">
             <form className="w-full" action={singOutAction}>
               <button className="w-full text-start" type="submit">
                 Sair
