@@ -5,6 +5,7 @@ import { Product } from "@/lib/actions/products";
 import Image from "next/image";
 import useCartStore, { ProductCart } from "@/hooks/use-cart-store";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 export function ProductCard({ product }: { product: Product }) {
   const discount =
@@ -19,7 +20,6 @@ export function ProductCard({ product }: { product: Product }) {
       : `${product.stock_quantity} unidades disponíveis`;
 
   const { addProduct } = useCartStore();
-
   const { register, handleSubmit } = useForm<ProductCart>();
 
   function onSubmit(data: ProductCart) {
@@ -31,22 +31,26 @@ export function ProductCard({ product }: { product: Product }) {
     });
   }
 
-  return (
-    <div className="relative border basis-72 w-full rounded-lg h-full p-4 shadow-sm group hover:shadow-lg transition duration-300 ease-in-out flex flex-col">
-      <Image
-        width={800}
-        height={600}
-        src={product.product_images?.[0]?.url || "/images/placeholder.png"}
-        alt={product.name}
-        className="w-full h-52 object-contain md:object-cover rounded-md"
-      />
+  const router = useRouter();
 
-      {discount > 0 && (
-        <div className="absolute top-1 right-1 bg-red-500 text-white text-xs font-bold py-1 px-2 rounded-full flex items-center space-x-1">
-          <BadgePercent className="w-4 h-4" />
-          <span>{discount}% OFF</span>
-        </div>
-      )}
+  return (
+    <div className="relative border basis-72 group w-full rounded-lg h-full p-4 shadow-sm hover:shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out flex flex-col overflow-hidden">
+      <div className="relative">
+        <Image
+          width={800}
+          height={600}
+          src={product.product_images?.[0]?.url || "/images/placeholder.png"}
+          alt={product.name}
+          className="w-full h-52 object-contain md:object-cover rounded-md"
+        />
+
+        {discount > 0 && (
+          <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold py-1 px-2 rounded-full flex items-center space-x-1">
+            <BadgePercent className="w-4 h-4" />
+            <span>{discount}% OFF</span>
+          </div>
+        )}
+      </div>
 
       <h3 className="text-lg font-semibold mt-2">{product.name}</h3>
 
@@ -109,9 +113,16 @@ export function ProductCard({ product }: { product: Product }) {
           </p>
         </div>
 
-        <div className="mt-auto">
-          <button className="bg-primary-foreground/90 p-2 w-full rounded-sm text-white hover:bg-primary-foreground duration-200">
-            Adicionar ao carrinho
+        <div className="mt-auto flex  gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <button className="bg-primary-foreground/90 w-full p-2 rounded-md text-white hover:bg-primary-foreground transition duration-200">
+            Comprar
+          </button>
+          <button
+            onClick={() => router.push("/produto/" + product.id)}
+            type="button"
+            className="bg-primary-foreground/90 w-full p-2 rounded-md text-white hover:bg-primary-foreground transition duration-200"
+          >
+            Visualizar
           </button>
         </div>
       </form>

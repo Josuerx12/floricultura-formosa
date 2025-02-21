@@ -20,6 +20,7 @@ import ProfileModal from "@/components/modals/profile-modal";
 import CategoryDropdown from "@/components/dropdowns/category-dropdown";
 import { Category, getCategories } from "@/lib/actions/category";
 import CartBtn from "@/components/buttons/cart-btn";
+import { MobileHomeSearchFilter } from "@/components/filters/mobile-home-search-filter";
 
 const NavbarMobile = () => {
   const { data: session } = useSession();
@@ -66,6 +67,7 @@ const NavbarMobile = () => {
           </Link>
 
           <div className="flex items-center gap-4">
+            <MobileHomeSearchFilter />
             <div className=" p-2 rounded-full">
               <CartBtn />
             </div>
@@ -81,10 +83,10 @@ const NavbarMobile = () => {
         <nav className="md:hidden bg-primary-foreground text-white uppercase">
           <ul className="flex items-center justify-between w-full px-4 py-2 text-sm tracking-wide">
             <li>
-              <CategoryDropdown categories={categories} />
+              <Link href={"/ofertas"}>Ofertas</Link>
             </li>
             <li>
-              <Link href={"/ofertas"}>Ofertas</Link>
+              <CategoryDropdown categories={categories} />
             </li>
             <li>
               <Link href={"/ajuda"}>Ajuda</Link>

@@ -67,14 +67,16 @@ export default async function Home() {
 
       {promotionsProducts && promotionsProducts.length > 0 && (
         <section className="w-full max-w-6xl my-8">
-          <h2 className="text-2xl font-bold mb-4">🔥 Produtos em Promoção</h2>
+          <h2 className="text-3xl font-bold text-center my-6">Destaques</h2>
           <PromoSlider products={promotionsProducts} />
         </section>
       )}
 
       {allProducts && allProducts.length > 0 && (
         <section className="w-full max-w-6xl my-8">
-          <h2 className="text-2xl font-bold mb-4">🌼 Todos os Produtos</h2>
+          <h2 className="text-2xl font-bold my-6 text-center capitalize">
+            Produtos recem adicionados
+          </h2>
           <div className="mx-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {allProducts?.map((product) => (
               <ProductCard key={product.id} product={product} />

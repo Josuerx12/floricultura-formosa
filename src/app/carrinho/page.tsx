@@ -19,7 +19,7 @@ const CartPage = () => {
     <div className="max-w-screen-xl mx-auto flex flex-col">
       <h2 className="text-center text-xl my-6">Carrinho de Compras</h2>
 
-      <div className="flex gap-2 mx-2 flex-wrap-reverse md:flex-nowrap max-w-screen-lg">
+      <div className="flex gap-2 mx-2 flex-wrap md:flex-nowrap max-w-screen-lg">
         {products.length === 0 ? (
           <p className="text-center">Seu carrinho está vazio.</p>
         ) : (

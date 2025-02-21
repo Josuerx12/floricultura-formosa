@@ -30,7 +30,7 @@ const NavbarDesktop = async () => {
 
   return (
     <div className="md:flex flex-col sticky z-20 inset-0">
-      <header className="bg-primary drop-shadow  md:flex hidden justify-between items-center gap-2 py-6 px-4 sm:px-10 md:px-10 lg:px-20">
+      <header className="bg-primary drop-shadow  md:flex hidden justify-between items-center gap-10 py-6 px-4 sm:px-10 md:px-10 lg:px-20">
         <HomeSearchFilter />
 
         <Link href={"/"}>

@@ -12,7 +12,7 @@ const Logo = () => {
         alt="Logo floricultura"
         className="bg-transparent fill-current w-[40px] h-[40px] md:w-[60px] md:h-[60px] text-black"
       />
-      <h2 className="text-primary-foreground text-sm text-center hidden md:block">
+      <h2 className="text-primary-foreground text-sm text-center hidden md:block text-nowrap">
         Floricultura Formosa
       </h2>
     </div>

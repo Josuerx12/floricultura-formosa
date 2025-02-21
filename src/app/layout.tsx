@@ -5,6 +5,7 @@ import NavbarDesktop from "@/components/navbar/navbar-desktop";
 import NavbarMobile from "@/components/navbar/navbar-mobile";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/toaster";
+import WppBtn from "@/components/buttons/wpp-btn";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -23,12 +24,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt">
-      <body className={`${poppins.className} antialiased bg-neutral-50`}>
+      <body className={`${poppins.className} antialiased bg-neutral-50 `}>
         <SessionProvider>
           <NavbarDesktop />
           <NavbarMobile />
           {children}
           <Toaster />
+          <WppBtn />
         </SessionProvider>
       </body>
     </html>

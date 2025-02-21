@@ -23,7 +23,9 @@ const CartBtn = () => {
 
         <IoCartOutline className="text-primary-foreground text-2xl md:text-3xl" />
       </div>
-      <p className="hidden md:block text-primary-foreground">Meu carrinho</p>
+      <p className="hidden md:block text-primary-foreground text-nowrap">
+        Meu carrinho
+      </p>
     </div>
   );
 };
