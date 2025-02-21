@@ -45,8 +45,6 @@ const DetailProductModal = ({
   );
   const [isEditing, setIsEditing] = useState(false);
 
-  console.log(state);
-
   useEffect(() => {
     if (state?.success) {
       Promise.all([setIsEditing(false), handleClose(), reset()]);

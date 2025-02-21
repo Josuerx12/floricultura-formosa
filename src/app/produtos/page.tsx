@@ -1,7 +1,6 @@
 import { ProductCard } from "@/components/cards/product-card";
 import Pagination from "@/components/pagination";
 import { prisma } from "@/lib/db/prisma";
-import React from "react";
 
 const ProductsPage = async ({ searchParams }: { searchParams: any }) => {
   const params = await searchParams;
@@ -10,8 +9,6 @@ const ProductsPage = async ({ searchParams }: { searchParams: any }) => {
 
   const search = params.search ?? "";
   const page = params.page ?? 1;
-
-  console.log(search, page);
 
   const totalProducts = await prisma.product.count({
     where: {

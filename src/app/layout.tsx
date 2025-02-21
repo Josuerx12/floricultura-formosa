@@ -6,6 +6,8 @@ import NavbarMobile from "@/components/navbar/navbar-mobile";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/toaster";
 import WppBtn from "@/components/buttons/wpp-btn";
+import { Suspense } from "react";
+import { Loader2 } from "lucide-react";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -25,13 +27,15 @@ export default function RootLayout({
   return (
     <html lang="pt">
       <body className={`${poppins.className} antialiased bg-neutral-50 `}>
-        <SessionProvider>
-          <NavbarDesktop />
-          <NavbarMobile />
-          {children}
-          <Toaster />
-          <WppBtn />
-        </SessionProvider>
+        <Suspense>
+          <SessionProvider>
+            <NavbarDesktop />
+            <NavbarMobile />
+            {children}
+            <Toaster />
+            <WppBtn />
+          </SessionProvider>
+        </Suspense>
       </body>
     </html>
   );

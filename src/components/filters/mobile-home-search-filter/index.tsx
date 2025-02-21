@@ -1,19 +1,12 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { DivideSquare, Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoIosSearch } from "react-icons/io";
 
@@ -49,30 +42,32 @@ export function MobileHomeSearchFilter() {
   };
 
   return (
-    <Sheet onOpenChange={handleClose} open={isOpen}>
-      <SheetTrigger asChild>
-        <IoIosSearch className="text-primary-foreground text-2xl" />
-      </SheetTrigger>
-      <SheetContent side={"left"} className="bg-primary">
-        <SheetHeader className="mt-4">
-          <SheetTitle className="text-sm text-primary-foreground">
-            Filtre pelo nome do produto!
-          </SheetTitle>
-        </SheetHeader>
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-4 w-full">
-          <label className="flex gap-2 w-full bg-primary-foreground drop-shadow-md p-2 rounded-full">
-            <input
-              {...register("search")}
-              placeholder="Buscar por nome do produto"
-              className="bg-transparent text-sm text-primary flex-grow border-r  placeholder:text-primary outline-none "
-              type="text"
-            />
-            <button type="submit" className="w-fit">
-              <IoIosSearch className="text-primary text-2xl " />
-            </button>
-          </label>
-        </form>
-      </SheetContent>
-    </Sheet>
+    <Suspense>
+      <Sheet onOpenChange={handleClose} open={isOpen}>
+        <SheetTrigger asChild>
+          <IoIosSearch className="text-primary-foreground text-2xl" />
+        </SheetTrigger>
+        <SheetContent side={"left"} className="bg-primary">
+          <SheetHeader className="mt-4">
+            <SheetTitle className="text-sm text-primary-foreground">
+              Filtre pelo nome do produto!
+            </SheetTitle>
+          </SheetHeader>
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-4 w-full">
+            <label className="flex gap-2 w-full bg-primary-foreground drop-shadow-md p-2 rounded-full">
+              <input
+                {...register("search")}
+                placeholder="Buscar por nome do produto"
+                className="bg-transparent text-sm text-primary flex-grow border-r  placeholder:text-primary outline-none "
+                type="text"
+              />
+              <button type="submit" className="w-fit">
+                <IoIosSearch className="text-primary text-2xl " />
+              </button>
+            </label>
+          </form>
+        </SheetContent>
+      </Sheet>
+    </Suspense>
   );
 }

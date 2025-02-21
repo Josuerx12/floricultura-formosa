@@ -100,8 +100,6 @@ export async function DeleteSubCategoryAction(
       select: { id: true },
     });
 
-    console.log(subCategory);
-
     if (!subCategory) {
       return {
         success: false,

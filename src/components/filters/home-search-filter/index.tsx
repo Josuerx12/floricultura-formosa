@@ -1,8 +1,14 @@
 "use client";
 import useDebounce from "@/hooks/use-debounce";
-import { Search } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  Suspense,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useForm } from "react-hook-form";
 
 const HomeSearchFilter = () => {
@@ -42,18 +48,20 @@ const HomeSearchFilter = () => {
   }, [debouncedInputValue]);
 
   return (
-    <form className="hidden md:block max-w-[300px] w-full">
-      <label className="flex gap-2 w-full bg-primary-foreground drop-shadow-md p-2 rounded-full">
-        <Search className="text-primary" />
-        <input
-          value={inputValue}
-          onChange={handleInputChange}
-          placeholder="Buscar por nome do produto"
-          className="bg-transparent flex-grow text-primary placeholder:text-primary outline-none"
-          type="text"
-        />
-      </label>
-    </form>
+    <Suspense>
+      <form className="hidden md:block max-w-[300px] w-full">
+        <label className="flex gap-2 w-full bg-primary-foreground drop-shadow-md p-2 rounded-full">
+          <Search className="text-primary" />
+          <input
+            value={inputValue}
+            onChange={handleInputChange}
+            placeholder="Buscar por nome do produto"
+            className="bg-transparent flex-grow text-primary placeholder:text-primary outline-none"
+            type="text"
+          />
+        </label>
+      </form>
+    </Suspense>
   );
 };
 

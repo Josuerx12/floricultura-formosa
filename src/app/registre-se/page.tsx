@@ -1,8 +1,5 @@
-import React from "react";
-import { BiKey, BiMailSend, BiSolidPhone, BiSolidUser } from "react-icons/bi";
+import React, { Suspense } from "react";
 import Image from "next/image";
-import { signUp } from "@/lib/actions/auth";
-import Link from "next/link";
 import SignUpForm from "./form";
 
 const Page = () => {

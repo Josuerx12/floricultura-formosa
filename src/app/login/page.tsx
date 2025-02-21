@@ -1,14 +1,9 @@
-import { signInWithCredentials, singInWithGoogle } from "@/lib/actions/auth";
+import { singInWithGoogle } from "@/lib/actions/auth";
 import { auth } from "@/lib/auth/auth";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import {
-  BiKey,
-  BiLogoGoogle,
-  BiLogoGooglePlus,
-  BiMailSend,
-} from "react-icons/bi";
+import { BiLogoGooglePlus } from "react-icons/bi";
 import LoginForm from "./form";
 
 const AutentiqueSe = async () => {

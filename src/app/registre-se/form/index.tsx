@@ -1,5 +1,5 @@
 "use client";
-import { signUp, UserErrorsT } from "@/lib/actions/auth";
+import { signUp } from "@/lib/actions/auth";
 import { Loader } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";

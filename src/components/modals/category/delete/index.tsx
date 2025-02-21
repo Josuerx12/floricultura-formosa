@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Category, DeleteCategoryAction } from "@/lib/actions/category";
 import { CircleX, ListPlus, Loader, OctagonX, Plus, Trash } from "lucide-react";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useCallback, useEffect, useState } from "react";
 
 const DeleteCategoriaModal = ({
   category,
