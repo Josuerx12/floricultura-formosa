@@ -4,10 +4,9 @@ import { prisma } from "@/lib/db/prisma";
 import React from "react";
 
 const OfertasPage = async ({ searchParams }: { searchParams: any }) => {
-  const page = Number(searchParams.page) || 1; // Pegando a página atual ou padrão para 1
-  const pageSize = 20; // Definindo quantos produtos por página
+  const page = Number(searchParams.page) || 1;
+  const pageSize = 20;
 
-  // Contando o total de produtos para calcular a paginação
   const totalProducts = await prisma.product.count({
     where: {
       promotions: {
@@ -19,9 +18,8 @@ const OfertasPage = async ({ searchParams }: { searchParams: any }) => {
     },
   });
 
-  const totalPages = Math.ceil(totalProducts / pageSize); // Calculando o total de páginas
+  const totalPages = Math.ceil(totalProducts / pageSize);
 
-  // Buscando os produtos da página atual
   const productPromotions = await prisma.product.findMany({
     where: {
       promotions: {

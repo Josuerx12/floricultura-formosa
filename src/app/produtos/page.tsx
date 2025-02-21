@@ -9,7 +9,7 @@ const ProductsPage = async ({ searchParams }: { searchParams: any }) => {
   const perPage = 20;
 
   const search = params.search ?? "";
-  const page = params.page ?? 0;
+  const page = params.page ?? 1;
 
   console.log(search, page);
 
