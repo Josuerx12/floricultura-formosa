@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/toaster";
 import WppBtn from "@/components/buttons/wpp-btn";
 import { Suspense } from "react";
 import { Loader2 } from "lucide-react";
+import ReactQueryProvider from "@/lib/react-query-provider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -29,11 +30,13 @@ export default function RootLayout({
       <body className={`${poppins.className} antialiased bg-neutral-50 `}>
         <Suspense>
           <SessionProvider>
-            <NavbarDesktop />
-            <NavbarMobile />
-            {children}
-            <Toaster />
-            <WppBtn />
+            <ReactQueryProvider>
+              <NavbarDesktop />
+              <NavbarMobile />
+              {children}
+              <Toaster />
+              <WppBtn />
+            </ReactQueryProvider>
           </SessionProvider>
         </Suspense>
       </body>

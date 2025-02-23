@@ -3,30 +3,25 @@ import Pagination from "@/components/pagination";
 import { prisma } from "@/lib/db/prisma";
 import React from "react";
 
-const ProdutosSubcategoria = async ({
+const CategoryPage = async ({
   params,
   searchParams,
 }: {
-  params: { categoria?: string; subcategoria?: string } & any;
+  params: any;
   searchParams: any;
 }) => {
+  const p = await params;
   const sp = await searchParams;
 
-  const { categoria, subcategoria } = await params;
-
+  const category = p.categoria?.replaceAll("-", " ") || "";
   const page = sp.page || 1;
   const perPage = 20;
 
   const totalProducts = await prisma.product.count({
     where: {
       subcategory: {
-        name: {
-          contains: subcategoria?.replaceAll("-", " "),
-        },
         category: {
-          name: {
-            contains: categoria?.replaceAll("-", " "),
-          },
+          name: category,
         },
       },
     },
@@ -37,29 +32,29 @@ const ProdutosSubcategoria = async ({
   const products = await prisma.product.findMany({
     where: {
       subcategory: {
-        name: {
-          contains: subcategoria?.replaceAll("-", " "),
-        },
         category: {
-          name: {
-            contains: categoria?.replaceAll("-", " "),
-          },
+          name: category,
         },
       },
     },
     include: {
-      subcategory: {
-        select: {
-          name: true,
-          id: true,
-        },
-      },
       product_images: {
         select: {
           url: true,
         },
       },
-
+      subcategory: {
+        select: {
+          name: true,
+          id: true,
+          category: {
+            select: {
+              name: true,
+              id: true,
+            },
+          },
+        },
+      },
       promotions: {
         where: {
           start_date: { lte: new Date() },
@@ -74,15 +69,12 @@ const ProdutosSubcategoria = async ({
     },
     take: perPage,
     skip: (page - 1) * perPage,
-    orderBy: {
-      created_at: "desc",
-    },
   });
 
   return (
-    <div className="flex flex-col pb-6">
+    <div className="pb-6">
       <h3 className="my-6 text-xl text-center">
-        {categoria?.replaceAll("-", " ")} | {subcategoria?.replaceAll("-", " ")}
+        {category?.replaceAll("-", " ")}
       </h3>
 
       <div className="max-w-screen-xl w-full mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -94,10 +86,9 @@ const ProdutosSubcategoria = async ({
           </p>
         )}
       </div>
-
       <Pagination totalPages={totalPages} />
     </div>
   );
 };
 
-export default ProdutosSubcategoria;
+export default CategoryPage;

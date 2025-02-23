@@ -49,7 +49,14 @@ const CategoryDropdown = ({ categories }: { categories: Category[] }) => {
             <DropdownMenuGroup>
               {categories.map((category) => (
                 <div key={category.id} className="py-1">
-                  <DropdownMenuItem className="font-semibold cursor-default hover:bg-primary-foreground hover:text-primary">
+                  <DropdownMenuItem
+                    onClick={() =>
+                      router.push(
+                        "/produtos/" + category.name?.replaceAll(" ", "-")
+                      )
+                    }
+                    className="font-semibold cursor-pointer hover:bg-primary-foreground hover:text-primary"
+                  >
                     {category.name}
                   </DropdownMenuItem>
                   {category.subcategories?.map((sub) => (

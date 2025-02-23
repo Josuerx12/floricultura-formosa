@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db/prisma";
 import ProductDetails from "./product-details";
+import BackBtn from "@/components/buttons/back-btn";
 
 const ProductPage = async ({ params }: { params: any }) => {
   const { id } = await params;
@@ -37,11 +38,16 @@ const ProductPage = async ({ params }: { params: any }) => {
   const finalPrice = product.price - (product.price * discount) / 100;
 
   return (
-    <ProductDetails
-      product={product}
-      finalPrice={finalPrice}
-      discount={discount}
-    />
+    <div className="flex py-10 px-2 max-w-screen-xl mx-auto flex-col">
+      <div className="w-full pb-6  flex justify-start">
+        <BackBtn />
+      </div>
+      <ProductDetails
+        product={product}
+        finalPrice={finalPrice}
+        discount={discount}
+      />
+    </div>
   );
 };
 

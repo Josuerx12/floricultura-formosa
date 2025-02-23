@@ -23,10 +23,8 @@ const ProductDetails = ({ product, finalPrice, discount }: any) => {
   }
 
   return (
-    <div className="container mx-auto px-2 py-10 grid grid-cols-1 md:grid-cols-2 gap-8">
-      {/* Galeria de imagens */}
+    <div className="mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
       <div className="flex gap-4">
-        {/* Miniaturas */}
         <div className="flex flex-col gap-2">
           {product.product_images.map((img: any, index: number) => (
             <Image
@@ -43,7 +41,6 @@ const ProductDetails = ({ product, finalPrice, discount }: any) => {
           ))}
         </div>
 
-        {/* Imagem Principal */}
         <div className="flex-1">
           <Image
             src={selectedImage}
@@ -56,11 +53,9 @@ const ProductDetails = ({ product, finalPrice, discount }: any) => {
         </div>
       </div>
 
-      {/* Detalhes do Produto */}
       <div>
         <h1 className="text-3xl font-bold">{product.name}</h1>
 
-        {/* Preço e Desconto */}
         <div className="mt-3">
           {discount > 0 ? (
             <p className="text-red-500 text-2xl font-bold">
@@ -76,7 +71,6 @@ const ProductDetails = ({ product, finalPrice, discount }: any) => {
           )}
         </div>
 
-        {/* Seleção de quantidade */}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="mt-5 flex flex-col gap-4"
@@ -120,7 +114,6 @@ const ProductDetails = ({ product, finalPrice, discount }: any) => {
             </select>
           </div>
 
-          {/* Botão Adicionar ao Carrinho */}
           <button
             type="submit"
             className="w-full bg-primary text-primary-foreground hover:bg-primary-foreground hover:text-primary py-3 rounded-md font-semibold hover:bg-primary-dark transition-all duration-300"
@@ -129,7 +122,6 @@ const ProductDetails = ({ product, finalPrice, discount }: any) => {
           </button>
         </form>
 
-        {/* Descrição do Produto */}
         <div className="mt-6">
           <h2 className="text-xl font-semibold">Descrição</h2>
           <p className="text-gray-600 mt-2">{product.description}</p>

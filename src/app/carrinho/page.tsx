@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import DeliveryForm from "./forms/delivery-form";
+import CreateAddressModal from "@/components/modals/address/create";
 
 const CartPage = () => {
   const { products, increaseQuantity, decreaseQuantity } = useCartStore();
@@ -101,7 +102,7 @@ const CartPage = () => {
                   </span>
                 </div>
               </div>
-
+              <CreateAddressModal />
               <DeliveryForm />
             </div>
           </>
