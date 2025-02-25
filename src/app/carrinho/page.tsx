@@ -1,20 +1,12 @@
 "use client";
 import useCartStore from "@/hooks/use-cart-store";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
-import Link from "next/link";
 import React from "react";
 import DeliveryForm from "./forms/delivery-form";
-import CreateAddressModal from "@/components/modals/address/create";
 
 const CartPage = () => {
-  const { products, increaseQuantity, decreaseQuantity } = useCartStore();
-
-  const totalPrice = products.reduce((acc, p) => {
-    const totalPriceByProduct = p.price * p.quantity;
-
-    return acc + totalPriceByProduct;
-  }, 0);
+  const { products, increaseQuantity, decreaseQuantity, fee, totalPrice } =
+    useCartStore();
 
   return (
     <div className="max-w-screen-xl mx-auto flex flex-col">
@@ -88,21 +80,50 @@ const CartPage = () => {
                       {product.name} (x{product.quantity})
                     </span>
                     <span className="text-gray-900 font-medium">
-                      R$ {(product.price * product.quantity).toFixed(2)}
+                      {(product.price * product.quantity).toLocaleString(
+                        "pt-BR",
+                        { style: "currency", currency: "BRL" }
+                      )}
                     </span>
                   </div>
                 ))}
               </div>
 
-              <div className="border-t pt-4 mt-4">
-                <div className="flex justify-between text-lg font-semibold">
-                  <span>Total:</span>
-                  <span className="text-green-600">
-                    R$ {totalPrice.toFixed(2)}
-                  </span>
+              {fee ? (
+                <div className="border-t pt-4 mt-4">
+                  <div className="flex justify-between items-center">
+                    <span>Frete:</span>
+                    <span className="text-gray-900 font-medium">
+                      {fee.toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      })}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Total com Frete:</span>
+                    <span className="text-green-600 font-medium">
+                      {totalPrice().toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      })}
+                    </span>
+                  </div>
                 </div>
-              </div>
-              <CreateAddressModal />
+              ) : (
+                <div className="border-t pt-4 mt-4">
+                  <div className="flex justify-between text-lg font-semibold">
+                    <span>Total:</span>
+                    <span className="text-green-600">
+                      {totalPrice().toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      })}
+                    </span>
+                  </div>
+                </div>
+              )}
+
               <DeliveryForm />
             </div>
           </>

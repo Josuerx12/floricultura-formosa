@@ -148,17 +148,18 @@ model promotions {
 }
 
 model order {
-  id           String       @id @default(cuid())
-  user_id      String
-  user         User         @relation(fields: [user_id], references: [id])
-  items        order_item[]
-  status       OrderStatus  @default(PENDING)
-  total_price  Decimal
-  delivery_fee Decimal
-  address_id   String
-  address      address      @relation(fields: [address_id], references: [id])
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  id                         String       @id @default(cuid())
+  user_id                    String
+  mercado_pago_preference_id String?
+  user                       User         @relation(fields: [user_id], references: [id])
+  items                      order_item[]
+  status                     OrderStatus  @default(PENDING)
+  total_price                Decimal
+  delivery_fee               Decimal
+  address_id                 String?
+  address                    address?     @relation(fields: [address_id], references: [id])
+  createdAt                  DateTime     @default(now())
+  updatedAt                  DateTime     @updatedAt
 }
 
 model order_item {

@@ -13,7 +13,7 @@ interface PromoSliderProps {
 export default function PromoSlider({ products }: PromoSliderProps) {
   const settings = {
     dots: true,
-    infinite: true,
+    infinite: products.length > 4,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,

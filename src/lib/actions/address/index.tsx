@@ -3,6 +3,7 @@
 import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/db/prisma";
 import { AddressSchema } from "@/lib/schemas-validator/address.schema";
+import { revalidatePath } from "next/cache";
 
 export async function CreateAddressAction(data: any) {
   const session = await auth();
@@ -34,10 +35,46 @@ export async function CreateAddressAction(data: any) {
       district: district.district,
     },
   });
+
+  revalidatePath("carrinho");
 }
 
 export async function getDistricts() {
   const districts = await prisma.delivery_fee.findMany();
 
   return districts;
+}
+
+export async function getUserAddresses() {
+  const session = await auth();
+  const user = session?.user;
+
+  const addresses = await prisma.address.findMany({
+    where: {
+      user_id: user?.id,
+    },
+    select: {
+      id: true,
+      street: true,
+      number: true,
+      district: true,
+      city: true,
+      state: true,
+      zipCode: true,
+      complement: true,
+      delivery_fee: {
+        select: {
+          fee: true,
+        },
+      },
+    },
+  });
+
+  return addresses.map((a) => ({
+    ...a,
+    delivery_fee: {
+      ...a.delivery_fee,
+      fee: Number(a.delivery_fee!.fee),
+    },
+  }));
 }

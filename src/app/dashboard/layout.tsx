@@ -28,7 +28,7 @@ export default async function DashboardLayout({
     redirect("/");
   }
   return (
-    <div className="relative">
+    <div className="relative overflow-auto">
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
@@ -39,7 +39,7 @@ export default async function DashboardLayout({
               <DashboardBreadcrumb />
             </div>
           </header>
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          <div>
             <Suspense
               fallback={
                 <div className="w-full h-screen flex justify-center items-center text-3xl bg-primary text-primary-foreground">

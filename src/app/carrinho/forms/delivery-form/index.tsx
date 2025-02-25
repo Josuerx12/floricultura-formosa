@@ -1,26 +1,61 @@
+import CreateAddressModal from "@/components/modals/address/create";
+import useCartStore from "@/hooks/use-cart-store";
+import useMercadoPago from "@/hooks/use-mercado-pago";
+import { getUserAddresses } from "@/lib/actions/address";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
+import { User } from "next-auth";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { FormEvent, useState } from "react";
 
-const DeliveryForm = ({ cartDetails }: { cartDetails?: any }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+const DeliveryForm = () => {
+  const { products, addFee, removeFee, fee_id } = useCartStore();
+
+  const { createMercadoPagoCheckout } = useMercadoPago();
+
+  const { mutateAsync, isPending: isRedirecting } = useMutation({
+    mutationKey: ["createMercadoPagoCheckout"],
+    mutationFn: createMercadoPagoCheckout,
+  });
+
   const [deliveryType, setDeliveryType] = useState<"pickup" | "delivery">(
-    "pickup"
+    fee_id ? "delivery" : "pickup"
   );
 
   const { data: session } = useSession();
 
   const user = session?.user;
 
-  const onSubmit = (data: any) => {
-    console.log("Dados do formulário:", data);
-    alert("Formulário enviado com sucesso!");
+  const { data, isPending } = useQuery({
+    queryKey: ["userAddresses"],
+    queryFn: getUserAddresses,
+  });
+
+  const selectedAddress = data?.find((address) => address.id === fee_id);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    await mutateAsync({
+      cart: products,
+      user: user as User,
+      address: selectedAddress,
+    });
   };
+
+  const submitBtn = isRedirecting ? (
+    <button
+      disabled
+      className="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg text-center font-semibold animate-pulse hover:bg-blue-700 transition"
+    >
+      Redirecionando
+    </button>
+  ) : (
+    <button className="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg text-center font-semibold hover:bg-blue-700 transition">
+      Finalizar Compra
+    </button>
+  );
 
   return (
     <div className="max-w-lg mx-auto p-6  my-4 rounded-lg">
@@ -33,7 +68,10 @@ const DeliveryForm = ({ cartDetails }: { cartDetails?: any }) => {
             type="radio"
             value="pickup"
             checked={deliveryType === "pickup"}
-            onChange={() => setDeliveryType("pickup")}
+            onChange={() => {
+              setDeliveryType("pickup");
+              removeFee();
+            }}
             className="form-radio"
           />
           <span>Retirada na Loja</span>
@@ -50,63 +88,59 @@ const DeliveryForm = ({ cartDetails }: { cartDetails?: any }) => {
         </label>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* Nome do Recebedor */}
-        <div>
-          <label className="block font-medium">Nome do Recebedor</label>
-          <input
-            type="text"
-            {...register("receiverName", {
-              required: "Nome do recebedor é obrigatório",
-            })}
-            className="w-full border rounded-lg px-3 py-2"
-          />
-        </div>
-
-        {/* Formulário de Endereço (aparece apenas se for entrega) */}
+      <form onSubmit={handleSubmit} className="space-y-4">
         {deliveryType === "delivery" && (
-          <>
-            <div>
-              <label className="block font-medium">CEP</label>
-              <input
-                type="text"
-                {...register("cep", { required: "CEP é obrigatório" })}
-                className="w-full border rounded-lg px-3 py-2"
-              />
-            </div>
+          <div>
+            {isPending && (
+              <div className="flex items-center justify-center gap-2">
+                <span>Carregando endereços</span>{" "}
+                <Loader2 className="animate-spin" />
+              </div>
+            )}
 
-            <div>
-              <label className="block font-medium">Município</label>
-              <input
-                type="text"
-                {...register("city", { required: "Município é obrigatório" })}
-                className="w-full border rounded-lg px-3 py-2"
-              />
-            </div>
-
-            <div>
-              <label className="block font-medium">Rua</label>
-              <input
-                type="text"
-                {...register("street", { required: "Rua é obrigatória" })}
-                className="w-full border rounded-lg px-3 py-2"
-              />
-            </div>
-
-            <div>
-              <label className="block font-medium">Número</label>
-              <input
-                type="text"
-                {...register("number", { required: "Número é obrigatório" })}
-                className="w-full border rounded-lg px-3 py-2"
-              />
-            </div>
-          </>
+            {data && (
+              <div className="flex flex-col gap-y-4">
+                {data.map((a) => {
+                  return (
+                    <label key={a.id} className="flex items-start  space-x-2">
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          value="pickup"
+                          checked={fee_id === a.id}
+                          onChange={() => {
+                            a.delivery_fee && addFee(a.delivery_fee.fee, a.id);
+                          }}
+                          className="form-radio"
+                        />
+                        <span className="font-bold">Endereço: </span>
+                      </div>
+                      <div className="flex flex-col gap-y-2">
+                        <span className="text-justify text-sm">
+                          Rua: {a.street}, numero: {a.number}, bairro:{" "}
+                          {a.district}, estado: {a.state}, cidade: {a.city},{" "}
+                          {a.complement && "complemento:" + a.complement}{" "}
+                        </span>
+                        <span className="text-sm">
+                          <b>
+                            taxa:{" "}
+                            {a.delivery_fee!.fee.toLocaleString("pt-BR", {
+                              style: "currency",
+                              currency: "BRL",
+                            })}
+                          </b>
+                        </span>
+                      </div>
+                    </label>
+                  );
+                })}
+              </div>
+            )}
+            <CreateAddressModal />
+          </div>
         )}
         {user ? (
-          <button className="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg text-center font-semibold hover:bg-blue-700 transition">
-            Finalizar Compra
-          </button>
+          submitBtn
         ) : (
           <Link href={"/login"}>Autentique-se para continuar!</Link>
         )}

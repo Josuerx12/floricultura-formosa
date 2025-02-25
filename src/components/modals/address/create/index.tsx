@@ -6,13 +6,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { Plus, RectangleEllipsis, ScrollText } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Loader, Plus, RectangleEllipsis, ScrollText } from "lucide-react";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { AddressSchema } from "@/lib/schemas-validator/address.schema";
 import { CreateAddressAction, getDistricts } from "@/lib/actions/address";
+import { Button } from "@/components/ui/button";
 
 const CreateAddressModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,14 +21,22 @@ const CreateAddressModal = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(AddressSchema),
   });
 
-  const { mutateAsync } = useMutation({
+  const queryClient = useQueryClient();
+
+  const { mutateAsync, isPending } = useMutation({
     mutationKey: ["createAddress"],
     mutationFn: CreateAddressAction,
+    onSuccess: () => {
+      setIsOpen(false);
+      reset();
+      queryClient.resetQueries({ queryKey: ["userAddresses"] });
+    },
   });
 
   async function onSubmit(data: any) {
@@ -38,8 +47,8 @@ const CreateAddressModal = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={() => setIsOpen((prev) => !prev)}>
-      <DialogTrigger className="flex items-center gap-2 bg-primary text-primary-foreground p-2 rounded font-medium text-sm drop-shadow">
-        Adicionar <Plus size={16} />
+      <DialogTrigger className="text-blue-500 p-2 rounded font-medium text-sm drop-shadow">
+        Adicionar endereço
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -51,7 +60,7 @@ const CreateAddressModal = () => {
           className="w-full flex flex-col gap-4 mx-auto"
         >
           <h4 className="text-start text-sm my-6 font-semibold">
-            Preencha o campo abaixo para criar uma nova Address!
+            Preencha o campo abaixo para criar um novo endereço!
           </h4>
           <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
             <RectangleEllipsis className="text-primary-foreground" size={24} />
@@ -64,10 +73,14 @@ const CreateAddressModal = () => {
             />
           </label>
 
+          {errors.zipCode && (
+            <p className="text-red-500 text-sm">{errors.zipCode.message}</p>
+          )}
+
           <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
             <ScrollText className="text-primary-foreground" size={24} />
             <select
-              name="category_id"
+              {...register("delivery_fee_id")}
               className="flex-grow bg-transparent outline-none text-neutral-700"
               required
               defaultValue={""}
@@ -76,7 +89,7 @@ const CreateAddressModal = () => {
                 Selecione seu bairro
               </option>
               {data?.map((d) => (
-                <option key={d.id} value={d.district}>
+                <option key={d.id} value={d.id}>
                   {d.district} -{" "}
                   {Number(d.fee).toLocaleString("pt-BR", {
                     style: "currency",
@@ -86,6 +99,12 @@ const CreateAddressModal = () => {
               ))}
             </select>
           </label>
+
+          {errors.delivery_fee_id && (
+            <p className="text-red-500 text-sm">
+              {errors.delivery_fee_id.message}
+            </p>
+          )}
 
           <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
             <RectangleEllipsis className="text-primary-foreground" size={24} />
@@ -97,6 +116,11 @@ const CreateAddressModal = () => {
               placeholder="Insira o nome da rua!"
             />
           </label>
+
+          {errors.street && (
+            <p className="text-red-500 text-sm">{errors.street.message}</p>
+          )}
+
           <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
             <RectangleEllipsis className="text-primary-foreground" size={24} />
             <input
@@ -107,6 +131,11 @@ const CreateAddressModal = () => {
               placeholder="Insira o numero da residencia!"
             />
           </label>
+
+          {errors.number && (
+            <p className="text-red-500 text-sm">{errors.number.message}</p>
+          )}
+
           <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
             <RectangleEllipsis className="text-primary-foreground" size={24} />
             <input
@@ -117,6 +146,11 @@ const CreateAddressModal = () => {
               placeholder="Insira o nome do seu estado!"
             />
           </label>
+
+          {errors.state && (
+            <p className="text-red-500 text-sm">{errors.state.message}</p>
+          )}
+
           <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
             <RectangleEllipsis className="text-primary-foreground" size={24} />
             <input
@@ -127,6 +161,23 @@ const CreateAddressModal = () => {
               placeholder="Insira o nome da sua cidade!"
             />
           </label>
+
+          {errors.city && (
+            <p className="text-red-500 text-sm">{errors.city.message}</p>
+          )}
+          <Button type="submit" className="mt-4">
+            <div className="flex items-center justify-center gap-2">
+              {isPending ? (
+                <>
+                  <span>Criando</span> <Loader className="animate-spin" />
+                </>
+              ) : (
+                <>
+                  <span>Criar</span> <Plus />
+                </>
+              )}
+            </div>
+          </Button>
         </form>
       </DialogContent>
     </Dialog>

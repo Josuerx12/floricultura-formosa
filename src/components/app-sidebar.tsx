@@ -28,33 +28,15 @@ const data = {
           url: "/dashboard/produtos",
         },
         {
-          title: "Promoções / Ofertas",
+          title: "Ofertas",
           url: "/dashboard/ofertas",
         },
       ],
     },
     {
       title: "Vendas",
-      url: "#",
+      url: "/dashboard/vendas",
       icon: HandCoins,
-      items: [
-        {
-          title: "Em aprovação",
-          url: "#",
-        },
-        {
-          title: "Em andamento",
-          url: "#",
-        },
-        {
-          title: "Finalizadas / Entregues",
-          url: "#",
-        },
-        {
-          title: "Canceladas",
-          url: "#",
-        },
-      ],
     },
     {
       title: "Usuários",
