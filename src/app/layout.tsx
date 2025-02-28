@@ -7,7 +7,7 @@ import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/toaster";
 import WppBtn from "@/components/buttons/wpp-btn";
 import { Suspense } from "react";
-import { Loader2 } from "lucide-react";
+import { Analytics } from "@vercel/analytics/react";
 import ReactQueryProvider from "@/lib/react-query-provider";
 import Footer from "@/components/footer";
 
@@ -61,6 +61,7 @@ export default function RootLayout({
           </SessionProvider>
         </Suspense>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
