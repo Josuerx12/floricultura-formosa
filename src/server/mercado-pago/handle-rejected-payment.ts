@@ -4,57 +4,59 @@ import { PaymentResponse } from "mercadopago/dist/clients/payment/commonTypes";
 import { prisma } from "@/lib/db/prisma";
 import { transporter } from "@/lib/mail/transporter";
 
-export async function handleRejectedPayment(paymentData: PaymentResponse) {
-  const metadata = paymentData.metadata;
-  const orderId = metadata.order_id;
+export async function handleRejectedPayment(
+  paymentData?: PaymentResponse,
+  order_id?: string
+) {
+  const metadata = paymentData?.metadata;
+  const orderId = metadata.order_id ?? order_id;
 
-  const order = await prisma.order.findUnique({
-    where: {
-      id: orderId,
-    },
-    select: {
-      id: true,
-      status: true,
-      total_price: true,
-      user: {
-        select: {
-          email: true,
-        },
-      },
-      items: true,
-    },
-  });
-
-  if (!order) {
-    throw new Error("Pedido não encontrado!");
-  }
-
-  await prisma.order.update({
-    where: {
-      id: orderId,
-    },
-    data: {
-      status: "CANCELED",
-    },
-  });
-
-  for (const product of order.items) {
-    await prisma.product.update({
+  await prisma.$transaction(async (db) => {
+    const order = await db.order.findUnique({
       where: {
-        id: product.product_id,
+        id: orderId,
       },
-      data: {
-        stock_quantity: {
-          increment: product.quantity,
+      include: {
+        items: true,
+        user: {
+          select: {
+            email: true,
+          },
         },
       },
     });
-  }
 
-  transporter.sendMail({
-    from: "Floricultura Formosa <contato@jcdev.com.br>",
-    to: order.user.email,
-    subject: "Pedido Cancelado",
-    text: `Seu pedido número: ${order} foi cancelado.`,
+    if (order) {
+      await db.order.update({
+        where: {
+          id: order.id,
+        },
+        data: { status: "CANCELED" },
+      });
+    }
+
+    const promisseArray =
+      order?.items.map(
+        async (item) =>
+          await db.product.update({
+            where: { id: item.product_id },
+            data: {
+              stock_quantity: {
+                increment: item.quantity,
+              },
+            },
+          })
+      ) || [];
+
+    if (promisseArray.length > 0) {
+      await Promise.all(promisseArray);
+    }
+
+    transporter.sendMail({
+      from: "Floricultura Formosa <contato@jcdev.com.br>",
+      to: order!.user.email,
+      subject: "Pedido Cancelado",
+      text: `Seu pedido número: ${order?.id} foi cancelado.`,
+    });
   });
 }

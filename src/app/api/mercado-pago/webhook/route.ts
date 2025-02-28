@@ -14,10 +14,14 @@ export async function POST(request: Request) {
 
     const { type, data } = body;
 
+    console.log("Received webhook event:", type, data);
+
     switch (type) {
       case "payment":
         const payment = new Payment(mpClient);
         const paymentData = await payment.get({ id: data.id });
+
+        console.log(paymentData);
 
         if (
           paymentData.status === "approved" ||
@@ -38,6 +42,8 @@ export async function POST(request: Request) {
       default:
         console.log("Unhandled event type:", type);
     }
+
+    console.log("Webhook handled successfully");
 
     return NextResponse.json({ received: true }, { status: 200 });
   } catch (error) {

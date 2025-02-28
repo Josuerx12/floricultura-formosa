@@ -4,7 +4,7 @@ import { FaWhatsapp } from "react-icons/fa";
 const WppBtn = () => {
   return (
     <Link
-      href="https://wa.me/seu-numero"
+      href="https://api.whatsapp.com/send?phone=5522999712066&text=Ol%C3%A1%20estou%20acessando%20atrav%C3%A9s%20do%20site%20da%20floricultura%20e%20preciso%20de%20ajuda..."
       target="_blank"
       rel="noopener noreferrer"
       className="fixed z-50 bottom-4 right-4 group flex items-center bg-green-600 p-2 md:p-4 rounded-full text-white shadow-lg transition-all duration-300 hover:bg-green-700"

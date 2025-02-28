@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Preference } from "mercadopago";
+import { Payment, Preference } from "mercadopago";
 import mpClient from "@/lib/mercado-pago";
 import { ProductCart } from "@/hooks/use-cart-store";
 import { User } from "next-auth";
@@ -88,7 +88,12 @@ export async function POST(req: NextRequest) {
         },
         auto_return: "approved",
         back_urls: {
-          success: `${req.headers.get("origin")}/api/mercado-pago/success`,
+          success: `${req.headers.get("origin")}/pagamentos?status=sucesso`,
+          failure: `${req.headers.get("origin")}/api/mercado-pago/failure`,
+          pending: `${req.headers.get("origin")}/api/mercado-pago/pending`,
+        },
+        redirect_urls: {
+          success: `${req.headers.get("origin")}/pagamentos?status=sucesso`,
           failure: `${req.headers.get("origin")}/api/mercado-pago/failure`,
           pending: `${req.headers.get("origin")}/api/mercado-pago/pending`,
         },
