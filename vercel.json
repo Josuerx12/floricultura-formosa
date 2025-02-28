@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "schedule": "0 */2 * * *",
+      "schedule": "0 5 * * *",
       "path": "/api/order/verify"
     }
   ]
