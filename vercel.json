@@ -2,7 +2,7 @@
   "crons": [
     {
       "schedule": "0 */2 * * *",
-      "job": "/api/order/verify"
+      "path": "/api/order/verify"
     }
   ]
 }
