@@ -9,7 +9,7 @@ export async function handleRejectedPayment(
   order_id?: string
 ) {
   const metadata = paymentData?.metadata;
-  const orderId = metadata.order_id ?? order_id;
+  const orderId = metadata?.order_id ?? order_id;
 
   await prisma.$transaction(async (db) => {
     const order = await db.order.findUnique({

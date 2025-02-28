@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Payment, Preference } from "mercadopago";
-import mpClient from "@/lib/mercado-pago";
 import { ProductCart } from "@/hooks/use-cart-store";
 import { User } from "next-auth";
 import { randomUUID } from "crypto";
 import { prisma } from "@/lib/db/prisma";
+import { Preference } from "mercadopago";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -97,6 +96,11 @@ export async function POST(req: NextRequest) {
           failure: `${req.headers.get("origin")}/api/mercado-pago/failure`,
           pending: `${req.headers.get("origin")}/api/mercado-pago/pending`,
         },
+        expires: true,
+        expiration_date_from: new Date().toISOString(),
+        expiration_date_to: new Date(
+          new Date().getTime() + 3600000
+        ).toISOString(),
       },
     });
 

@@ -23,7 +23,6 @@ export async function GET(request: Request) {
   const preference = new Preference(mpClient);
 
   console.log("Processando pagamentos...");
-  console.log(preference);
 
   const promises = orders.map(async (order) => {
     const preferenceData = order.mercado_pago_preference_id
@@ -32,22 +31,22 @@ export async function GET(request: Request) {
         })
       : null;
 
-    console.log(preferenceData);
+    if (preferenceData) {
+      if (!preferenceData.expiration_date_to) {
+        return await handleRejectedPayment(undefined, order.id);
+      }
 
-    // if (
-    //   !preferenceData ||
-    //   preferenceData. === "rejected" ||
-    //   paymentData.status === "cancelled"
-    // ) {
-    //   await handleRejectedPayment(undefined, order.id);
-    // }
+      const expiresId =
+        new Date(preferenceData.expiration_date_to).getTime() -
+        new Date().getTime();
+      if (expiresId <= 0) {
+        return await handleRejectedPayment(undefined, order.id);
+      }
+    }
 
-    // if (
-    //   paymentData &&
-    //   (paymentData.status === "approved" || paymentData.date_approved !== null)
-    // ) {
-    //   await handleApprovedPayment(paymentData);
-    // }
+    if (!preferenceData) {
+      return await handleRejectedPayment(undefined, order.id);
+    }
   });
 
   await Promise.all(promises);
