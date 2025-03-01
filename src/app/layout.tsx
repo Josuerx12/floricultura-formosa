@@ -42,7 +42,9 @@ export default function RootLayout({
         />
       </head>
 
-      <body className={`${poppins.className} antialiased bg-neutral-50 `}>
+      <body
+        className={`${poppins.className} antialiased bg-neutral-50 flex flex-col min-h-screen h-full`}
+      >
         <noscript
           dangerouslySetInnerHTML={{
             __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P82PQR7"
@@ -57,10 +59,10 @@ export default function RootLayout({
               {children}
               <Toaster />
               <WppBtn />
+              <Footer />
             </ReactQueryProvider>
           </SessionProvider>
         </Suspense>
-        <Footer />
         <Analytics />
       </body>
     </html>
