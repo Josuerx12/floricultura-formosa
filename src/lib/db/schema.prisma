@@ -195,6 +195,17 @@ model delivery_fee {
   address  address[]
 }
 
+model banners {
+  id         Int      @id @default(autoincrement())
+  title      String
+  url        String
+  file_key   String
+  bucket     String
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
 enum OrderStatus {
   PENDING
   PROCESSING

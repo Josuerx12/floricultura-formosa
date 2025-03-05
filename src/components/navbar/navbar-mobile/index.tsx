@@ -13,14 +13,15 @@ import {
   UserPlus,
   X,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { singOutAction } from "@/lib/actions/auth";
 import { useRouter } from "next/navigation";
 import ProfileModal from "@/components/modals/profile-modal";
 import CategoryDropdown from "@/components/dropdowns/category-dropdown";
-import { Category, getCategories } from "@/lib/actions/category";
+import { getCategories } from "@/lib/actions/category";
 import CartBtn from "@/components/buttons/cart-btn";
 import { MobileHomeSearchFilter } from "@/components/filters/mobile-home-search-filter";
+import { useQuery } from "@tanstack/react-query";
 
 const NavbarMobile = () => {
   const { data: session } = useSession();
@@ -35,17 +36,10 @@ const NavbarMobile = () => {
     setIsOpen((prev) => !prev);
   }
 
-  const [categories, setCategories] = useState<Category[]>([]);
-
-  async function fetchCategoires() {
-    const res = await getCategories();
-
-    setCategories(res);
-  }
-
-  useEffect(() => {
-    fetchCategoires();
-  }, []);
+  const { data, isPending } = useQuery({
+    queryKey: ["categories"],
+    queryFn: getCategories,
+  });
 
   return (
     <>
@@ -86,7 +80,8 @@ const NavbarMobile = () => {
               <Link href={"/ofertas"}>Ofertas</Link>
             </li>
             <li>
-              <CategoryDropdown categories={categories} />
+              {isPending && <div>Carregando Categorias...</div>}
+              {data && <CategoryDropdown categories={data} />}
             </li>
             <li>
               <Link href={"/ajuda"}>Ajuda</Link>

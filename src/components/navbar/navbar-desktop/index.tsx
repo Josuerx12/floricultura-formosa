@@ -1,32 +1,32 @@
-import { auth } from "@/lib/auth/auth";
+"use client";
 import Logo from "../../logo";
 
 import Link from "next/link";
 import UserDropdown from "../../user-dropdown";
-import { ShoppingCart } from "lucide-react";
 import CategoryDropdown from "@/components/dropdowns/category-dropdown";
 import { prisma } from "@/lib/db/prisma";
 import CartBtn from "@/components/buttons/cart-btn";
 import MyAccountDropdown from "@/components/dropdowns/my-account-dropdown";
-import SearchFilter from "@/components/filters/search-filter";
 import HomeSearchFilter from "@/components/filters/home-search-filter";
+import { useQuery } from "@tanstack/react-query";
+import { getCategories } from "@/lib/actions/category";
+import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
-const NavbarDesktop = async () => {
-  const session = await auth();
-  const user = session?.user;
+const NavbarDesktop = () => {
+  const session = useSession();
+  const user = session?.data?.user;
 
-  const categories = await prisma.category.findMany({
-    select: {
-      name: true,
-      id: true,
-      subcategories: {
-        select: {
-          name: true,
-          id: true,
-        },
-      },
-    },
+  const { data, isPending } = useQuery({
+    queryKey: ["categories"],
+    queryFn: getCategories,
   });
+
+  const pathname = usePathname();
+
+  const hideNavbar = pathname.startsWith("/dashboard");
+
+  if (hideNavbar) return null;
 
   return (
     <div className="md:flex flex-col sticky z-20 inset-0">
@@ -41,7 +41,7 @@ const NavbarDesktop = async () => {
           <div className="flex items-center gap-4">
             <CartBtn />
 
-            <UserDropdown user={user} />
+            {user && <UserDropdown user={user} />}
           </div>
         ) : (
           <div className="flex gap-6 text-sm items-center">
@@ -53,7 +53,8 @@ const NavbarDesktop = async () => {
       <nav className="bg-primary-foreground text-primary hidden md:flex gap-6 px-4 py-2 justify-center items-center">
         <ul className="flex gap-10 text-sm uppercase">
           <li>
-            <CategoryDropdown categories={categories} />
+            {isPending && <div>Carregando Categorias...</div>}
+            {data && <CategoryDropdown categories={data} />}
           </li>
           <Link href={"/ofertas"}>
             <li className=" relative before:absolute before:w-0 before:h-[2px] before:left-0 before:-bottom-1 hover:before:w-10/12 before:bg-primary-foreground  before:duration-200 cursor-pointer">

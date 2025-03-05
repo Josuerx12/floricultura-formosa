@@ -6,7 +6,7 @@ import ShippedSalesInfiniteScroll from "@/components/infinite-scrolls/shipped-sa
 
 const SalesPage = () => {
   return (
-    <div className="w-max !overflow-x-visible flex">
+    <div className="w-max h-[90dvh] !overflow-x-visible flex">
       <ProcessedSalesInfiniteScroll />
       <ShippedSalesInfiniteScroll />
       <DeliveredSalesInfiniteScroll />

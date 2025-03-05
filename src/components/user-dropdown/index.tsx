@@ -14,6 +14,7 @@ import ProfileModal from "../modals/profile-modal";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { User } from "next-auth";
+import { signOut } from "next-auth/react";
 
 const UserDropdown = ({ user }: { user: User }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -43,7 +44,7 @@ const UserDropdown = ({ user }: { user: User }) => {
             <ChevronDown className="text-primary-foreground" />
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-fit absolute top-full left-1/2 -translate-x-1/2 drop-shadow-md bg-primary text-primary-foreground rounded-md">
+        <DropdownMenuContent className="w-fit  drop-shadow-md bg-primary text-primary-foreground rounded-md">
           <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
@@ -68,12 +69,13 @@ const UserDropdown = ({ user }: { user: User }) => {
             Compras
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="font-semibold cursor-pointer text-nowrap hover:bg-red-600 hover:text-primary duration-100">
-            <form className="w-full" action={singOutAction}>
-              <button className="w-full text-start" type="submit">
-                Sair
-              </button>
-            </form>
+          <DropdownMenuItem
+            onClick={() => signOut()}
+            className="font-semibold cursor-pointer text-nowrap hover:bg-red-600 hover:text-primary duration-100"
+          >
+            <button className="w-full text-start" type="submit">
+              Sair
+            </button>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

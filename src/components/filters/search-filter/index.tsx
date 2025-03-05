@@ -46,7 +46,7 @@ const SearchFilter = ({ placeholder }: { placeholder: string }) => {
           <input
             value={inputValue}
             onChange={handleInputChange}
-            placeholder={`Buscar por nome ${placeholder}`}
+            placeholder={`Buscar por dados ${placeholder}`}
             className="bg-transparent flex-grow placeholder:text-neutral-700 outline-none"
             type="text"
           />

@@ -27,7 +27,7 @@ const PendingSalesInfiniteScroll = () => {
   if (data?.pages[0].data.length <= 0) return null;
 
   return (
-    <div className="flex flex-col bg-primary rounded-lg shadow-md max-w-96 w-full  mx-2 overflow-y-auto h-screen">
+    <div className="flex flex-col bg-primary rounded-lg shadow-md max-w-96 w-full  mx-2 overflow-y-auto h-full">
       <div className="sticky inset-0 bg-primary-foreground drop-shadow-md flex  items-center justify-between p-2 gap-2">
         <h2 className="text-start text-white font-semibold">
           Vendas com pagamento pendente

@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   description: "Floricultura formosa a floricultura de confiança.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
