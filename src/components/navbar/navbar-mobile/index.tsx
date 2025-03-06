@@ -9,7 +9,7 @@ import {
   LogOut,
   Menu,
   ShoppingCart,
-  User,
+  User as UserIcon,
   UserPlus,
   X,
 } from "lucide-react";
@@ -22,11 +22,9 @@ import { getCategories } from "@/lib/actions/category";
 import CartBtn from "@/components/buttons/cart-btn";
 import { MobileHomeSearchFilter } from "@/components/filters/mobile-home-search-filter";
 import { useQuery } from "@tanstack/react-query";
+import { User } from "next-auth";
 
-const NavbarMobile = () => {
-  const { data: session } = useSession();
-  const user = session?.user;
-
+const NavbarMobile = ({ user }: { user?: User }) => {
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -105,7 +103,7 @@ const NavbarMobile = () => {
                 }}
                 className="flex items-center justify-between gap-2"
               >
-                Perfil <User size={18} />
+                Perfil <UserIcon size={18} />
               </li>
               <li
                 onClick={() => {

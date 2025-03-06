@@ -10,6 +10,7 @@ import { Suspense } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import ReactQueryProvider from "@/lib/react-query-provider";
 import Footer from "@/components/footer";
+import Navbar from "@/components/navbar";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -54,8 +55,7 @@ export default async function RootLayout({
         <Suspense>
           <SessionProvider>
             <ReactQueryProvider>
-              <NavbarDesktop />
-              <NavbarMobile />
+              <Navbar />
               {children}
               <Toaster />
               <WppBtn />

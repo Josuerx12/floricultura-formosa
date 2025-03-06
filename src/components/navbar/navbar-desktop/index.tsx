@@ -10,13 +10,10 @@ import MyAccountDropdown from "@/components/dropdowns/my-account-dropdown";
 import HomeSearchFilter from "@/components/filters/home-search-filter";
 import { useQuery } from "@tanstack/react-query";
 import { getCategories } from "@/lib/actions/category";
-import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { User } from "next-auth";
 
-const NavbarDesktop = () => {
-  const session = useSession();
-  const user = session?.data?.user;
-
+const NavbarDesktop = ({ user }: { user?: User }) => {
   const { data, isPending } = useQuery({
     queryKey: ["categories"],
     queryFn: getCategories,

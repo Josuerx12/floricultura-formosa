@@ -1,3 +1,4 @@
+"use client";
 import CreateAddressModal from "@/components/modals/address/create";
 import useCartStore from "@/hooks/use-cart-store";
 import useMercadoPago from "@/hooks/use-mercado-pago";
@@ -5,11 +6,10 @@ import { getUserAddresses } from "@/lib/actions/address";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { User } from "next-auth";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { FormEvent, useState } from "react";
 
-const DeliveryForm = () => {
+const DeliveryForm = ({ user }: { user?: User }) => {
   const { products, addFee, removeFee, fee_id } = useCartStore();
 
   const { createMercadoPagoCheckout } = useMercadoPago();
@@ -22,10 +22,6 @@ const DeliveryForm = () => {
   const [deliveryType, setDeliveryType] = useState<"pickup" | "delivery">(
     fee_id ? "delivery" : "pickup"
   );
-
-  const { data: session } = useSession();
-
-  const user = session?.user;
 
   const { data, isPending } = useQuery({
     queryKey: ["userAddresses"],
