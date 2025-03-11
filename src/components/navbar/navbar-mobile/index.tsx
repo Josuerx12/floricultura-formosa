@@ -1,5 +1,4 @@
 "use client";
-import { useSession } from "next-auth/react";
 import Logo from "../../logo";
 
 import Link from "next/link";
@@ -34,16 +33,16 @@ const NavbarMobile = ({ user }: { user?: User }) => {
     setIsOpen((prev) => !prev);
   }
 
+  const { data, isPending } = useQuery({
+    queryKey: ["categories"],
+    queryFn: getCategories,
+  });
+
   const pathname = usePathname();
 
   const hideNavbar = pathname.startsWith("/dashboard");
 
   if (hideNavbar) return null;
-
-  const { data, isPending } = useQuery({
-    queryKey: ["categories"],
-    queryFn: getCategories,
-  });
 
   return (
     <>
