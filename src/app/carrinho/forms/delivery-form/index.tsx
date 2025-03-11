@@ -54,7 +54,7 @@ const DeliveryForm = ({ user }: { user?: User }) => {
   );
 
   return (
-    <div className="max-w-lg mx-auto p-6  my-4 rounded-lg">
+    <div className="max-w-lg mx-auto p-6 my-4 rounded-lg">
       <h2 className="text-2xl font-semibold mb-4">Escolha o tipo de entrega</h2>
 
       {/* Opções de entrega */}
@@ -98,7 +98,7 @@ const DeliveryForm = ({ user }: { user?: User }) => {
               <div className="flex flex-col gap-y-4">
                 {data.map((a) => {
                   return (
-                    <label key={a.id} className="flex items-start  space-x-2">
+                    <label key={a.id} className="flex items-start space-x-2">
                       <div className="flex items-center gap-2">
                         <input
                           type="radio"
@@ -138,7 +138,12 @@ const DeliveryForm = ({ user }: { user?: User }) => {
         {user ? (
           submitBtn
         ) : (
-          <Link href={"/login"}>Autentique-se para continuar!</Link>
+          <Link
+            href="/login"
+            className="mt-6 w-full text-center block bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
+          >
+            Autentique-se para continuar
+          </Link>
         )}
       </form>
     </div>

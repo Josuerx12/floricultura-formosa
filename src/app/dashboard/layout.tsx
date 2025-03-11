@@ -27,6 +27,7 @@ export default async function DashboardLayout({
   if (user?.role !== "ADMIN" && user?.role !== "SELLER") {
     redirect("/");
   }
+
   return (
     <div className="relative overflow-auto">
       <SidebarProvider>

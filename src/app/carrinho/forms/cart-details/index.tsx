@@ -15,11 +15,11 @@ const CartDetails = ({ user }: { user?: User }) => {
         <p className="text-center">Seu carrinho está vazio.</p>
       ) : (
         <>
-          <ul className="flex flex-col gap-4 ">
+          <ul className="flex flex-col gap-4 bg-primary-foreground rounded-xl p-3">
             {products.map((product) => (
               <li
                 key={product.id}
-                className="flex gap-4 border w-full p-3 rounded"
+                className="flex gap-4 w-full p-3 rounded bg-white/70 shadow-md"
               >
                 {product.product_image && (
                   <Image
@@ -32,33 +32,43 @@ const CartDetails = ({ user }: { user?: User }) => {
                   />
                 )}
 
-                <div className="flex flex-col gapy-2">
-                  <span>
-                    {product.name} - R${product.price}
-                  </span>
-                  <span>
-                    Valor unitario:{" "}
+                <div className="flex flex-col gap-y-2">
+                  <span className="text-sm md:text-lg">{product.name}</span>
+
+                  <span className="font-bold text-sm md:text-lg text-primary-foreground">
                     {product.price.toLocaleString("pt-BR", {
                       style: "currency",
                       currency: "BRL",
                     })}
                   </span>
+
                   <div className="flex  items-center gap-3">
                     <button
-                      className="p-1 border rounded-md"
+                      className="py-1 px-3 text-primary bg-primary-foreground rounded-md"
                       onClick={() => decreaseQuantity(product.id)}
                     >
                       -
                     </button>
-                    <span>{product.quantity}</span>
+                    <span className="text-primary-foreground text-sm font-bold">
+                      {product.quantity} {"un's"}
+                    </span>
                     <button
                       disabled={product.total_stock === product.quantity}
-                      className="p-1 border rounded-md"
+                      className="py-1 px-3 text-primary bg-primary-foreground rounded-md"
                       onClick={() => increaseQuantity(product.id)}
                     >
                       +
                     </button>
                   </div>
+                  <span className="text-primary-foreground font-semibold">
+                    Total:{" "}
+                    <span>
+                      {(product.price * product.quantity).toLocaleString(
+                        "pt-BR",
+                        { style: "currency", currency: "BRL" }
+                      )}
+                    </span>
+                  </span>
                 </div>
               </li>
             ))}

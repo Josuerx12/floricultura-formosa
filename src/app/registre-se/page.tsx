@@ -1,24 +1,30 @@
-import React, { Suspense } from "react";
+import React from "react";
 import Image from "next/image";
 import SignUpForm from "./form";
 
 const Page = () => {
   return (
-    <div className="w-full h-screen flex justify-center ">
-      <div className="flex flex-col gap-6 mx-2 md:mx-auto p-3 py-7 max-w-screen-md h-fit border border-primary mt-40 flex-1 rounded-xl">
-        <div className="flex flex-col  items-center w-full mx-auto">
+    <div className="w-full h-full md:h-screen flex justify-center py-10 bg-primary px-4">
+      <div className="flex flex-col gap-6 p-6 py-8 h-fit max-w-md w-full bg-white shadow-lg rounded-2xl border border-gray-200">
+        {/* Logo e Mensagem de Boas-vindas */}
+        <div className="flex flex-col items-center">
           <Image
-            src={"/logo.svg"}
-            width={70}
-            height={70}
+            src="/logo.svg"
+            width={80}
+            height={80}
             quality={100}
-            alt="Logo floricultura"
-            className="bg-transparent fill-current text-black"
+            alt="Logo Floricultura"
           />
-
-          <h3 className="mt-2">Preencha seus dados para criar sua conta!</h3>
+          <h2 className="mt-3 text-lg font-semibold text-gray-700 text-center">
+            Junte-se a nós! 🌸
+          </h2>
+          <p className="text-sm text-gray-500 text-center">
+            Preencha os campos abaixo para criar sua conta e aproveitar nossas
+            ofertas exclusivas.
+          </p>
         </div>
 
+        {/* Formulário de Cadastro */}
         <SignUpForm />
       </div>
     </div>

@@ -12,44 +12,55 @@ const AutentiqueSe = async () => {
   if (session?.user) {
     redirect("/");
   }
-  return (
-    <div className="w-full h-screen flex justify-center ">
-      <div className="flex flex-col gap-6 mx-2 md:mx-auto p-3 py-7 max-w-screen-md h-fit border border-primary mt-40 flex-1 rounded-xl">
-        <div className="flex flex-col  items-center w-full mx-auto">
-          <Image
-            src={"/logo.svg"}
-            width={70}
-            height={70}
-            quality={100}
-            alt="Logo floricultura"
-            className=""
-          />
 
-          <h3 className="mt-2">Preencha seus dados para autenticar-se!</h3>
+  return (
+    <div className="w-full h-full md:h-screen flex justify-center py-10 bg-primary">
+      <div className="flex flex-col h-fit gap-6 mx-4 md:mx-auto p-6 py-8 max-w-md w-full bg-white shadow-lg rounded-2xl border border-gray-200">
+        {/* Logo */}
+        <div className="flex flex-col items-center">
+          <Image
+            src="/logo.svg"
+            width={80}
+            height={80}
+            quality={100}
+            alt="Logo Floricultura"
+          />
+          <h2 className="mt-3 text-lg font-semibold text-gray-700">
+            Bem-vindo à nossa floricultura!
+          </h2>
+          <p className="text-sm text-gray-500">Faça login para continuar</p>
         </div>
 
+        {/* Formulário */}
         <LoginForm />
 
-        <div className="flex flex-col gap-2">
-          <p className="mx-auto font-light text-sm">
+        {/* Alternativas de Login */}
+        <div className="flex flex-col gap-3">
+          <p className="text-center text-sm text-gray-600">
             Não possui uma conta?{" "}
-            <Link className="text-blue-600" href={"/registre-se"}>
-              clique aqui!
+            <Link
+              className="text-[#E8485F] font-medium hover:underline"
+              href="/registre-se"
+            >
+              Registre-se
             </Link>
           </p>
-          <p className="text-sm mx-auto font-light">
-            Ou se preferir autentique-se com
-          </p>
-          <div className="flex flex-wrap gap-4 mx-auto">
-            <form action={singInWithGoogle}>
-              <button
-                type="submit"
-                className="flex bg-[#DB4437] duration-200 text-sm rounded p-2 text-white justify-center items-center gap-2"
-              >
-                <BiLogoGooglePlus size={18} /> Google
-              </button>
-            </form>
+
+          <div className="relative flex items-center">
+            <div className="w-full border-t border-gray-300"></div>
+            <span className="px-2 text-sm text-gray-400 bg-white">ou</span>
+            <div className="w-full border-t border-gray-300"></div>
           </div>
+
+          <form action={singInWithGoogle} className="w-full">
+            <button
+              type="submit"
+              className="flex items-center gap-3 justify-center w-full py-2 px-4 bg-[#E8485F] text-white text-sm font-medium rounded-lg shadow-md transition-all duration-300 hover:bg-[#d73850] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#E8485F] focus:ring-offset-1"
+            >
+              <BiLogoGooglePlus size={20} />
+              Entrar com Google
+            </button>
+          </form>
         </div>
       </div>
     </div>

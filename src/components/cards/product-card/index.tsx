@@ -34,7 +34,8 @@ export function ProductCard({ product }: { product: Product }) {
   const router = useRouter();
 
   return (
-    <div className="relative border basis-72 group w-full rounded-lg h-full p-4 shadow-sm hover:shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out flex flex-col overflow-hidden">
+    <div className="relative border bg-white rounded-lg p-4 shadow-sm hover:shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out flex flex-col overflow-hidden">
+      {/* Imagem do Produto */}
       <div className="relative">
         <Image
           width={800}
@@ -52,22 +53,28 @@ export function ProductCard({ product }: { product: Product }) {
         )}
       </div>
 
+      {/* Nome do Produto */}
       <h3 className="text-lg font-semibold mt-2">{product.name}</h3>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-y-5 flex-grow mt-5"
       >
+        {/* Preço */}
         {finalPrice !== product.price ? (
-          <p className="text-red-500 font-bold text-xl">
-            R$ {finalPrice.toFixed(2)}{" "}
+          <div className="flex items-center space-x-2">
+            <p className="text-red-500 font-bold text-xl">
+              R$ {finalPrice.toFixed(2)}
+            </p>
             <span className="text-gray-400 line-through text-xl">
               R$ {product.price.toFixed(2)}
             </span>
-          </p>
+          </div>
         ) : (
           <p className="text-gray-600 text-xl">R$ {product.price.toFixed(2)}</p>
         )}
+
+        {/* Campos Invisíveis para o Formulário */}
         <input {...register("id")} type="hidden" value={product.id} />
         <input
           {...register("total_stock")}
@@ -89,10 +96,12 @@ export function ProductCard({ product }: { product: Product }) {
               : ""
           }
         />
+
+        {/* Seletor de Quantidade */}
         <div>
           <select
             {...register("quantity")}
-            className="w-full text-sm bg-transparent border-primary-foreground/40 border px-2 py-1 outline-none"
+            className="w-full text-sm bg-transparent border border-gray-300 rounded-md px-2 py-1 outline-none focus:ring-2 focus:ring-primary-foreground"
             defaultValue={1}
           >
             {Array.from({ length: product.stock_quantity }).map((_, i) => (
@@ -102,8 +111,9 @@ export function ProductCard({ product }: { product: Product }) {
             ))}
           </select>
 
+          {/* Mensagem de Estoque */}
           <p
-            className={`text-sm mt-1 mx-auto ${
+            className={`text-sm mt-1 text-center ${
               product.stock_quantity <= 10
                 ? "text-red-600 font-bold"
                 : "text-gray-600"
@@ -113,8 +123,12 @@ export function ProductCard({ product }: { product: Product }) {
           </p>
         </div>
 
-        <div className="mt-auto flex  gap-2 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
-          <button className="bg-primary-foreground/90 w-full p-2 rounded-md text-white hover:bg-primary-foreground transition duration-200">
+        {/* Botões de Ação */}
+        <div className="mt-auto flex gap-2 opacity-100 transition-opacity duration-300 group-hover:opacity-100">
+          <button
+            type="submit"
+            className="bg-primary-foreground/90 w-full p-2 rounded-md text-white hover:bg-primary-foreground transition duration-200"
+          >
             Comprar
           </button>
           <button

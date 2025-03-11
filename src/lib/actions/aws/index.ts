@@ -1,5 +1,3 @@
-"use server";
-
 import {
   DeleteObjectCommand,
   PutObjectCommand,
@@ -15,15 +13,31 @@ const s3 = new S3Client({
   },
 });
 
+export const fileTypes = {
+  AVATAR: "avatar",
+  BANNER: "banner",
+  PRODUCT: "product",
+} as const;
+
+export type FileType = (typeof fileTypes)[keyof typeof fileTypes];
+
 export async function uploadFileAWS(file: File, type?: string) {
   const fileNameWithoutExt =
     new Date().getTime() +
     file.name.replace(/\.[^/.]+$/, "").replace(/\s+/g, "-");
   const fileKey = `${fileNameWithoutExt}.webp`;
-  const bucket =
-    type === "avatar"
-      ? (process.env.FLORICULTURA_AWS_AVATAR_BUCKET_NAME as string)
-      : (process.env.FLORICULTURA_AWS_PRODUCT_IMAGES_BUCKET_NAME as string);
+
+  let bucket: string;
+
+  switch (type) {
+    case "avatar":
+      bucket = process.env.FLORICULTURA_AWS_AVATAR_BUCKET_NAME as string;
+    case "banner":
+      bucket = process.env.FLORICULTURA_AWS_BANNER_IMAGES_BUCKET_NAME as string;
+    default:
+      bucket = process.env
+        .FLORICULTURA_AWS_PRODUCT_IMAGES_BUCKET_NAME as string;
+  }
 
   const fileBuffer = await file.arrayBuffer();
 
