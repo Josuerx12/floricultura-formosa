@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { singOutAction } from "@/lib/actions/auth";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import ProfileModal from "@/components/modals/profile-modal";
 import CategoryDropdown from "@/components/dropdowns/category-dropdown";
 import { getCategories } from "@/lib/actions/category";
@@ -33,6 +33,12 @@ const NavbarMobile = ({ user }: { user?: User }) => {
   function handleOpen() {
     setIsOpen((prev) => !prev);
   }
+
+  const pathname = usePathname();
+
+  const hideNavbar = pathname.startsWith("/dashboard");
+
+  if (hideNavbar) return null;
 
   const { data, isPending } = useQuery({
     queryKey: ["categories"],
