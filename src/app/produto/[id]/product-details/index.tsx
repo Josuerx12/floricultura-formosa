@@ -116,7 +116,7 @@ const ProductDetails = ({ product, finalPrice, discount }: any) => {
 
           <button
             type="submit"
-            className="w-full bg-primary text-primary-foreground hover:bg-primary-foreground hover:text-primary py-3 rounded-md font-semibold hover:bg-primary-dark transition-all duration-300"
+            className="w-full bg-primary-foreground text-primary hover:bg-primary-foreground/80 hover:text-primary py-3 rounded-md font-semibold hover:bg-primary-dark transition-all duration-300"
           >
             Adicionar ao Carrinho
           </button>

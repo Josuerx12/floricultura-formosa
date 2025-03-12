@@ -56,7 +56,7 @@ const OfertasPage = async ({ searchParams }: { searchParams: any }) => {
   });
 
   return (
-    <div className="flex flex-col px-2">
+    <div className="flex flex-col min-h-screen px-4 pb-6">
       <h2 className="text-center text-xl my-6">Ofertas - Promoções</h2>
 
       <div className="max-w-screen-xl w-full mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

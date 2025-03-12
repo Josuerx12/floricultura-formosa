@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
       "floricultura-fotos-produto.s3.amazonaws.com",
     ],
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "10mb",
+    },
+  },
 };
 
 export default nextConfig;

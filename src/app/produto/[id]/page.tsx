@@ -38,7 +38,7 @@ const ProductPage = async ({ params }: { params: any }) => {
   const finalPrice = product.price - (product.price * discount) / 100;
 
   return (
-    <div className="flex py-10 px-2 max-w-screen-xl mx-auto flex-col">
+    <div className="flex py-10 px-2 max-w-screen-xl min-h-screen mx-auto flex-col">
       <div className="w-full pb-6  flex justify-start">
         <BackBtn />
       </div>

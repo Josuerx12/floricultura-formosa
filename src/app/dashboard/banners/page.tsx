@@ -11,6 +11,7 @@ import {
 import React from "react";
 import SearchFilter from "@/components/filters/search-filter";
 import Pagination from "@/components/pagination";
+import CreateBannerModal from "@/components/modals/banners/create";
 
 const BannersPage = async ({ searchParams }: { searchParams: any }) => {
   const { search, page } = await searchParams;
@@ -63,12 +64,12 @@ const BannersPage = async ({ searchParams }: { searchParams: any }) => {
     <div>
       <div className="flex mb-4 justify-end items-center gap-4">
         <SearchFilter placeholder="do banner" />
-        {/* <CreateCategoriaModal /> */}
+        <CreateBannerModal />
       </div>
       <Table>
         {banners?.length <= 0 && (
           <TableCaption>
-            Não foi possivel encontrar categorias cadastradas.
+            Não foi possivel encontrar banners cadastrados.
           </TableCaption>
         )}
         <TableHeader>

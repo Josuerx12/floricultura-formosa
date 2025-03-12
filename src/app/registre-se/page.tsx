@@ -4,7 +4,7 @@ import SignUpForm from "./form";
 
 const Page = () => {
   return (
-    <div className="w-full h-full md:h-screen flex justify-center py-10 bg-primary px-4">
+    <div className="w-full h-full md:h-screen flex justify-center py-10 px-4">
       <div className="flex flex-col gap-6 p-6 py-8 h-fit max-w-md w-full bg-white shadow-lg rounded-2xl border border-gray-200">
         {/* Logo e Mensagem de Boas-vindas */}
         <div className="flex flex-col items-center">

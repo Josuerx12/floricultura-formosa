@@ -27,19 +27,26 @@ export default function HomeSlider() {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    autoPlay: true,
   };
   return (
-    <Slider className="-z-20" {...settings}>
-      {slides.map((slide) => (
-        <Image
-          key={slide.id}
-          src={slide.src}
-          alt={slide.alt}
-          width={1920}
-          height={580}
-          quality={100}
-        />
-      ))}
-    </Slider>
+    <div className="w-full overflow-hidden">
+      <Slider {...settings}>
+        {slides.map((slide) => {
+          console.log(slide);
+          return (
+            <Image
+              key={slide.id}
+              className="w-full"
+              src={slide.src}
+              alt={slide.alt}
+              width={1920}
+              height={580}
+              quality={100}
+            />
+          );
+        })}
+      </Slider>
+    </div>
   );
 }

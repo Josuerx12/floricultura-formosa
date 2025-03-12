@@ -72,7 +72,7 @@ const CategoryPage = async ({
   });
 
   return (
-    <div className="pb-6">
+    <div className="px-4 pb-6">
       <h3 className="my-6 text-xl text-center">
         {category?.replaceAll("-", " ")}
       </h3>

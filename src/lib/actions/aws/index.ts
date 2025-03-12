@@ -42,7 +42,7 @@ export async function uploadFileAWS(file: File, type?: string) {
   const fileBuffer = await file.arrayBuffer();
 
   const optimizedImage = await sharp(Buffer.from(fileBuffer))
-    .resize({ width: 800 })
+    .resize({ width: type == "banner" ? 1920 : 800 })
     .toFormat("webp", { quality: 80 })
     .toBuffer();
 

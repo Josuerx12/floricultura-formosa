@@ -20,15 +20,22 @@ export type PaginationInputProps = {
 
 export async function getBannersWithPagination() {}
 
-export async function storeBanner(input: { title: string; file: File }) {
-  const fileData = await uploadFileAWS(input.file, fileTypes.BANNER);
+export async function storeBanner(input: FormData) {
+  const title = input.get("title") as string;
+  const redirect_url = input.get("redirect_url") as string;
+  const file = input.get("file") as File;
+
+  if (!file) throw new Error("Arquivo não encontrado!");
+
+  const fileData = await uploadFileAWS(file, fileTypes.BANNER);
 
   const entity = await prisma.banners.create({
     data: {
       bucket: fileData.bucket,
       file_key: fileData.fileKey,
       url: fileData.url,
-      title: input.title,
+      title,
+      redirect_url,
       is_active: true,
     },
   });

@@ -14,7 +14,7 @@ const AutentiqueSe = async () => {
   }
 
   return (
-    <div className="w-full h-full md:h-screen flex justify-center py-10 bg-primary">
+    <div className="w-full h-full md:h-screen flex justify-center py-10 ">
       <div className="flex flex-col h-fit gap-6 mx-4 md:mx-auto p-6 py-8 max-w-md w-full bg-white shadow-lg rounded-2xl border border-gray-200">
         {/* Logo */}
         <div className="flex flex-col items-center">
@@ -25,10 +25,12 @@ const AutentiqueSe = async () => {
             quality={100}
             alt="Logo Floricultura"
           />
-          <h2 className="mt-3 text-lg font-semibold text-gray-700">
+          <h2 className="mt-3 text-lg text-center font-semibold text-gray-700">
             Bem-vindo à nossa floricultura!
           </h2>
-          <p className="text-sm text-gray-500">Faça login para continuar</p>
+          <p className="text-sm text-gray-500 text-center">
+            Faça login para continuar
+          </p>
         </div>
 
         {/* Formulário */}
