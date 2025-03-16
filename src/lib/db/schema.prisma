@@ -156,6 +156,7 @@ model order {
   status                     OrderStatus  @default(PENDING)
   total_price                Decimal
   delivery_fee               Decimal
+  observation                String?
   address_id                 String?
   address                    address?     @relation(fields: [address_id], references: [id])
   createdAt                  DateTime     @default(now())

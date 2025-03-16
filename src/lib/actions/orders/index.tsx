@@ -2,12 +2,30 @@
 
 import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/db/prisma";
+import { OrderStatus } from "@prisma/client";
 import { redirect } from "next/navigation";
+import { SessionValidation } from "../session-validation";
 
 export type GetOrdersProps = {
   page?: string;
   perPage?: string;
   search?: string;
+};
+
+export type Order = {
+  id: string;
+  user_id: string;
+  mercado_pago_preference_id?: string | null;
+  address_id?: string | null;
+  status: OrderStatus;
+  total_price: number;
+  delivery_fee: number;
+  observation?: string | null;
+  user: any;
+  items: any[];
+  address: any;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export const getOrdersByUser = async ({
@@ -744,3 +762,63 @@ export const getPendingOrders = async ({
     totalItems: totalOrders,
   };
 };
+
+export async function DeliverOrder(id: string) {
+  const session = await auth();
+
+  const sessionValidate = new SessionValidation(session);
+
+  sessionValidate.IsSellerOrAdmin();
+
+  const order = await prisma.order.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!order) {
+    throw new Error("Comprar não localizada para o id informado.");
+  }
+
+  order.status = OrderStatus.SHIPPED;
+
+  await prisma.order.update({
+    data: order,
+    where: {
+      id,
+    },
+  });
+
+  return {
+    message: "Pedido enviado com sucesso!",
+  };
+}
+
+export async function ReciveOrder(id: string) {
+  const session = await auth();
+
+  new SessionValidation(session);
+
+  const order = await prisma.order.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!order) {
+    throw new Error("Comprar não localizada para o id informado.");
+  }
+
+  order.status = OrderStatus.DELIVERED;
+
+  await prisma.order.update({
+    data: order,
+    where: {
+      id,
+    },
+  });
+
+  return {
+    message: "Pedido recebido com sucesso!",
+  };
+}

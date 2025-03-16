@@ -11,6 +11,7 @@ export async function POST(req: NextRequest) {
   const cart: ProductCart[] = body.cart;
   const user: User = body.user;
   const address = body.address;
+  const observation = body?.observation;
 
   try {
     await prisma.$connect();
@@ -36,6 +37,7 @@ export async function POST(req: NextRequest) {
         delivery_fee: address ? Number(address.delivery_fee.fee) : 0,
         total_price: Number(totalPrice) + fee,
         user_id: user.id as string,
+        observation,
         items: {
           createMany: {
             data: products.map((p) => ({

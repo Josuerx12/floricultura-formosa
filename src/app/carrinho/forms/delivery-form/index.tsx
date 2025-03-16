@@ -22,6 +22,7 @@ const DeliveryForm = ({ user }: { user?: User }) => {
   const [deliveryType, setDeliveryType] = useState<"pickup" | "delivery">(
     fee_id ? "delivery" : "pickup"
   );
+  const [observation, setObservation] = useState("");
 
   const { data, isPending } = useQuery({
     queryKey: ["userAddresses"],
@@ -37,6 +38,7 @@ const DeliveryForm = ({ user }: { user?: User }) => {
       cart: products,
       user: user as User,
       address: selectedAddress,
+      observation,
     });
   };
 
@@ -135,6 +137,19 @@ const DeliveryForm = ({ user }: { user?: User }) => {
             <CreateAddressModal />
           </div>
         )}
+        <label
+          className="flex flex-col items-center w-full"
+          htmlFor="observation"
+        >
+          <span>Observação</span>
+
+          <textarea
+            placeholder="Adicione uma observação."
+            className="bg-neutral-200 w-full h-48 rounded p-2 text-neutral-900 placeholder:text-neutral-900"
+            id="observation"
+            onChange={(e) => setObservation(e.target.value)}
+          />
+        </label>
         {user ? (
           submitBtn
         ) : (

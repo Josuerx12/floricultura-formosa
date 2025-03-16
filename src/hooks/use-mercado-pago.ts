@@ -9,6 +9,7 @@ export type checkoutInput = {
   cart: ProductCart[];
   address?: any;
   user: User;
+  observation?: string;
 };
 
 const useMercadoPago = () => {

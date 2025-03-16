@@ -1,4 +1,5 @@
 "use client";
+import RefetchBtn from "@/components/buttons/refetch-btn";
 import SalesCard from "@/components/cards/sales-card";
 import { getShippedOrders } from "@/lib/actions/orders";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -31,22 +32,12 @@ const ShippedSalesInfiniteScroll = () => {
       <div className="sticky inset-0 bg-yellow-200  drop-shadow-md flex  items-center justify-between p-2 gap-2">
         <h2 className="text-start font-semibold">Pedidos em rota de entrega</h2>
 
-        <button
-          disabled={isRefetching}
-          onClick={() => refetch()}
-          className="text-sm flex items-center gap-1 bg-neutral-900 disabled:bg-neutral-900/80 text-white p-2 rounded-md"
-        >
-          <span>Atualizar</span>
-          <RefreshCcw
-            size={14}
-            className={`${isRefetching ? "animate-spin" : ""}`}
-          />
-        </button>
+        <RefetchBtn isRefetching={isRefetching} refetch={refetch} />
       </div>
 
       {isLoading && <p className="animate-pulse">Carregando...</p>}
 
-      <div className="flex flex-col gap-y-4 ">
+      <div className="flex flex-col gap-y-4 p-2">
         {data?.pages.map((page, i) => (
           <React.Fragment key={i}>
             {page.data.map((sale: any) => (

@@ -1,4 +1,5 @@
-import { prisma } from "@/lib/db/prisma";
+"use client";
+
 import {
   Table,
   TableBody,
@@ -12,54 +13,26 @@ import React from "react";
 import SearchFilter from "@/components/filters/search-filter";
 import Pagination from "@/components/pagination";
 import CreateBannerModal from "@/components/modals/banners/create";
+import ManageBannerDropdown from "@/components/dropdowns/manage-banner-dropdown";
+import { useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { findAllBannersWithPagination } from "@/lib/actions/banners";
+import Loading from "@/components/loading";
 
-const BannersPage = async ({ searchParams }: { searchParams: any }) => {
-  const { search, page } = await searchParams;
+const BannersPage = () => {
+  const searchParams = useSearchParams();
+  const search = searchParams.get("search") || "";
+  const page = Number(searchParams.get("page")) || 1;
 
-  const perPage = 10;
-  const currentPage = page ?? 1;
-
-  const totalBanners = await prisma.banners.count({
-    where: {
-      OR: [
-        {
-          title: {
-            contains: search ?? "",
-          },
-        },
-        !isNaN(Number(search))
-          ? {
-              id: Number(search),
-            }
-          : {},
-      ],
-    },
+  const { data, isPending } = useQuery({
+    queryKey: ["banners", search, page],
+    queryFn: () => findAllBannersWithPagination({ page, search }),
   });
 
-  const totalPages = Math.ceil(totalBanners / perPage);
+  if (!data && isPending) {
+    return <Loading />;
+  }
 
-  const banners = await prisma.banners.findMany({
-    where: {
-      OR: [
-        {
-          title: {
-            contains: search ?? "",
-            mode: "insensitive",
-          },
-        },
-        !isNaN(Number(search))
-          ? {
-              id: Number(search),
-            }
-          : {},
-      ],
-    },
-    take: perPage ?? 10,
-    skip: (currentPage - 1) * perPage,
-    orderBy: {
-      is_active: "desc",
-    },
-  });
   return (
     <div>
       <div className="flex mb-4 justify-end items-center gap-4">
@@ -67,7 +40,7 @@ const BannersPage = async ({ searchParams }: { searchParams: any }) => {
         <CreateBannerModal />
       </div>
       <Table>
-        {banners?.length <= 0 && (
+        {data && data?.banners?.length <= 0 && (
           <TableCaption>
             Não foi possivel encontrar banners cadastrados.
           </TableCaption>
@@ -82,20 +55,23 @@ const BannersPage = async ({ searchParams }: { searchParams: any }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {banners.map((banner) => (
-            <TableRow key={banner.id}>
-              <TableCell className="font-medium">{banner.id}</TableCell>
-              <TableCell>{banner.title}</TableCell>
-              <TableCell>{banner.is_active ? "Sim" : "Não"}</TableCell>
-              <TableCell>{banner.created_at.toLocaleString("pt-BR")}</TableCell>
-              <TableCell className="text-right">
-                {/* <ManageCategoryDropdown category={categoria} /> */}
-              </TableCell>
-            </TableRow>
-          ))}
+          {data &&
+            data.banners?.map((banner) => (
+              <TableRow key={banner.id}>
+                <TableCell className="font-medium">{banner.id}</TableCell>
+                <TableCell>{banner.title}</TableCell>
+                <TableCell>{banner.is_active ? "Sim" : "Não"}</TableCell>
+                <TableCell>
+                  {banner.created_at.toLocaleString("pt-BR")}
+                </TableCell>
+                <TableCell className="text-right">
+                  <ManageBannerDropdown banner={banner} />
+                </TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
-      <Pagination totalPages={totalPages} />
+      {data && <Pagination totalPages={data?.totalPages} />}
     </div>
   );
 };

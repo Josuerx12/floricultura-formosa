@@ -1,4 +1,5 @@
 "use client";
+import RefetchBtn from "@/components/buttons/refetch-btn";
 import SalesCard from "@/components/cards/sales-card";
 import { getProcessedOrders } from "@/lib/actions/orders";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -33,17 +34,7 @@ const ProcessedSalesInfiniteScroll = () => {
           Vendas aprovadas
         </h2>
 
-        <button
-          disabled={isRefetching}
-          onClick={() => refetch()}
-          className="text-sm flex items-center gap-1 bg-neutral-900 disabled:bg-neutral-900/80 text-white p-2 rounded-md"
-        >
-          <span>Atualizar</span>
-          <RefreshCcw
-            size={14}
-            className={`${isRefetching ? "animate-spin" : ""}`}
-          />
-        </button>
+        <RefetchBtn isRefetching={isRefetching} refetch={refetch} />
       </div>
 
       {isLoading && <p className="animate-pulse">Carregando...</p>}

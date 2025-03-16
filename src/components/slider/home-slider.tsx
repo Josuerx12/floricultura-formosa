@@ -5,6 +5,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useQuery } from "@tanstack/react-query";
 import { getBanners } from "@/lib/actions/banners";
+import Link from "next/link";
 
 export default function HomeSlider() {
   const { data } = useQuery({
@@ -18,34 +19,47 @@ export default function HomeSlider() {
           id: b.id,
           src: b.url,
           alt: b.title,
+          url: b.redirect_url,
+          title: b.title,
         }))
-      : [{ id: 1, src: "/images/banner-teste.png", alt: "Banner Image" }];
+      : [
+          {
+            id: 1,
+            src: "/images/banner-teste.png",
+            alt: "Banner Image",
+            url: "/",
+            title: "Banner padrão",
+          },
+        ];
 
   const settings = {
     dots: true,
     infinite: slides.length > 1,
-    speed: 500,
+    speed: 1000,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoPlay: true,
+    autoplay: true,
   };
+
   return (
     <div className="w-full overflow-hidden">
       <Slider {...settings}>
-        {slides.map((slide) => {
-          console.log(slide);
-          return (
+        {slides.map((slide) => (
+          <Link
+            title={slide.title}
+            key={slide.id}
+            href={slide.url}
+            target="_blank"
+            className="relative w-full min-h-[250px] md:min-h-[350px] lg:min-h-[580px]"
+          >
             <Image
-              key={slide.id}
-              className="w-full"
               src={slide.src}
               alt={slide.alt}
-              width={1920}
-              height={580}
+              layout="fill"
               quality={100}
             />
-          );
-        })}
+          </Link>
+        ))}
       </Slider>
     </div>
   );

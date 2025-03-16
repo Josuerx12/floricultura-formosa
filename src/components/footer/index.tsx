@@ -1,6 +1,15 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const Footer = () => {
+  const pathname = usePathname();
+
+  const hideFooter = pathname.startsWith("/dashboard");
+
+  if (hideFooter) return null;
+
   return (
     <footer className="bg-primary-foreground text-primary py-6 px-4 text-center mt-auto">
       <div className="max-w-4xl mx-auto">
