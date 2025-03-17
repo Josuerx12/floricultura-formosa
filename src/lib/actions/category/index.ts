@@ -199,3 +199,20 @@ export async function EditCategoryAction(
     };
   }
 }
+
+export async function getAllCategoriesWithoutPagination() {
+  const categories = await prisma.category.findMany({
+    select: {
+      id: true,
+      name: true,
+      subcategories: {
+        select: {
+          name: true,
+          id: true,
+        },
+      },
+    },
+  });
+
+  return categories;
+}

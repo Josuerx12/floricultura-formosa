@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { CreateProductAction } from "@/lib/actions/products";
+import { CreateProduct } from "@/lib/actions/products";
 import { SubCategory } from "@/lib/actions/sub-category";
 import {
   Banknote,
@@ -24,29 +24,59 @@ import {
 import { useEffect, useState } from "react";
 import { useResetableActionState } from "@/hooks/use-resetable-action-state";
 import { Category } from "@/lib/actions/category";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "@/hooks/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ProductSchema } from "@/lib/schemas-validator/product.schema";
 
 const CreateProductModal = ({ categories }: { categories: Category[] }) => {
-  const [state, formAction, isPending, reset] = useResetableActionState(
-    CreateProductAction,
-    null
-  );
-
   const [photos, setPhotos] = useState<File[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const { reset: resetForm, register } = useForm();
+  function handleClose() {
+    setIsOpen((prev) => !prev);
+  }
 
-  useEffect(() => {
-    if (state?.success) {
-      setIsOpen(false);
-      reset();
+  const {
+    reset: resetForm,
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(ProductSchema),
+  });
+
+  const query = useQueryClient();
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationKey: ["create-product"],
+    mutationFn: CreateProduct,
+    onSuccess: () => {
+      query.invalidateQueries({ queryKey: ["products"] }), setIsOpen(false);
       resetForm();
       setPhotos([]);
       setPreviewImages([]);
-    }
-  }, [state?.success]);
+      toast({
+        title: "Produto criado com sucesso!",
+      });
+      handleClose();
+    },
+  });
+
+  async function OnSubmit(data: any) {
+    const formData = new FormData();
+
+    photos?.map((p) => formData.append("photos", p));
+
+    formData.append("name", data.name);
+    formData.append("subcategory_id", data.subcategory_id);
+    formData.append("stock_quantity", data.stock_quantity);
+    formData.append("price", data.price);
+
+    await mutateAsync(formData);
+  }
 
   const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -59,7 +89,7 @@ const CreateProductModal = ({ categories }: { categories: Category[] }) => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={() => setIsOpen((prev) => !prev)}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogTrigger className="flex items-center gap-2 bg-primary text-primary-foreground p-2 rounded font-medium text-sm drop-shadow">
         Adicionar <Plus size={16} />
       </DialogTrigger>
@@ -69,7 +99,7 @@ const CreateProductModal = ({ categories }: { categories: Category[] }) => {
         </DialogHeader>
 
         <form
-          action={formAction}
+          onSubmit={handleSubmit(OnSubmit)}
           className="w-full flex flex-col gap-4 mx-auto"
         >
           <h4 className="text-start text-sm my-6 font-semibold">
@@ -86,8 +116,8 @@ const CreateProductModal = ({ categories }: { categories: Category[] }) => {
             />
           </label>
 
-          {state?.errors?.name && (
-            <p className="text-red-600">{state?.errors?.name}</p>
+          {errors?.name && (
+            <p className="text-red-600">{errors?.name.message}</p>
           )}
 
           <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
@@ -110,8 +140,8 @@ const CreateProductModal = ({ categories }: { categories: Category[] }) => {
               )}
             </select>
           </label>
-          {state?.errors?.subcategory_id && (
-            <p className="text-red-600">{state?.errors?.subcategory_id}</p>
+          {errors?.subcategory_id && (
+            <p className="text-red-600">{errors?.subcategory_id.message}</p>
           )}
 
           <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
@@ -126,8 +156,8 @@ const CreateProductModal = ({ categories }: { categories: Category[] }) => {
             />
           </label>
 
-          {state?.errors?.stock_quantity && (
-            <p className="text-red-600">{state?.errors?.stock_quantity}</p>
+          {errors?.stock_quantity && (
+            <p className="text-red-600">{errors?.stock_quantity.message}</p>
           )}
 
           <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
@@ -136,20 +166,18 @@ const CreateProductModal = ({ categories }: { categories: Category[] }) => {
               {...register("price")}
               required
               className="w-full bg-transparent outline-none placeholder:text-neutral-700"
-              type="number"
               placeholder="Preço do produto!"
-              step="0.01"
-              min="0"
-              inputMode="decimal"
               onInput={(e) => {
-                const target = e.target as HTMLInputElement;
-                target.value = target.value.replace(/[^0-9.]/g, ""); // Remove caracteres inválidos
+                e.currentTarget.value = e.currentTarget.value.replace(
+                  /[^0-9.,]/g,
+                  ""
+                );
               }}
             />
           </label>
 
-          {state?.errors?.price && (
-            <p className="text-red-600">{state?.errors?.price}</p>
+          {errors?.price && (
+            <p className="text-red-600">{errors?.price.message}</p>
           )}
 
           <label className="flex flex-grow bg-neutral-200 p-2 gap-2 rounded-3xl">
@@ -163,8 +191,8 @@ const CreateProductModal = ({ categories }: { categories: Category[] }) => {
             />
           </label>
 
-          {state?.errors?.description && (
-            <p className="text-red-600">{state?.errors?.description}</p>
+          {errors?.description && (
+            <p className="text-red-600">{errors?.description.message}</p>
           )}
 
           {previewImages.length <= 0 ? (
@@ -201,8 +229,8 @@ const CreateProductModal = ({ categories }: { categories: Category[] }) => {
             />
           </label>
 
-          {state?.errors?.description && (
-            <p className="text-red-600">{state?.errors?.description}</p>
+          {errors?.description && (
+            <p className="text-red-600">{errors?.description.message}</p>
           )}
 
           <Button type="submit" className="mt-4">

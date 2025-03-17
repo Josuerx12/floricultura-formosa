@@ -5,9 +5,10 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { DeleteProductAction, Product } from "@/lib/actions/products";
+import { toast } from "@/hooks/use-toast";
+import { DeleteProduct, Product } from "@/lib/actions/products";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CircleX, Loader, Trash } from "lucide-react";
 import { useActionState, useEffect } from "react";
 
@@ -20,16 +21,23 @@ const DeleteProductModal = ({
   handleClose: () => void;
   product: Product;
 }) => {
-  const [state, formAction, isPending] = useActionState(
-    DeleteProductAction,
-    null
-  );
+  const query = useQueryClient();
 
-  useEffect(() => {
-    if (state?.success) {
+  const { mutateAsync, isPending } = useMutation({
+    mutationKey: ["delete-product", product.id],
+    mutationFn: DeleteProduct,
+    onSuccess: (data) => {
+      toast({
+        title: data.success,
+      });
+      query.invalidateQueries({ queryKey: ["products-dash"] });
       handleClose();
-    }
-  }, [state?.success]);
+    },
+  });
+
+  async function handleSubmit() {
+    await mutateAsync({ id: product.id });
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
@@ -38,15 +46,12 @@ const DeleteProductModal = ({
           <DialogTitle>Deletar produto!</DialogTitle>
         </DialogHeader>
 
-        <form action={formAction} className="w-full mx-auto">
+        <form onSubmit={handleSubmit} className="w-full mx-auto">
           <CircleX className="mx-auto text-red-600" size={200} />
 
-          <input type="hidden" value={product.id} name="id" />
           <h4 className="text-start text-sm my-6">
             Tem certeza que deseja deletar o produto: <b>{product.name}</b>?
           </h4>
-
-          {state?.error && <p className="text-red-600">{state?.error}</p>}
 
           <Button
             type="submit"

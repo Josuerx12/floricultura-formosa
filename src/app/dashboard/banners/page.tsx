@@ -29,49 +29,50 @@ const BannersPage = () => {
     queryFn: () => findAllBannersWithPagination({ page, search }),
   });
 
-  if (!data && isPending) {
-    return <Loading />;
-  }
-
   return (
     <div>
       <div className="flex mb-4 justify-end items-center gap-4">
         <SearchFilter placeholder="do banner" />
         <CreateBannerModal />
       </div>
-      <Table>
-        {data && data?.banners?.length <= 0 && (
-          <TableCaption>
-            Não foi possivel encontrar banners cadastrados.
-          </TableCaption>
-        )}
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">ID</TableHead>
-            <TableHead>Titulo</TableHead>
-            <TableHead>Ativo</TableHead>
-            <TableHead>Data criação</TableHead>
-            <TableHead className="text-right"></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data &&
-            data.banners?.map((banner) => (
-              <TableRow key={banner.id}>
-                <TableCell className="font-medium">{banner.id}</TableCell>
-                <TableCell>{banner.title}</TableCell>
-                <TableCell>{banner.is_active ? "Sim" : "Não"}</TableCell>
-                <TableCell>
-                  {banner.created_at.toLocaleString("pt-BR")}
-                </TableCell>
-                <TableCell className="text-right">
-                  <ManageBannerDropdown banner={banner} />
-                </TableCell>
+      {isPending && <Loading />}
+      {!isPending && (
+        <>
+          <Table>
+            {data && data?.banners?.length <= 0 && (
+              <TableCaption>
+                Não foi possivel encontrar banners cadastrados.
+              </TableCaption>
+            )}
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">ID</TableHead>
+                <TableHead>Titulo</TableHead>
+                <TableHead>Ativo</TableHead>
+                <TableHead>Data criação</TableHead>
+                <TableHead className="text-right"></TableHead>
               </TableRow>
-            ))}
-        </TableBody>
-      </Table>
-      {data && <Pagination totalPages={data?.totalPages} />}
+            </TableHeader>
+            <TableBody>
+              {data &&
+                data.banners?.map((banner) => (
+                  <TableRow key={banner.id}>
+                    <TableCell className="font-medium">{banner.id}</TableCell>
+                    <TableCell>{banner.title}</TableCell>
+                    <TableCell>{banner.is_active ? "Sim" : "Não"}</TableCell>
+                    <TableCell>
+                      {banner.created_at.toLocaleString("pt-BR")}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <ManageBannerDropdown banner={banner} />
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+          {data && <Pagination totalPages={data?.totalPages} />}
+        </>
+      )}
     </div>
   );
 };

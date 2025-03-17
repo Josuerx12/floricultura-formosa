@@ -34,37 +34,45 @@ const UsersPage = () => {
         <SearchFilter placeholder="do banner" />
         {/* <CreateBannerModal /> */}
       </div>
-      <Table>
-        {data && data.users?.length <= 0 && (
-          <TableCaption>
-            Não foi possivel encontrar banners cadastrados.
-          </TableCaption>
-        )}
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">ID</TableHead>
-            <TableHead>Nome</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Data criação</TableHead>
-            <TableHead className="text-right"></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data &&
-            data.users?.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell className="font-medium">{user.id}</TableCell>
-                <TableCell>{user.name}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.createdAt.toLocaleString("pt-BR")}</TableCell>
-                <TableCell className="text-right">
-                  <ManageUserDropdown user={user} />
-                </TableCell>
+      {isPending && <Loading />}
+
+      {!isPending && (
+        <>
+          <Table>
+            {data && data.users?.length <= 0 && (
+              <TableCaption>
+                Não foi possivel encontrar banners cadastrados.
+              </TableCaption>
+            )}
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">ID</TableHead>
+                <TableHead>Nome</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Data criação</TableHead>
+                <TableHead className="text-right"></TableHead>
               </TableRow>
-            ))}
-        </TableBody>
-      </Table>
-      {data && <Pagination totalPages={data.totalPages} />}
+            </TableHeader>
+            <TableBody>
+              {data &&
+                data.users?.map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell className="font-medium">{user.id}</TableCell>
+                    <TableCell>{user.name}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>
+                      {user.createdAt.toLocaleString("pt-BR")}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <ManageUserDropdown user={user} />
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+          {data && <Pagination totalPages={data.totalPages} />}
+        </>
+      )}
     </div>
   );
 };
