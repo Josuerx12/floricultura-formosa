@@ -46,11 +46,13 @@ export async function CreateProduct(formData: FormData) {
   });
 
   const images = formData.getAll("photos") as File[];
-
   await prisma.$transaction(async (tx) => {
     const product = await tx.product.create({
       data: {
-        ...(rawObject as any),
+        description: rawObject?.description,
+        name: rawObject.name,
+        stock_quantity: parseInt(rawObject.stock_quantity),
+        subcategory_id: parseInt(rawObject.subcategory_id),
         price: parseFloat(rawObject.price.replace(/\./g, "").replace(",", ".")),
       },
     });
