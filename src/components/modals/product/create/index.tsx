@@ -28,6 +28,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProductSchema } from "@/lib/schemas-validator/product.schema";
+import { z } from "zod";
 
 const CreateProductModal = ({ categories }: { categories: Category[] }) => {
   const [photos, setPhotos] = useState<File[]>([]);
@@ -65,14 +66,15 @@ const CreateProductModal = ({ categories }: { categories: Category[] }) => {
     },
   });
 
-  async function OnSubmit(data: any) {
+  async function OnSubmit(data: z.infer<typeof ProductSchema>) {
     const formData = new FormData();
 
     photos?.map((p) => formData.append("photos", p));
 
     formData.append("name", data.name);
-    formData.append("subcategory_id", data.subcategory_id);
-    formData.append("stock_quantity", data.stock_quantity);
+    formData.append("subcategory_id", data.subcategory_id?.toString());
+    formData.append("stock_quantity", data.stock_quantity?.toString());
+    formData.append("description", data.description);
     formData.append("price", data.price);
 
     await mutateAsync(formData);
