@@ -113,7 +113,7 @@ const NavbarMobile = ({ user }: { user?: User }) => {
               <li
                 onClick={() => {
                   handleOpen();
-                  router.push("/dashboard/metricas");
+                  router.push("/dashboard");
                 }}
                 className="flex items-center justify-between gap-2"
               >

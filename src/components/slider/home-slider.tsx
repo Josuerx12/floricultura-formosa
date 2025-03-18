@@ -50,13 +50,15 @@ export default function HomeSlider() {
             key={slide.id}
             href={slide.url}
             target="_blank"
-            className="relative w-full min-h-[250px] md:min-h-[350px] lg:min-h-[580px]"
+            className="relative"
           >
             <Image
+              width={1920}
+              height={1080}
               src={slide.src}
               alt={slide.alt}
-              layout="fill"
               quality={100}
+              className="object-cover"
             />
           </Link>
         ))}
