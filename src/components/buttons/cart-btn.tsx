@@ -11,21 +11,22 @@ const CartBtn = () => {
   return (
     <div
       onClick={() => router.push("/carrinho")}
-      className="flex cursor-pointer flex-col items-center"
+      className="flex cursor-pointer gap-4 items-center"
       title="Ir para carrinho de compras!"
     >
-      <div className=" relative">
+      <p className="hidden md:block text-primary text-nowrap uppercase">
+        carrinho
+      </p>
+
+      <div className=" relative ">
         {products.length > 0 && (
-          <p className="absolute text-sm bg-primary-foreground text-primary w-5 rounded-full leading-none h-5 flex items-center justify-center -top-2 -right-2">
+          <p className="absolute text-sm bg-primary text-primary-foreground font-medium w-5 rounded-full leading-none h-5 flex items-center justify-center -top-2 -right-2">
             {products.length}
           </p>
         )}
 
-        <IoCartOutline className="text-primary-foreground text-2xl md:text-3xl" />
+        <IoCartOutline className="text-primary text-2xl md:text-3xl" />
       </div>
-      <p className="hidden md:block text-primary-foreground text-nowrap">
-        Meu carrinho
-      </p>
     </div>
   );
 };

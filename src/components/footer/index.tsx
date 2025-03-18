@@ -11,7 +11,7 @@ const Footer = () => {
   if (hideFooter) return null;
 
   return (
-    <footer className="bg-primary-foreground text-primary py-6 px-4 text-center mt-auto">
+    <footer className="bg-primary-hard_pink text-primary py-6 px-4 text-center mt-auto">
       <div className="max-w-4xl mx-auto">
         <p className="text-sm">CNPJ: 27.870.680/0001-50</p>
         <p className="text-sm">

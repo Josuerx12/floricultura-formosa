@@ -45,7 +45,10 @@ export function MobileHomeSearchFilter() {
     <Suspense>
       <Sheet onOpenChange={handleClose} open={isOpen}>
         <SheetTrigger asChild>
-          <IoIosSearch className="text-primary-foreground text-2xl" />
+          <IoIosSearch
+            className="text-primary text-2xl cursor-pointer"
+            title="Buscar produto"
+          />
         </SheetTrigger>
         <SheetContent side={"left"} className="bg-primary">
           <SheetHeader className="mt-4">

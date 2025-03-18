@@ -220,3 +220,41 @@ export async function GetAllProductsWithPagination({
     products,
   };
 }
+
+export async function getTop10SelledProducts() {
+  const topSellingProducts = await prisma.order_item.groupBy({
+    by: ["product_id"],
+    _sum: {
+      quantity: true,
+    },
+    orderBy: {
+      _sum: {
+        quantity: "desc",
+      },
+    },
+    take: 10,
+  });
+
+  const productIds = topSellingProducts.map((item) => item.product_id);
+
+  const products = await prisma.product.findMany({
+    where: {
+      id: {
+        in: productIds,
+      },
+    },
+    orderBy: {
+      created_at: "desc",
+    },
+    include: {
+      product_images: {
+        select: {
+          url: true,
+          id: true,
+        },
+      },
+    },
+  });
+
+  return products;
+}

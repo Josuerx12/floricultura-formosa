@@ -11,8 +11,10 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#FBDEF5",
-          foreground: "#E8485F",
+          DEFAULT: "#FFFDF2",
+          foreground: "#171717",
+          soft_pink: "#FBDEF5",
+          hard_pink: "#E8485F",
         },
         body: "#FAFAFA",
         body_foreground: "#3D3D3D",

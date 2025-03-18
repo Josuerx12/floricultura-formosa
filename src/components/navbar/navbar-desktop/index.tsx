@@ -26,7 +26,7 @@ const NavbarDesktop = ({ user }: { user?: User }) => {
   if (hideNavbar) return null;
 
   return (
-    <div className="md:flex flex-col sticky z-20 inset-0">
+    <div className="hidden flex-col sticky z-20 inset-0">
       <header className="bg-primary drop-shadow  md:flex hidden justify-between items-center gap-10 py-6 px-4 sm:px-10 md:px-10 lg:px-20">
         <HomeSearchFilter />
 
@@ -47,7 +47,7 @@ const NavbarDesktop = ({ user }: { user?: User }) => {
           </div>
         )}
       </header>
-      <nav className="bg-primary-foreground text-primary hidden md:flex gap-6 px-4 py-2 justify-center items-center">
+      <nav className="bg-[#FBDEF5] font-medium text-primary-foreground hidden md:flex gap-6 px-4 py-2 justify-center items-center">
         <ul className="flex gap-10 text-sm uppercase">
           <li>
             {isPending && <div>Carregando Categorias...</div>}

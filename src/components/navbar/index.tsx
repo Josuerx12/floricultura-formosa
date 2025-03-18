@@ -7,7 +7,6 @@ const Navbar = async () => {
   const user = await auth();
   return (
     <>
-      <NavbarDesktop user={user?.user} />
       <NavbarMobile user={user?.user} />
     </>
   );

@@ -29,19 +29,16 @@ const CategoryDropdown = ({ categories }: { categories: Category[] }) => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-        <DropdownMenuTrigger
-          className="z-50 select-none outline-none uppercase flex items-center gap-2 cursor-pointer"
-          onMouseEnter={() => setIsOpen(true)}
-        >
+        <DropdownMenuTrigger className="z-50 select-none outline-none uppercase flex items-center justify-between w-full gap-2 cursor-pointer">
           Categorias <ChevronDown />
         </DropdownMenuTrigger>
 
         {isOpen && (
           <DropdownMenuContent
             onMouseLeave={() => setIsOpen(false)}
-            className="w-56 absolute top-full left-1/2 -translate-x-1/2 bg-primary text-primary-foreground shadow-lg rounded-md"
+            className="w-80 absolute top-full right-1/2 translate-x-1/2  bg-primary text-primary-foreground shadow-lg rounded-md"
           >
             <DropdownMenuLabel>Categorias</DropdownMenuLabel>
             <DropdownMenuSeparator />

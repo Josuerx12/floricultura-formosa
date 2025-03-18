@@ -2,8 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Loader2, Router } from "lucide-react";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
@@ -37,7 +35,9 @@ const Pagination = ({ totalPages }: { totalPages: number }) => {
             key={page}
             onClick={() => router.push(createPageLink(page))}
             variant={currentPage === page ? "default" : "outline"}
-            className={cn(currentPage === page && "bg-primary text-white")}
+            className={cn(
+              currentPage === page && "bg-prim text-primary-foreground"
+            )}
           >
             {page}
           </Button>
