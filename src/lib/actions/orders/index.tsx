@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db/prisma";
 import { OrderStatus } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { SessionValidation } from "../session-validation";
+import { User } from "next-auth";
 
 export type GetOrdersProps = {
   page?: string;
@@ -21,7 +22,7 @@ export type Order = {
   total_price: number;
   delivery_fee: number;
   observation?: string | null;
-  user: any;
+  user: User;
   items: any[];
   address: any;
   createdAt: Date;

@@ -11,6 +11,7 @@ import { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import { auth } from "@/lib/auth/auth";
 import { redirect } from "next/navigation";
+import Loading from "@/components/loading";
 
 export const metadata: Metadata = {
   title: "Floricultura Formosa - Dashboard",
@@ -40,17 +41,7 @@ export default async function DashboardLayout({
               <DashboardBreadcrumb />
             </div>
           </header>
-          <div>
-            <Suspense
-              fallback={
-                <div className="w-full h-screen flex justify-center items-center text-3xl bg-primary text-primary-foreground">
-                  Carregando dados <Loader2 className="animate-spin" />
-                </div>
-              }
-            >
-              {children}
-            </Suspense>
-          </div>
+          <div>{children}</div>
         </SidebarInset>
       </SidebarProvider>
     </div>

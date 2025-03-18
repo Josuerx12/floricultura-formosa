@@ -84,7 +84,6 @@ const CreateDeliveryFeeModal = () => {
               {...register("fee")}
               required
               className="w-full bg-transparent outline-none placeholder:text-neutral-700"
-              type="number"
               placeholder="Insira o cep da sua residencia!"
             />
           </label>

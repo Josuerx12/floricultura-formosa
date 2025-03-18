@@ -1,7 +1,15 @@
 "use client";
 
 import * as React from "react";
-import { ChartLine, Flower, HandCoins, Home, Image, Users } from "lucide-react";
+import {
+  ChartLine,
+  Flower,
+  HandCoins,
+  Home,
+  Image,
+  MapPin,
+  Users,
+} from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { Sidebar, SidebarContent, SidebarRail } from "@/components/ui/sidebar";
@@ -53,7 +61,12 @@ const data = {
         },
       ],
     },
-
+    {
+      title: "Bairros",
+      url: "/dashboard/bairros",
+      isActive: true,
+      icon: MapPin,
+    },
     {
       title: "Banners",
       url: "/dashboard/banners",

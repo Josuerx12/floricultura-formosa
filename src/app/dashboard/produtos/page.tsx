@@ -1,7 +1,7 @@
 "use client";
 
 import { prisma } from "@/lib/db/prisma";
-import React from "react";
+import React, { Suspense } from "react";
 import {
   Table,
   TableBody,
@@ -16,7 +16,7 @@ import Image from "next/image";
 import ManageProductDropdown from "@/components/dropdowns/MenageProductDropdown";
 import CreateProductModal from "@/components/modals/product/create";
 import Pagination from "@/components/pagination";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { GetAllProductsWithPagination } from "@/lib/actions/products";
 import { useSearchParams } from "next/navigation";
 import { getAllCategoriesWithoutPagination } from "@/lib/actions/category";
@@ -27,7 +27,7 @@ const ProdutosPage = () => {
   const search = searchParams.get("search") || "";
   const page = Number(searchParams.get("page")) || 1;
 
-  const { data, isPending } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["products-dash", search, page],
     queryFn: () => GetAllProductsWithPagination({ page, search }),
   });
@@ -42,9 +42,11 @@ const ProdutosPage = () => {
       <div className="flex mb-4 justify-end items-center gap-4">
         <SearchFilter placeholder="produtos" />
         {categories && <CreateProductModal categories={categories} />}
-      </div>{" "}
-      {isPending && <Loading />}
-      {!isPending && (
+      </div>
+
+      {isLoading ? (
+        <Loading />
+      ) : (
         <>
           <Table>
             {data && data?.products?.length <= 0 && (
