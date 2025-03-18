@@ -79,7 +79,7 @@ export default async function Home() {
           <h2 className="text-lg text-body_foreground md:text-2xl font-bold my-6 text-center capitalize">
             Produtos recem adicionados
           </h2>
-          <div className="mx-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="mx-2 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {allProducts?.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

@@ -15,11 +15,11 @@ const CartDetails = ({ user }: { user?: User }) => {
         <p className="text-center">Seu carrinho está vazio.</p>
       ) : (
         <>
-          <ul className="flex flex-col gap-4 bg-primary-foreground rounded-xl p-3">
+          <ul className="flex flex-col gap-4 rounded-xl p-3">
             {products.map((product) => (
               <li
                 key={product.id}
-                className="flex gap-4 w-full p-3 rounded bg-white/70 shadow-md"
+                className="flex gap-4 w-full p-3 rounded bg-white/70 shadow-md border"
               >
                 {product.product_image && (
                   <Image
@@ -33,7 +33,9 @@ const CartDetails = ({ user }: { user?: User }) => {
                 )}
 
                 <div className="flex flex-col gap-y-2">
-                  <span className="text-sm md:text-lg">{product.name}</span>
+                  <span className="text-sm md:text-lg uppercase">
+                    {product.name}
+                  </span>
 
                   <span className="font-bold text-sm md:text-lg text-primary-foreground">
                     {product.price.toLocaleString("pt-BR", {

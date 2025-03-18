@@ -18,16 +18,17 @@ export function ProductCard({ product }: { product: Product }) {
     <div
       title={`Visitar pagina do produto: ${product.name}`}
       onClick={() => router.push("/produto/" + product.id)}
-      className="relative cursor-pointer h-[360px] bg-transparent md:hover:scale-105 transition-transform duration-300 ease-in-out flex flex-col overflow-hidden"
+      className="relative cursor-pointer bg-transparent transition-transform duration-300 ease-in-out flex flex-col overflow-hidden"
     >
       {/* Imagem do Produto */}
-      <div className="relative">
+      <div className="relative max-w-[410px] max-h-[410px] w-full h-full hover:opacity-80 duration-200">
         <Image
-          width={800}
-          height={600}
+          width={410}
+          height={410}
           src={product.product_images?.[0]?.url || "/images/placeholder.png"}
           alt={product.name}
-          className="w-full h-52 object-contain md:object-cover "
+          className="object-fit w-full h-[350px] md:w-[410px] md:h-[410px]"
+          priority
         />
 
         {discount > 0 && (
@@ -38,20 +39,22 @@ export function ProductCard({ product }: { product: Product }) {
         )}
       </div>
 
-      <div className="flex flex-col gap-4 h-full">
+      <div className="flex flex-col gap-2 h-full">
         {/* Nome do Produto */}
-        <h3 className=" text-start mt-2">{product.name}</h3>
+        <h3 className=" text-start mt-2 uppercase font-bold text-neutral-500">
+          {product.name}
+        </h3>
 
         <div>
           {finalPrice !== product.price ? (
-            <div className="flex justify-start items-center space-x-2">
+            <div className="flex justify-start items-center space-x-2 text-neutral-500">
               <span className="line-through">
                 {product.price.toLocaleString("pt-br", {
                   style: "currency",
                   currency: "BRL",
                 })}
               </span>
-              <p className="text-red-500 font-bold ">
+              <p className="">
                 {finalPrice.toLocaleString("pt-br", {
                   style: "currency",
                   currency: "BRL",
@@ -59,7 +62,7 @@ export function ProductCard({ product }: { product: Product }) {
               </p>
             </div>
           ) : (
-            <p className="font-bold text-body_foreground text-start">
+            <p className="text-start text-neutral-500">
               {product.price.toLocaleString("pt-br", {
                 style: "currency",
                 currency: "BRL",

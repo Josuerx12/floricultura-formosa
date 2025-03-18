@@ -77,7 +77,7 @@ const CategoryPage = async ({
         {category?.replaceAll("-", " ")}
       </h3>
 
-      <div className="max-w-screen-xl w-full mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="max-w-screen-xl w-full mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-4">
         {products?.length > 0 ? (
           products.map((p) => <ProductCard key={p.id} product={p} />)
         ) : (

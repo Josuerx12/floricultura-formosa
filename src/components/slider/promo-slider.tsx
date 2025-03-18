@@ -13,9 +13,9 @@ interface PromoSliderProps {
 export default function PromoSlider({ products }: PromoSliderProps) {
   const settings = {
     dots: true,
-    infinite: products.length > 4,
+    infinite: products.length > 3,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
@@ -42,10 +42,10 @@ export default function PromoSlider({ products }: PromoSliderProps) {
   };
 
   return (
-    <div className="w-full overflow-hidden">
+    <div className="flex-grow overflow-hidden">
       <Slider {...settings}>
         {products.map((product) => (
-          <div key={product.id} className="px-2 h-[400px] mt-5">
+          <div key={product.id} className="px-2 md:h-[600px] mt-5">
             <ProductCard product={product} />
           </div>
         ))}

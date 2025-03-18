@@ -44,7 +44,7 @@ export default async function RootLayout({
       </head>
 
       <body
-        className={`${poppins.className} antialiased bg-body flex flex-col min-h-screen h-full`}
+        className={`${poppins.className} antialiased  flex flex-col min-h-screen h-full`}
       >
         <noscript
           dangerouslySetInnerHTML={{
