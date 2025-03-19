@@ -1,6 +1,6 @@
 "use client";
 import useCartStore from "@/hooks/use-cart-store";
-import React, { JSX } from "react";
+import React from "react";
 import Image from "next/image";
 import { User } from "next-auth";
 import DeliveryForm from "../delivery-form";
@@ -10,16 +10,16 @@ const CartDetails = ({ user }: { user?: User }) => {
     useCartStore();
 
   return (
-    <div className="flex gap-2 mx-2 flex-wrap md:flex-nowrap max-w-screen-lg">
+    <div className="flex gap-2 flex-wrap md:flex-nowrap flex-1">
       {products.length === 0 ? (
         <p className="text-center">Seu carrinho está vazio.</p>
       ) : (
         <>
-          <ul className="flex flex-col gap-4 rounded-xl p-3">
+          <ul className="flex flex-col flex-grow basis-96 gap-4 rounded-xl p-3">
             {products.map((product) => (
               <li
                 key={product.id}
-                className="flex gap-4 w-full p-3 rounded bg-white/70 shadow-md border"
+                className="flex gap-4 w-full p-3 rounded-xl bg-white/70 shadow-md"
               >
                 {product.product_image && (
                   <Image
@@ -75,7 +75,7 @@ const CartDetails = ({ user }: { user?: User }) => {
               </li>
             ))}
           </ul>
-          <div className="bg-white shadow-lg rounded-xl p-6 w-full max-w-md mx-auto">
+          <div className="bg-white shadow-lg rounded-xl flex-grow basis-[448px] p-6 mx-2 md:mx-auto">
             <h2 className="text-lg font-semibold border-b pb-3 mb-4">
               Resumo do Pedido
             </h2>

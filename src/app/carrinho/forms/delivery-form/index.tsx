@@ -19,6 +19,8 @@ const DeliveryForm = ({ user }: { user?: User }) => {
     mutationFn: createMercadoPagoCheckout,
   });
 
+  console.log(products);
+
   const [deliveryType, setDeliveryType] = useState<"pickup" | "delivery">(
     fee_id ? "delivery" : "pickup"
   );

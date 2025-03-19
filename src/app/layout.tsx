@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import NavbarDesktop from "@/components/navbar/navbar-desktop";
-import NavbarMobile from "@/components/navbar/navbar-mobile";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/toaster";
 import WppBtn from "@/components/buttons/wpp-btn";

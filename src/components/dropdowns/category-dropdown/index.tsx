@@ -38,7 +38,7 @@ const CategoryDropdown = ({ categories }: { categories: Category[] }) => {
         {isOpen && (
           <DropdownMenuContent
             onMouseLeave={() => setIsOpen(false)}
-            className="w-80 absolute top-full right-1/2 translate-x-1/2  bg-primary text-primary-foreground shadow-lg rounded-md"
+            className="w-80 absolute top-full right-1/2 translate-x-1/2  bg-white text-primary-foreground shadow-lg rounded-md"
           >
             <DropdownMenuLabel>Categorias</DropdownMenuLabel>
             <DropdownMenuSeparator />

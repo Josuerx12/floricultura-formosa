@@ -73,7 +73,7 @@ const CategoryPage = async ({
 
   return (
     <div className="px-4 pb-6">
-      <h3 className="my-6 text-xl text-center">
+      <h3 className="my-6 text-xl text-center uppercase font-medium">
         {category?.replaceAll("-", " ")}
       </h3>
 
@@ -86,7 +86,7 @@ const CategoryPage = async ({
           </p>
         )}
       </div>
-      <Pagination totalPages={totalPages} />
+      {products.length > 0 && <Pagination totalPages={totalPages} />}
     </div>
   );
 };

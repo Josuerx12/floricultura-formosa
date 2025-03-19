@@ -81,7 +81,7 @@ const ProdutosSubcategoria = async ({
 
   return (
     <div className="flex flex-col px-4 pb-6">
-      <h3 className="my-6 text-xl text-center">
+      <h3 className="my-6 text-xl text-center uppercase font-medium">
         {categoria?.replaceAll("-", " ")} | {subcategoria?.replaceAll("-", " ")}
       </h3>
 

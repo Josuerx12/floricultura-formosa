@@ -10,7 +10,7 @@ import { toast } from "@/hooks/use-toast";
 import { DeleteProduct, Product } from "@/lib/actions/products";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CircleX, Loader, Trash } from "lucide-react";
-import { useActionState, useEffect } from "react";
+import { FormEvent } from "react";
 
 const DeleteProductModal = ({
   product,
@@ -27,15 +27,21 @@ const DeleteProductModal = ({
     mutationKey: ["delete-product", product.id],
     mutationFn: DeleteProduct,
     onSuccess: (data) => {
+      console.log(data);
       toast({
         title: data.success,
       });
       query.invalidateQueries({ queryKey: ["products-dash"] });
       handleClose();
     },
+    onError: (e) => {
+      console.log(e.message);
+    },
   });
 
-  async function handleSubmit() {
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+
     await mutateAsync({ id: product.id });
   }
 

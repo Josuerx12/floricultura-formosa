@@ -9,8 +9,10 @@ const CartPage = async () => {
   const user = await auth();
 
   return (
-    <div className="max-w-screen-xl mx-auto flex flex-col mb-10">
-      <h2 className="text-center text-xl my-6">Carrinho de Compras</h2>
+    <div className="max-w-screen-xl w-full mx-auto flex flex-col mb-10">
+      <h2 className="text-center text-xl my-6 font-medium uppercase">
+        Carrinho de Compras
+      </h2>
 
       <CartDetails user={user?.user} />
     </div>

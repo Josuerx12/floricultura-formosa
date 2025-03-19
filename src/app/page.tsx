@@ -1,7 +1,11 @@
 import { ProductCard } from "@/components/cards/product-card";
 import HomeSlickSlider from "@/components/slider/home-slider";
 import PromoSlider from "@/components/slider/promo-slider";
-import { getTop10SelledProducts, Product } from "@/lib/actions/products";
+import {
+  getDeluxeProducts,
+  getTop10SelledProducts,
+  Product,
+} from "@/lib/actions/products";
 import { prisma } from "@/lib/db/prisma";
 import Image from "next/image";
 
@@ -25,27 +29,26 @@ export default async function Home() {
         },
       },
     },
-    take: 20,
+    take: 21,
     orderBy: { created_at: "desc" },
   });
 
+  const deluxeProducts = await getDeluxeProducts();
+
   return (
     <main className="flex w-full flex-col  items-center justify-center pb-6">
-      <div className="py-4 flex items-center flex-col justify-center text-primary-hard_pink">
-        <Image
-          src={"/logo.svg"}
-          width={300}
-          height={300}
-          priority
-          quality={100}
-          alt="Logo floricultura"
-          className="bg-transparent w-36 h-36 text-black"
-        />
-        <h2 className="uppercase font-medium text-xl">Floricultura formosa</h2>
-      </div>
       <section className="w-full">
         <HomeSlickSlider />
       </section>
+
+      {topProducts && topProducts.length > 0 && (
+        <section className="w-full max-w-6xl my-8">
+          <h2 className="text-lg text-body_foreground md:text-2xl font-bold text-center my-6 uppercase">
+            Mais vendidos
+          </h2>
+          <PromoSlider products={topProducts} />
+        </section>
+      )}
 
       {allProducts && allProducts.length > 0 && (
         <section className="w-full max-w-6xl my-8">
@@ -57,12 +60,12 @@ export default async function Home() {
         </section>
       )}
 
-      {topProducts && topProducts.length > 0 && (
+      {deluxeProducts && deluxeProducts.length > 0 && (
         <section className="w-full max-w-6xl my-8">
-          <h2 className="text-lg text-body_foreground md:text-2xl font-bold text-center my-6">
-            Mais vendidos
+          <h2 className="text-lg text-body_foreground md:text-2xl font-bold text-center my-6 uppercase">
+            Coleção luxo
           </h2>
-          <PromoSlider products={topProducts} />
+          <PromoSlider products={deluxeProducts} />
         </section>
       )}
     </main>

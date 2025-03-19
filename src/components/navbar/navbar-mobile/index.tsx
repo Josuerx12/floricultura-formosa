@@ -22,6 +22,7 @@ import CartBtn from "@/components/buttons/cart-btn";
 import { MobileHomeSearchFilter } from "@/components/filters/mobile-home-search-filter";
 import { useQuery } from "@tanstack/react-query";
 import { User } from "next-auth";
+import Image from "next/image";
 
 const NavbarMobile = ({ user }: { user?: User }) => {
   const router = useRouter();
@@ -58,19 +59,35 @@ const NavbarMobile = ({ user }: { user?: User }) => {
         }`}
       />
       <div className="sticky inset-0 z-30">
-        <header className="bg-primary-hard_pink  flex  justify-between items-center gap-2 py-6 px-4 md:px-20 ">
+        <header className="bg-primary-hard_pink  flex  justify-between items-center gap-2 py-6 px-4 md:px-10 ">
           <button onClick={handleOpen} className=" text-primary p-1 rounded">
             {isOpen ? (
-              <div className="flex items-center gap-2 font-medium text-primary">
+              <div className="flex items-center gap-2 font-medium text-primary uppercase">
                 <X />
                 Fechar
               </div>
             ) : (
-              <div className="flex items-center gap-2 font-medium text-primary">
+              <div className="flex items-center gap-2 font-medium text-primary uppercase">
                 <Menu /> Menu
               </div>
             )}
           </button>
+
+          <Link
+            className="absolute  right-1/2 translate-x-1/2 "
+            href={"/"}
+            title="Ir para pagina inicial"
+          >
+            <Image
+              className="w-10 h-10 md:w-20 md:h-20 object-fill"
+              src={"/images/logo-branca.webp"}
+              loading="lazy"
+              alt="Logo pic"
+              width={400}
+              height={400}
+            />
+          </Link>
+
           <div className="flex items-center gap-4">
             <MobileHomeSearchFilter />
             <div className=" p-2 rounded-full">
@@ -81,11 +98,11 @@ const NavbarMobile = ({ user }: { user?: User }) => {
       </div>
 
       <div
-        className={`fixed h-full ${
-          isOpen ? "left-0" : "-left-full"
-        } max-w-[400px]  w-full p-5 duration-200 top-0 ease-linear bg-primary z-20 flex items-start pt-40 justify-center`}
+        className={`fixed md:h-full ${
+          isOpen ? "top-0 md:left-0" : "-top-full md:-left-full"
+        }  w-full md:max-w-[400px] p-5 duration-200 top-0 ease-linear bg-primary-hard_pink  z-20 flex items-start pt-40 justify-start`}
       >
-        <ul className="flex w-full flex-col gap-y-5 text-primary-foreground text-sm font-semibold uppercase">
+        <ul className="flex w-full h-fit  flex-col gap-y-5 text-primary-foreground text-sm font-semibold uppercase">
           {user ? (
             <>
               <li
@@ -93,7 +110,7 @@ const NavbarMobile = ({ user }: { user?: User }) => {
                   handleOpen();
                   router.push("/");
                 }}
-                className="flex items-center justify-between gap-2 cursor-pointer hover:bg-primary-soft_pink p-2 rounded-md"
+                className="flex items-center justify-between gap-6 text-white cursor-pointer hover:bg-primary-foreground hover:text-primary duration-200 p-2 rounded-md"
               >
                 Pagina inicial <Home size={18} />
               </li>
@@ -101,34 +118,35 @@ const NavbarMobile = ({ user }: { user?: User }) => {
                 onClick={() => {
                   handleOpen();
                 }}
-                className="flex items-center justify-between gap-2 cursor-pointer hover:bg-primary-soft_pink p-2 rounded-md"
+                className="flex items-center justify-between gap-6 text-white cursor-pointer hover:bg-primary-foreground hover:text-primary duration-200 p-2 rounded-md"
               >
                 {isPending && <div>Carregando Categorias...</div>}
                 {data && <CategoryDropdown categories={data} />}
+              </li>
+
+              <li
+                onClick={() => {
+                  handleOpen();
+                  router.push("/dashboard");
+                }}
+                className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:bg-primary-foreground hover:text-primary duration-200 p-2 rounded-md"
+              >
+                Dashboard <LayoutDashboard size={18} />
+              </li>
+              <li
+                onClick={handleOpen}
+                className=" flex items-center justify-between text-white  gap-6 cursor-pointer hover:bg-primary-foreground hover:text-primary duration-200 p-2 rounded-md"
+              >
+                Compras <ShoppingCart size={18} />
               </li>
               <li
                 onClick={() => {
                   handleOpen();
                   setIsProfileOpen((prev) => !prev);
                 }}
-                className="flex items-center justify-between gap-2 cursor-pointer hover:bg-primary-soft_pink p-2 rounded-md"
+                className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:bg-primary-foreground hover:text-primary duration-200 p-2 rounded-md"
               >
                 Perfil <UserIcon size={18} />
-              </li>
-              <li
-                onClick={() => {
-                  handleOpen();
-                  router.push("/dashboard");
-                }}
-                className="flex items-center justify-between gap-2 cursor-pointer hover:bg-primary-soft_pink p-2 rounded-md"
-              >
-                Dashboard <LayoutDashboard size={18} />
-              </li>
-              <li
-                onClick={handleOpen}
-                className="flex items-center justify-between gap-2 cursor-pointer hover:bg-primary-soft_pink p-2 rounded-md"
-              >
-                Compras <ShoppingCart size={18} />
               </li>
               <li onClick={handleOpen}>
                 <form className="w-full" action={singOutAction}>
@@ -162,6 +180,16 @@ const NavbarMobile = ({ user }: { user?: User }) => {
             </>
           )}
         </ul>
+      </div>
+      <div className="w-full mx-auto flex justify-center py-10 items-center">
+        <Link href={"/"} title="Ir para pagina inicial">
+          <Image
+            src={"/images/logo-letra.webp"}
+            alt="Logo floricultura"
+            width={200}
+            height={200}
+          />
+        </Link>
       </div>
     </>
   );

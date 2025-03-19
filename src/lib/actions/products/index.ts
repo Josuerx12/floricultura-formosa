@@ -96,6 +96,10 @@ export async function DeleteProduct({ id }: { id: number }) {
     );
   }
 
+  await prisma.order_item.deleteMany({
+    where: { product_id: id },
+  });
+
   const piPromises = product.product_images.map(async (pi) => {
     await deleteFileAWS(pi.file_key, pi.bucket);
     await prisma.product_images.delete({ where: { id: pi.id } });
@@ -251,6 +255,27 @@ export async function getTop10SelledProducts() {
         select: {
           url: true,
           id: true,
+        },
+      },
+    },
+  });
+
+  return products;
+}
+
+export async function getDeluxeProducts() {
+  const products = await prisma.product.findMany({
+    where: {
+      subcategory: {
+        category: {
+          name: "categoria luxo",
+        },
+      },
+    },
+    include: {
+      product_images: {
+        select: {
+          url: true,
         },
       },
     },

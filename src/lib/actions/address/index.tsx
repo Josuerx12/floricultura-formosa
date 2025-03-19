@@ -70,11 +70,12 @@ export async function getUserAddresses() {
     },
   });
 
-  return addresses.map((a) => ({
+  const addr = addresses.map((a) => ({
     ...a,
     delivery_fee: {
-      ...a.delivery_fee,
-      fee: Number(a.delivery_fee!.fee),
+      fee: a.delivery_fee!.fee.toNumber(),
     },
   }));
+
+  return addr;
 }

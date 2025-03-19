@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth/auth";
 import React from "react";
-import NavbarDesktop from "./navbar-desktop";
 import NavbarMobile from "./navbar-mobile";
+import Image from "next/image";
 
 const Navbar = async () => {
   const user = await auth();

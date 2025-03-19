@@ -118,7 +118,7 @@ model product {
   description    String
   price          Float
   stock_quantity Int
-  subcategory    subcategory      @relation(fields: [subcategory_id], references: [id])
+  subcategory    subcategory      @relation(fields: [subcategory_id], references: [id], onDelete: NoAction)
   created_at     DateTime         @default(now())
   updated_at     DateTime         @updatedAt
   product_images product_images[]
@@ -133,7 +133,7 @@ model product_images {
   file_key   String
   bucket     String
   created_at DateTime @default(now())
-  product    product  @relation(fields: [product_id], references: [id])
+  product    product  @relation(fields: [product_id], references: [id], onDelete: NoAction)
 }
 
 model promotions {
@@ -142,7 +142,7 @@ model promotions {
   discount_percentage Float
   start_date          DateTime
   end_date            DateTime
-  product             product  @relation(fields: [product_id], references: [id])
+  product             product  @relation(fields: [product_id], references: [id], onDelete: NoAction)
   created_at          DateTime @default(now())
   updated_at          DateTime @updatedAt
 }
@@ -168,7 +168,7 @@ model order_item {
   order_id   String
   order      order   @relation(fields: [order_id], references: [id], onDelete: Cascade)
   product_id Int
-  product    product @relation(fields: [product_id], references: [id])
+  product    product @relation(fields: [product_id], references: [id], onDelete: NoAction)
   quantity   Int
   price      Decimal
 }
