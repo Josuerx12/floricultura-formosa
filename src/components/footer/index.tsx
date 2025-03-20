@@ -1,7 +1,9 @@
 "use client";
 
+import { Instagram } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { FaFacebook, FaInstagram } from "react-icons/fa";
 
 const Footer = () => {
   const pathname = usePathname();
@@ -11,22 +13,101 @@ const Footer = () => {
   if (hideFooter) return null;
 
   return (
-    <footer className="bg-primary-hard_pink text-primary py-6 px-4 text-center mt-auto">
-      <div className="max-w-4xl mx-auto">
+    <footer className="bg-primary-hard_pink text-primary w-full mx-auto py-6 px-4 mt-auto">
+      <div className="max-w-screen-2xl mx-auto w-full flex gap-10  justify-between">
+        <div className="flex-grow basis-64">
+          <h3 className="uppercase  font-medium">A empresa</h3>
+          <ul className="text-sm ">
+            <li>
+              <Link href="/sobre" className="underline text-sm">
+                Que somos
+              </Link>
+            </li>
+            <li>
+              <Link href="/termos-de-uso" className="underline text-sm">
+                Termos de Serviços
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/politica-de-privacidade"
+                className="underline text-sm"
+              >
+                Política de Privacidade
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/politica-de-privacidade"
+                className="underline text-sm"
+              >
+                Política de Reembolso
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        <div className="flex-grow basis-64 flex flex-col justify-start">
+          <h3 className="uppercase  font-medium">ajuda</h3>
+
+          <ul className="text-sm ">
+            <li>
+              <Link href="/" className="underline text-sm">
+                Seu pedido
+              </Link>
+            </li>
+            <li>
+              <Link href="/" className="underline text-sm">
+                Entrega
+              </Link>
+            </li>
+            <li>
+              <Link href="/" className="underline text-sm">
+                Fale com a gente
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        <div className="flex-grow basis-64">
+          <h3 className="uppercase  font-medium">telefones</h3>
+
+          <ul>
+            <li>
+              <Link href="https://api.whatsapp.com/send?phone=5522999712066&text=Ol%C3%A1%20estou%20acessando%20atrav%C3%A9s%20do%20site%20da%20floricultura%20e%20preciso%20de%20ajuda...">
+                (22) 9 99712-0066 - 08:00 às 18:00 (Seg à Sex) e 08:00 à 12:00
+                aos sábados.
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        <div className="flex-grow basis-64">
+          <h3 className="uppercase font-medium text-regular-600">
+            siga a verbena
+          </h3>
+
+          <ul className="flex gap-2">
+            <li>
+              <Link href={""}>
+                <FaInstagram />
+              </Link>
+            </li>
+            <li>
+              <Link href={""}>
+                <FaFacebook />
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div className="max-w-screen-2xl mx-auto mt-10 text-center">
         <p className="text-sm">CNPJ: 27.870.680/0001-50</p>
         <p className="text-sm">
           Razão Social: X.C. OLIVEIRA COMERCIO E SERVIÇOS DE FLORES NATURAIS
           EIRELI
         </p>
-        <div className="flex justify-center gap-4 mt-4">
-          <Link href="/politica-de-privacidade" className="underline text-sm">
-            Política de Privacidade
-          </Link>
-          <Link href="/termos-de-uso" className="underline text-sm">
-            Termos de Uso
-          </Link>
-        </div>
-        <div className="mt-4">
+        <div className="mt-4 mx-auto">
           <p className="text-xs">
             Desenvolvido por
             <Link

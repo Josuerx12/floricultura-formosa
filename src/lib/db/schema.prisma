@@ -114,6 +114,7 @@ model subcategory {
 model product {
   id             Int              @id @default(autoincrement())
   subcategory_id Int
+  occasions_id   Int?
   name           String
   description    String
   price          Float
@@ -124,6 +125,7 @@ model product {
   product_images product_images[]
   promotions     promotions[]
   order_item     order_item[]
+  occasions      occasions?       @relation(fields: [occasions_id], references: [id])
 }
 
 model product_images {
@@ -134,6 +136,12 @@ model product_images {
   bucket     String
   created_at DateTime @default(now())
   product    product  @relation(fields: [product_id], references: [id], onDelete: NoAction)
+}
+
+model occasions {
+  id       Int       @id @default(autoincrement())
+  name     String
+  products product[]
 }
 
 model promotions {
