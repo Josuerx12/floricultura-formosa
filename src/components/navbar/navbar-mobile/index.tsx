@@ -99,7 +99,7 @@ const NavbarMobile = ({ user }: { user?: User }) => {
 
       <div
         className={`fixed md:h-full ${
-          isOpen ? "top-0 md:left-0" : "-top-full md:-left-full"
+          isOpen ? "left-0" : "-left-full"
         }  w-full md:max-w-[400px] p-5 duration-200 top-0 ease-linear bg-primary-hard_pink  z-20 flex items-start pt-40 justify-start`}
       >
         <ul className="flex w-full h-fit  flex-col gap-y-5 text-primary-foreground text-sm font-semibold uppercase">
