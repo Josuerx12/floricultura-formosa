@@ -50,14 +50,17 @@ export function MobileHomeSearchFilter() {
             title="Buscar produto"
           />
         </SheetTrigger>
-        <SheetContent side={"left"} className="bg-primary">
+        <SheetContent side={"left"}>
           <SheetHeader className="mt-4">
-            <SheetTitle className="text-sm text-primary-foreground">
+            <SheetTitle className="text-sm text-white uppercase">
               Filtre pelo nome do produto!
             </SheetTitle>
           </SheetHeader>
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-4 w-full">
-            <label className="flex gap-2 w-full bg-primary-foreground drop-shadow-md p-2 rounded-full">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="mt-4 w-full relative flex flex-col"
+          >
+            <label className="flex gap-2 flex-grow bg-primary-foreground drop-shadow-md p-2 rounded-full">
               <input
                 {...register("search")}
                 placeholder="Buscar por nome do produto"

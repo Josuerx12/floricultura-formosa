@@ -23,6 +23,7 @@ import { MobileHomeSearchFilter } from "@/components/filters/mobile-home-search-
 import { useQuery } from "@tanstack/react-query";
 import { User } from "next-auth";
 import Image from "next/image";
+import CategoryAccordeon from "@/components/accordeons/category-accordeon";
 
 const NavbarMobile = ({ user }: { user?: User }) => {
   const router = useRouter();
@@ -114,14 +115,15 @@ const NavbarMobile = ({ user }: { user?: User }) => {
               >
                 Pagina inicial <Home size={18} />
               </li>
-              <li
-                onClick={() => {
-                  handleOpen();
-                }}
-                className="flex items-center justify-between gap-6 text-white cursor-pointer hover:bg-primary-foreground hover:text-primary duration-200 p-2 rounded-md"
-              >
+
+              <li>
                 {isPending && <div>Carregando Categorias...</div>}
-                {data && <CategoryDropdown categories={data} />}
+                {data && (
+                  <CategoryAccordeon
+                    handleClose={handleOpen}
+                    categories={data}
+                  />
+                )}
               </li>
 
               <li
@@ -163,7 +165,7 @@ const NavbarMobile = ({ user }: { user?: User }) => {
             <>
               <Link
                 onClick={handleOpen}
-                className="font-semibold text-sm flex w-full items-center justify-between gap-2 text-primary-foreground hover:text-primary-foreground/80 duration-200"
+                className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:bg-primary-foreground hover:text-primary duration-200 p-2 rounded-md"
                 title="Cadastre-se para poder realizar suas compras!"
                 href={"/registre-se"}
               >
@@ -172,7 +174,7 @@ const NavbarMobile = ({ user }: { user?: User }) => {
               <Link
                 onClick={handleOpen}
                 title="Autentique-se para poder realizar suas compras"
-                className="border text-sm flex items-center justify-between gap-2 cursor-pointer  p-2 rounded-md  text-primary-foreground hover:bg-primary-foreground hover:text-primary duration-200"
+                className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:bg-primary-foreground hover:text-primary duration-200 p-2 rounded-md"
                 href={"/login"}
               >
                 Login <LogIn />

@@ -14,8 +14,8 @@ const Footer = () => {
 
   return (
     <footer className="bg-primary-hard_pink text-primary w-full mx-auto py-6 px-4 mt-auto">
-      <div className="max-w-screen-2xl mx-auto w-full flex gap-10  justify-between">
-        <div className="flex-grow basis-64">
+      <div className="max-w-screen-2xl mx-auto w-full flex gap-10 flex-wrap justify-between">
+        <div className="flex-grow basis-64 text-center md:text-start">
           <h3 className="uppercase  font-medium">A empresa</h3>
           <ul className="text-sm ">
             <li>
@@ -47,7 +47,7 @@ const Footer = () => {
           </ul>
         </div>
 
-        <div className="flex-grow basis-64 flex flex-col justify-start">
+        <div className="flex-grow basis-64 flex flex-col justify-start text-center md:text-start">
           <h3 className="uppercase  font-medium">ajuda</h3>
 
           <ul className="text-sm ">
@@ -69,7 +69,7 @@ const Footer = () => {
           </ul>
         </div>
 
-        <div className="flex-grow basis-64">
+        <div className="flex-grow basis-64 text-center md:text-start">
           <h3 className="uppercase  font-medium">telefones</h3>
 
           <ul>
@@ -82,9 +82,9 @@ const Footer = () => {
           </ul>
         </div>
 
-        <div className="flex-grow basis-64">
+        <div className="flex-grow basis-64 flex flex-col justify-center items-center">
           <h3 className="uppercase font-medium text-regular-600">
-            siga a verbena
+            siga a floricultura formosa
           </h3>
 
           <ul className="flex gap-2">
