@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -58,19 +59,26 @@ export function MobileHomeSearchFilter() {
           </SheetHeader>
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="mt-4 w-full relative flex flex-col"
+            className="mt-4 w-full relative flex flex-col gap-2"
           >
-            <label className="flex gap-2 flex-grow bg-primary-foreground drop-shadow-md p-2 rounded-full">
+            <label className="flex gap-2  bg-white text-primary-foreground drop-shadow-md p-2 rounded-sm md:rounded-full">
               <input
                 {...register("search")}
                 placeholder="Buscar por nome do produto"
-                className="bg-transparent text-sm text-primary flex-grow border-r  placeholder:text-primary outline-none "
+                className="bg-transparent text-sm text-primary-foreground md:flex-grow md:border-r md:border-primary-foreground  placeholder:text-primary-foreground outline-none "
                 type="text"
               />
-              <button type="submit" className="w-fit">
-                <IoIosSearch className="text-primary text-2xl " />
+              <button
+                type="submit"
+                title="buscar"
+                className="w-fit hidden md:block "
+              >
+                <IoIosSearch className="text-primary-foreground text-2xl" />
               </button>
             </label>
+            <Button className="md:hidden" type="submit">
+              Buscar
+            </Button>
           </form>
         </SheetContent>
       </Sheet>

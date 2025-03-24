@@ -3,6 +3,7 @@
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { Button } from "../ui/button";
 
 const BackBtn = () => {
   const router = useRouter();
@@ -19,12 +20,9 @@ const BackBtn = () => {
   };
 
   return (
-    <button
-      className="flex items-center bg-neutral-900 text-white p-2 rounded-full"
-      onClick={handleBack}
-    >
+    <Button onClick={handleBack}>
       <ChevronLeft size={26} /> <span>Voltar</span>
-    </button>
+    </Button>
   );
 };
 

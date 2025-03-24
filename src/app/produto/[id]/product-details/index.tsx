@@ -4,6 +4,7 @@ import useCartStore, { ProductCart } from "@/hooks/use-cart-store";
 import React, { useState } from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 
 const ProductDetails = ({ product, finalPrice, discount }: any) => {
   const [selectedImage, setSelectedImage] = useState(
@@ -54,18 +55,18 @@ const ProductDetails = ({ product, finalPrice, discount }: any) => {
       </div>
 
       <div>
-        <h1 className="text-3xl font-bold">{product.name}</h1>
+        <h1 className="text-3xl font-bold text-title">{product.name}</h1>
 
         <div className="mt-3">
           {discount > 0 ? (
             <p className="text-red-500 text-2xl font-bold">
               R$ {finalPrice.toFixed(2)}{" "}
-              <span className="text-gray-400 line-through text-lg">
+              <span className="text-price line-through text-lg">
                 R$ {product.price.toFixed(2)}
               </span>
             </p>
           ) : (
-            <p className="text-gray-800 text-2xl font-bold">
+            <p className="text-price text-2xl font-bold">
               R$ {product.price.toFixed(2)}
             </p>
           )}
@@ -98,7 +99,7 @@ const ProductDetails = ({ product, finalPrice, discount }: any) => {
           />
 
           <div>
-            <label htmlFor="quantity" className="font-medium text-gray-700">
+            <label htmlFor="quantity" className="font-medium text-price">
               Quantidade:
             </label>
             <select
@@ -114,17 +115,14 @@ const ProductDetails = ({ product, finalPrice, discount }: any) => {
             </select>
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-primary-foreground text-primary hover:bg-primary-foreground/80 hover:text-primary py-3 rounded-md font-semibold hover:bg-primary-dark transition-all duration-300"
-          >
+          <Button className="text-btn-text bg-btn-body" type="submit">
             Adicionar ao Carrinho
-          </button>
+          </Button>
         </form>
 
         <div className="mt-6">
-          <h2 className="text-xl font-semibold">Descrição</h2>
-          <p className="text-gray-600 mt-2">{product.description}</p>
+          <h2 className="text-xl font-semibold text-title">Descrição</h2>
+          <p className="text-price mt-2">{product.description}</p>
         </div>
       </div>
     </div>
