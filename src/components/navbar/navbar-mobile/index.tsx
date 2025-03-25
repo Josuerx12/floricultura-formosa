@@ -136,7 +136,10 @@ const NavbarMobile = ({ user }: { user?: User }) => {
                 Dashboard <LayoutDashboard size={18} />
               </li>
               <li
-                onClick={handleOpen}
+                onClick={() => {
+                  handleOpen();
+                  router.push("/compras");
+                }}
                 className=" flex items-center justify-between text-white  gap-6 cursor-pointer hover:bg-primary-foreground hover:text-primary duration-200 p-2 rounded-md"
               >
                 Compras <ShoppingCart size={18} />
