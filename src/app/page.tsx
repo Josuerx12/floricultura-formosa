@@ -52,7 +52,7 @@ export default async function Home() {
 
       {allProducts && allProducts.length > 0 && (
         <section className="w-full max-w-6xl my-8">
-          <div className="mx-2 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="mx-2 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-6">
             {allProducts?.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

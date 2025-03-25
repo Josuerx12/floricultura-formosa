@@ -17,10 +17,10 @@ const Footer = () => {
       <div className="max-w-screen-2xl mx-auto w-full flex gap-10 flex-wrap justify-between">
         <div className="flex-grow basis-64 text-center md:text-start">
           <h3 className="uppercase  font-medium">A empresa</h3>
-          <ul className="text-sm ">
+          <ul className="text-sm flex flex-col gap-y-2 mt-2">
             <li>
               <Link href="/sobre" className="underline text-sm">
-                Que somos
+                Quem somos
               </Link>
             </li>
             <li>
@@ -50,7 +50,7 @@ const Footer = () => {
         <div className="flex-grow basis-64 flex flex-col justify-start text-center md:text-start">
           <h3 className="uppercase  font-medium">ajuda</h3>
 
-          <ul className="text-sm ">
+          <ul className="text-sm flex flex-col gap-y-2 mt-2">
             <li>
               <Link href="/" className="underline text-sm">
                 Seu pedido
@@ -72,7 +72,7 @@ const Footer = () => {
         <div className="flex-grow basis-64 text-center md:text-start">
           <h3 className="uppercase  font-medium">telefones</h3>
 
-          <ul>
+          <ul className="text-sm flex flex-col gap-y-2">
             <li>
               <Link href="https://api.whatsapp.com/send?phone=5522999712066&text=Ol%C3%A1%20estou%20acessando%20atrav%C3%A9s%20do%20site%20da%20floricultura%20e%20preciso%20de%20ajuda...">
                 (22) 9 99712-0066 - 08:00 às 18:00 (Seg à Sex) e 08:00 à 12:00
@@ -82,20 +82,20 @@ const Footer = () => {
           </ul>
         </div>
 
-        <div className="flex-grow basis-64 flex flex-col justify-center items-center">
+        <div className="flex-grow basis-64 flex flex-col  items-center">
           <h3 className="uppercase font-medium text-regular-600">
             siga a floricultura formosa
           </h3>
 
-          <ul className="flex gap-2">
+          <ul className="flex gap-26 mt-4">
             <li>
               <Link href={""}>
-                <FaInstagram />
+                <FaInstagram size={32} />
               </Link>
             </li>
             <li>
               <Link href={""}>
-                <FaFacebook />
+                <FaFacebook size={32} />
               </Link>
             </li>
           </ul>
