@@ -99,11 +99,11 @@ const NavbarMobile = ({ user }: { user?: User }) => {
       </div>
 
       <div
-        className={`fixed md:h-full ${
+        className={`fixed overflow-y-auto h-full ${
           isOpen ? "left-0" : "-left-full"
-        }  w-full md:max-w-[400px] p-5 duration-200 top-0 ease-linear bg-primary-hard_pink  z-20 flex items-start pt-40 justify-start`}
+        }  w-full md:max-w-[400px] p-5 duration-200 top-0 ease-linear bg-primary-hard_pink  z-20 flex items-start py-28 justify-start`}
       >
-        <ul className="flex w-full h-fit  flex-col gap-y-5 text-primary-foreground text-sm font-semibold uppercase">
+        <ul className="flex w-full h-full  flex-col gap-y-5 text-primary-foreground text-sm font-semibold uppercase">
           {user ? (
             <>
               <li
@@ -151,7 +151,7 @@ const NavbarMobile = ({ user }: { user?: User }) => {
                 Perfil <UserIcon size={18} />
               </li>
               <li onClick={handleOpen}>
-                <form className="w-full" action={singOutAction}>
+                <form className="w-full pb-20" action={singOutAction}>
                   <button
                     className="flex w-full bg-red-600 uppercase text-white p-2 rounded items-center justify-between gap-2"
                     type="submit"
