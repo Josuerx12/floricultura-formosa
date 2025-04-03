@@ -16,7 +16,6 @@ import { useState } from "react";
 import { singOutAction } from "@/lib/actions/auth";
 import { usePathname, useRouter } from "next/navigation";
 import ProfileModal from "@/components/modals/profile-modal";
-import CategoryDropdown from "@/components/dropdowns/category-dropdown";
 import { getCategories } from "@/lib/actions/category";
 import CartBtn from "@/components/buttons/cart-btn";
 import { MobileHomeSearchFilter } from "@/components/filters/mobile-home-search-filter";
@@ -104,43 +103,41 @@ const NavbarMobile = ({ user }: { user?: User }) => {
         }  w-full md:max-w-[400px] p-5 duration-200 top-0 ease-linear bg-primary-hard_pink  z-20 flex items-start py-28 justify-start`}
       >
         <ul className="flex w-full h-full  flex-col gap-y-5 text-primary-foreground text-sm font-semibold uppercase">
+          <li
+            onClick={() => {
+              handleOpen();
+              router.push("/");
+            }}
+            className="flex items-center justify-between gap-6 text-white cursor-pointer hover:bg-primary-soft_pink hover:text-primary-foreground duration-200 p-2 rounded-md"
+          >
+            Pagina inicial <Home size={18} />
+          </li>
+
+          <li>
+            {isPending && <div>Carregando Categorias...</div>}
+            {data && (
+              <CategoryAccordeon handleClose={handleOpen} categories={data} />
+            )}
+          </li>
           {user ? (
             <>
-              <li
-                onClick={() => {
-                  handleOpen();
-                  router.push("/");
-                }}
-                className="flex items-center justify-between gap-6 text-white cursor-pointer hover:bg-primary-foreground hover:text-primary duration-200 p-2 rounded-md"
-              >
-                Pagina inicial <Home size={18} />
-              </li>
-
-              <li>
-                {isPending && <div>Carregando Categorias...</div>}
-                {data && (
-                  <CategoryAccordeon
-                    handleClose={handleOpen}
-                    categories={data}
-                  />
-                )}
-              </li>
-
-              <li
-                onClick={() => {
-                  handleOpen();
-                  router.push("/dashboard");
-                }}
-                className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:bg-primary-foreground hover:text-primary duration-200 p-2 rounded-md"
-              >
-                Dashboard <LayoutDashboard size={18} />
-              </li>
+              {(user.role == "ADMIN" || user.role == "SELLER") && (
+                <li
+                  onClick={() => {
+                    handleOpen();
+                    router.push("/dashboard");
+                  }}
+                  className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:bg-primary-soft_pink hover:text-primary-foreground duration-200 p-2 rounded-md"
+                >
+                  Dashboard <LayoutDashboard size={18} />
+                </li>
+              )}
               <li
                 onClick={() => {
                   handleOpen();
                   router.push("/compras");
                 }}
-                className=" flex items-center justify-between text-white  gap-6 cursor-pointer hover:bg-primary-foreground hover:text-primary duration-200 p-2 rounded-md"
+                className=" flex items-center justify-between text-white  gap-6 cursor-pointer hover:bg-primary-soft_pink hover:text-primary-foreground duration-200 p-2 rounded-md"
               >
                 Compras <ShoppingCart size={18} />
               </li>
@@ -149,7 +146,7 @@ const NavbarMobile = ({ user }: { user?: User }) => {
                   handleOpen();
                   setIsProfileOpen((prev) => !prev);
                 }}
-                className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:bg-primary-foreground hover:text-primary duration-200 p-2 rounded-md"
+                className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:bg-primary-soft_pink hover:text-primary-foreground duration-200 p-2 rounded-md"
               >
                 Perfil <UserIcon size={18} />
               </li>
@@ -168,7 +165,7 @@ const NavbarMobile = ({ user }: { user?: User }) => {
             <>
               <Link
                 onClick={handleOpen}
-                className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:bg-primary-foreground hover:text-primary duration-200 p-2 rounded-md"
+                className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:bg-primary-soft_pink hover:text-primary-foreground duration-200 p-2 rounded-md"
                 title="Cadastre-se para poder realizar suas compras!"
                 href={"/registre-se"}
               >
@@ -177,7 +174,7 @@ const NavbarMobile = ({ user }: { user?: User }) => {
               <Link
                 onClick={handleOpen}
                 title="Autentique-se para poder realizar suas compras"
-                className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:bg-primary-foreground hover:text-primary duration-200 p-2 rounded-md"
+                className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:bg-primary-soft_pink hover:text-primary-foreground duration-200 p-2 rounded-md"
                 href={"/login"}
               >
                 Login <LogIn />

@@ -52,17 +52,21 @@ const Footer = () => {
 
           <ul className="text-sm flex flex-col gap-y-2 mt-2">
             <li>
-              <Link href="/" className="underline text-sm">
+              <Link href="/rastreio" className="underline text-sm">
                 Seu pedido
               </Link>
             </li>
             <li>
-              <Link href="/" className="underline text-sm">
+              <Link href="/rastreio" className="underline text-sm">
                 Entrega
               </Link>
             </li>
             <li>
-              <Link href="/" className="underline text-sm">
+              <Link
+                target="_blank"
+                href="https://api.whatsapp.com/send?phone=5522999712066&text=Ol%C3%A1%20estou%20acessando%20atrav%C3%A9s%20do%20site%20da%20floricultura%20e%20preciso%20de%20ajuda..."
+                className="underline text-sm"
+              >
                 Fale com a gente
               </Link>
             </li>
@@ -74,7 +78,10 @@ const Footer = () => {
 
           <ul className="text-sm flex flex-col gap-y-2">
             <li>
-              <Link href="https://api.whatsapp.com/send?phone=5522999712066&text=Ol%C3%A1%20estou%20acessando%20atrav%C3%A9s%20do%20site%20da%20floricultura%20e%20preciso%20de%20ajuda...">
+              <Link
+                target="_blank"
+                href="https://api.whatsapp.com/send?phone=5522999712066&text=Ol%C3%A1%20estou%20acessando%20atrav%C3%A9s%20do%20site%20da%20floricultura%20e%20preciso%20de%20ajuda..."
+              >
                 (22) 9 99712-0066 - 08:00 às 18:00 (Seg à Sex) e 08:00 à 12:00
                 aos sábados.
               </Link>
@@ -87,7 +94,7 @@ const Footer = () => {
             siga a floricultura formosa
           </h3>
 
-          <ul className="flex gap-26 mt-4">
+          <ul className="flex gap-5 mt-4">
             <li>
               <Link href={""}>
                 <FaInstagram size={32} />

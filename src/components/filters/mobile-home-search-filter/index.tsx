@@ -76,7 +76,7 @@ export function MobileHomeSearchFilter() {
                 <IoIosSearch className="text-primary-foreground text-2xl" />
               </button>
             </label>
-            <Button className="md:hidden" type="submit">
+            <Button className="md:hidden bg-[#BA3B4E]" type="submit">
               Buscar
             </Button>
           </form>

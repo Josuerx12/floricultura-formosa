@@ -21,13 +21,13 @@ export function ProductCard({ product }: { product: Product }) {
       className="relative cursor-pointer bg-transparent transition-transform duration-300 ease-in-out flex flex-col overflow-hidden"
     >
       {/* Imagem do Produto */}
-      <div className="relative max-w-[410px] max-h-[410px] w-full h-full hover:opacity-80 duration-200">
+      <div className="relative w-full h-full hover:opacity-80 duration-200">
         <Image
           width={410}
           height={410}
           src={product.product_images?.[0]?.url || "/images/placeholder.png"}
           alt={product.name}
-          className="object-fit w-full h-[350px] md:w-[410px] md:h-[410px]"
+          className="object-cover w-full"
           priority
         />
 

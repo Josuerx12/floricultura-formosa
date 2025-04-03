@@ -135,6 +135,32 @@ export const getOrdersByUser = async ({
   };
 };
 
+export const getOrderById = async (id: string) => {
+  const order = await prisma.order.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      items: {
+        include: {
+          product: {
+            include: {
+              product_images: {
+                select: {
+                  id: true,
+                  url: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return order;
+};
+
 export const getCanceledOrders = async ({
   pageParam = 1,
   perPage = "10",
