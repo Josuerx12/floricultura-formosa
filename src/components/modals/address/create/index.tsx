@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader, Plus, RectangleEllipsis, ScrollText } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { AddressSchema } from "@/lib/schemas-validator/address.schema";
@@ -45,6 +45,8 @@ const CreateAddressModal = () => {
 
   const { data } = useQuery({ queryKey: ["districts"], queryFn: getDistricts });
 
+  const ref = useRef<HTMLFormElement | null>(null);
+
   return (
     <Dialog open={isOpen} onOpenChange={() => setIsOpen((prev) => !prev)}>
       <DialogTrigger className="text-blue-500 p-2 rounded font-medium text-sm drop-shadow">
@@ -56,6 +58,7 @@ const CreateAddressModal = () => {
         </DialogHeader>
 
         <form
+          ref={ref}
           onSubmit={handleSubmit(onSubmit)}
           className="w-full flex flex-col gap-4 mx-auto"
         >
@@ -165,7 +168,11 @@ const CreateAddressModal = () => {
           {errors.city && (
             <p className="text-red-500 text-sm">{errors.city.message}</p>
           )}
-          <Button type="submit" className="mt-4">
+          <Button
+            onClick={() => ref.current?.requestSubmit()}
+            type="button"
+            className="mt-4"
+          >
             <div className="flex items-center justify-center gap-2">
               {isPending ? (
                 <>

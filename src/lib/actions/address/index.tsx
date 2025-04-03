@@ -3,6 +3,7 @@
 import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/db/prisma";
 import { AddressSchema } from "@/lib/schemas-validator/address.schema";
+import { User } from "next-auth";
 import { revalidatePath } from "next/cache";
 
 export async function CreateAddressAction(data: any) {
@@ -45,9 +46,10 @@ export async function getDistricts() {
   return districts;
 }
 
-export async function getUserAddresses() {
-  const session = await auth();
-  const user = session?.user;
+export async function getUserAddresses(user?: User) {
+  if (!user) {
+    return null;
+  }
 
   const addresses = await prisma.address.findMany({
     where: {

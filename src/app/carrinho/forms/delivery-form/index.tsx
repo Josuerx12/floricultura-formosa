@@ -19,8 +19,6 @@ const DeliveryForm = ({ user }: { user?: User }) => {
     mutationFn: createMercadoPagoCheckout,
   });
 
-  console.log(products);
-
   const [deliveryType, setDeliveryType] = useState<"pickup" | "delivery">(
     fee_id ? "delivery" : "pickup"
   );
@@ -28,7 +26,8 @@ const DeliveryForm = ({ user }: { user?: User }) => {
 
   const { data, isPending } = useQuery({
     queryKey: ["userAddresses"],
-    queryFn: getUserAddresses,
+    queryFn: () => getUserAddresses(user),
+    refetchOnWindowFocus: true,
   });
 
   const selectedAddress = data?.find((address) => address.id === fee_id);
@@ -59,99 +58,112 @@ const DeliveryForm = ({ user }: { user?: User }) => {
 
   return (
     <div className="max-w-lg mx-auto p-6 my-4 rounded-lg">
-      <h2 className="text-2xl font-semibold mb-4">Escolha o tipo de entrega</h2>
+      {user && (
+        <h2 className="text-2xl font-semibold mb-4">
+          Escolha o tipo de entrega
+        </h2>
+      )}
 
-      {/* Opções de entrega */}
-      <div className="mb-4">
-        <label className="flex items-center space-x-2">
-          <input
-            type="radio"
-            value="pickup"
-            checked={deliveryType === "pickup"}
-            onChange={() => {
-              setDeliveryType("pickup");
-              removeFee();
-            }}
-            className="form-radio"
-          />
-          <span>Retirada na Loja</span>
-        </label>
-        <label className="flex items-center space-x-2 mt-2">
-          <input
-            type="radio"
-            value="delivery"
-            checked={deliveryType === "delivery"}
-            onChange={() => setDeliveryType("delivery")}
-            className="form-radio"
-          />
-          <span>Entrega</span>
-        </label>
-      </div>
+      {user && (
+        <div className="mb-4">
+          <label className="flex items-center space-x-2">
+            <input
+              type="radio"
+              value="pickup"
+              checked={deliveryType === "pickup"}
+              onChange={() => {
+                setDeliveryType("pickup");
+                removeFee();
+              }}
+              className="form-radio"
+            />
+            <span>Retirada na Loja</span>
+          </label>
+          <label className="flex items-center space-x-2 mt-2">
+            <input
+              type="radio"
+              value="delivery"
+              checked={deliveryType === "delivery"}
+              onChange={() => setDeliveryType("delivery")}
+              className="form-radio"
+            />
+            <span>Entrega</span>
+          </label>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {deliveryType === "delivery" && (
-          <div>
-            {isPending && (
-              <div className="flex items-center justify-center gap-2">
-                <span>Carregando endereços</span>{" "}
-                <Loader2 className="animate-spin" />
-              </div>
-            )}
+        {user && (
+          <>
+            {deliveryType === "delivery" && (
+              <div>
+                {isPending && (
+                  <div className="flex items-center justify-center gap-2">
+                    <span>Carregando endereços</span>{" "}
+                    <Loader2 className="animate-spin" />
+                  </div>
+                )}
 
-            {data && (
-              <div className="flex flex-col gap-y-4">
-                {data.map((a) => {
-                  return (
-                    <label key={a.id} className="flex items-start space-x-2">
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="radio"
-                          value="pickup"
-                          checked={fee_id === a.id}
-                          onChange={() => {
-                            a.delivery_fee && addFee(a.delivery_fee.fee, a.id);
-                          }}
-                          className="form-radio"
-                        />
-                        <span className="font-bold">Endereço: </span>
-                      </div>
-                      <div className="flex flex-col gap-y-2">
-                        <span className="text-justify text-sm">
-                          Rua: {a.street}, numero: {a.number}, bairro:{" "}
-                          {a.district}, estado: {a.state}, cidade: {a.city},{" "}
-                          {a.complement && "complemento:" + a.complement}{" "}
-                        </span>
-                        <span className="text-sm">
-                          <b>
-                            taxa:{" "}
-                            {a.delivery_fee!.fee.toLocaleString("pt-BR", {
-                              style: "currency",
-                              currency: "BRL",
-                            })}
-                          </b>
-                        </span>
-                      </div>
-                    </label>
-                  );
-                })}
+                {data && (
+                  <div className="flex flex-col gap-y-4">
+                    {data.map((a) => {
+                      return (
+                        <label
+                          key={a.id}
+                          className="flex items-start space-x-2"
+                        >
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="radio"
+                              value="pickup"
+                              checked={fee_id === a.id}
+                              onChange={() => {
+                                a.delivery_fee &&
+                                  addFee(a.delivery_fee.fee, a.id);
+                              }}
+                              className="form-radio"
+                            />
+                            <span className="font-bold">Endereço: </span>
+                          </div>
+                          <div className="flex flex-col gap-y-2">
+                            <span className="text-justify text-sm">
+                              Rua: {a.street}, numero: {a.number}, bairro:{" "}
+                              {a.district}, estado: {a.state}, cidade: {a.city},{" "}
+                              {a.complement && "complemento:" + a.complement}{" "}
+                            </span>
+                            <span className="text-sm">
+                              <b>
+                                taxa:{" "}
+                                {a.delivery_fee!.fee.toLocaleString("pt-BR", {
+                                  style: "currency",
+                                  currency: "BRL",
+                                })}
+                              </b>
+                            </span>
+                          </div>
+                        </label>
+                      );
+                    })}
+                  </div>
+                )}
+                <CreateAddressModal />
               </div>
             )}
-            <CreateAddressModal />
-          </div>
+            <label
+              className="flex flex-col items-center w-full"
+              htmlFor="observation"
+            >
+              <span>Observação</span>
+
+              <textarea
+                placeholder="Adicione uma observação."
+                className="bg-neutral-200 w-full h-48 rounded p-2 text-neutral-900 placeholder:text-neutral-900"
+                id="observation"
+                onChange={(e) => setObservation(e.target.value)}
+              />
+            </label>
+          </>
         )}
-        <label
-          className="flex flex-col items-center w-full"
-          htmlFor="observation"
-        >
-          <span>Observação</span>
-
-          <textarea
-            placeholder="Adicione uma observação."
-            className="bg-neutral-200 w-full h-48 rounded p-2 text-neutral-900 placeholder:text-neutral-900"
-            id="observation"
-            onChange={(e) => setObservation(e.target.value)}
-          />
-        </label>
         {user ? (
           submitBtn
         ) : (
