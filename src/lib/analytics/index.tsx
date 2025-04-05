@@ -13,11 +13,7 @@ export async function getStatistcs() {
       id: true,
     },
 
-    where: {
-      status: {
-        not: "CANCELED",
-      },
-    },
+    where: { NOT: [{ status: "CANCELED" }, { status: "PENDING" }] },
   });
 
   const usersCount = await prisma.user.count();
@@ -36,11 +32,7 @@ export async function getStatistcs() {
   `;
 
   const lastSales = await prisma.order.findMany({
-    where: {
-      status: {
-        not: "CANCELED",
-      },
-    },
+    where: { NOT: [{ status: "CANCELED" }, { status: "PENDING" }] },
     take: 10,
     orderBy: {
       createdAt: "desc",
