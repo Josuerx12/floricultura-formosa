@@ -117,6 +117,7 @@ model product {
   occasions_id   Int?
   name           String
   description    String
+  is_visible     Boolean          @default(true)
   price          Float
   stock_quantity Int
   subcategory    subcategory      @relation(fields: [subcategory_id], references: [id], onDelete: NoAction)

@@ -28,7 +28,6 @@ const NavbarMobile = ({ user }: { user?: User }) => {
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   function handleOpen() {
     setIsOpen((prev) => !prev);
@@ -47,11 +46,6 @@ const NavbarMobile = ({ user }: { user?: User }) => {
 
   return (
     <>
-      <ProfileModal
-        isOpen={isProfileOpen}
-        onClose={() => setIsProfileOpen((prev) => !prev)}
-        user={user as any}
-      />
       <div
         onClick={handleOpen}
         className={`fixed inset-0 z-10 bg-black/40 backdrop-blur-sm transition-opacity duration-200 ${
@@ -144,7 +138,7 @@ const NavbarMobile = ({ user }: { user?: User }) => {
               <li
                 onClick={() => {
                   handleOpen();
-                  setIsProfileOpen((prev) => !prev);
+                  router.push("/perfil");
                 }}
                 className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:bg-primary-soft_pink hover:text-primary-foreground duration-200 p-2 rounded-md"
               >

@@ -45,7 +45,7 @@ export default function PromoSlider({ products }: PromoSliderProps) {
     <div className="flex-grow overflow-hidden">
       <Slider {...settings}>
         {products.map((product) => (
-          <div key={product.id} className="px-2 md:h-[600px] mt-5">
+          <div key={product.id} className=" md:h-[600px] mt-5">
             <ProductCard product={product} />
           </div>
         ))}

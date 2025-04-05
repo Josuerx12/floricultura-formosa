@@ -25,7 +25,17 @@ const ProductDetails = ({ product, finalPrice, discount }: any) => {
 
   return (
     <div className="mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div className="flex gap-4">
+      <div className="flex flex-col gap-4">
+        <div className="flex-1">
+          <Image
+            src={selectedImage}
+            alt={product.name}
+            width={800}
+            height={600}
+            quality={100}
+            className="w-full object-cover rounded-md"
+          />
+        </div>
         <div className="flex flex-col gap-2">
           {product.product_images.map((img: any, index: number) => (
             <Image
@@ -40,17 +50,6 @@ const ProductDetails = ({ product, finalPrice, discount }: any) => {
               onClick={() => setSelectedImage(img.url)}
             />
           ))}
-        </div>
-
-        <div className="flex-1">
-          <Image
-            src={selectedImage}
-            alt={product.name}
-            width={800}
-            height={600}
-            quality={100}
-            className="w-full object-cover rounded-md"
-          />
         </div>
       </div>
 

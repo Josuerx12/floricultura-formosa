@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/db/prisma";
 import ProductDetails from "./product-details";
 import BackBtn from "@/components/buttons/back-btn";
+import PromoSlider from "@/components/slider/promo-slider";
+import Title from "@/components/title";
 
 const ProductPage = async ({ params }: { params: any }) => {
   const { id } = await params;
@@ -37,16 +39,49 @@ const ProductPage = async ({ params }: { params: any }) => {
       : 0;
   const finalPrice = product.price - (product.price * discount) / 100;
 
+  const relatedProducts = await prisma.product.findMany({
+    where: {
+      subcategory_id: product.subcategory_id,
+    },
+    include: {
+      product_images: true,
+      promotions: {
+        where: {
+          start_date: { lte: new Date() },
+          end_date: { gte: new Date() },
+        },
+        orderBy: { start_date: "asc" },
+        take: 1,
+        select: {
+          discount_percentage: true,
+          end_date: true,
+          start_date: true,
+        },
+      },
+    },
+  });
+
   return (
-    <div className="flex py-10 px-2 max-w-screen-xl min-h-screen mx-auto flex-col">
-      <div className="w-full pb-6  flex justify-start">
+    <div className="flex flex-col py-10 px-2 min-h-screen w-full">
+      <div className="w-full pb-6 flex justify-start max-w-screen-xl mx-auto">
         <BackBtn />
       </div>
-      <ProductDetails
-        product={product}
-        finalPrice={finalPrice}
-        discount={discount}
-      />
+
+      <div className="w-full max-w-screen-xl mx-auto">
+        <ProductDetails
+          product={product}
+          finalPrice={finalPrice}
+          discount={discount}
+        />
+      </div>
+
+      <div className="w-full max-w-screen-xl mx-auto">
+        <Title>Produtos Relacionados</Title>
+      </div>
+
+      <section className="w-full max-w-screen-xl mx-auto overflow-x-hidden">
+        <PromoSlider products={relatedProducts} />
+      </section>
     </div>
   );
 };

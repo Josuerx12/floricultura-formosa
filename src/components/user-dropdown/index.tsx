@@ -7,7 +7,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { singOutAction } from "@/lib/actions/auth";
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import ProfileModal from "../modals/profile-modal";
