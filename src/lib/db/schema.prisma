@@ -127,6 +127,7 @@ model product {
   promotions     promotions[]
   order_item     order_item[]
   occasions      occasions?       @relation(fields: [occasions_id], references: [id])
+  order_bump     order_bump[]
 }
 
 model product_images {
@@ -157,19 +158,32 @@ model promotions {
 }
 
 model order {
-  id                         String       @id @default(cuid())
+  id                         String              @id @default(cuid())
   user_id                    String
   mercado_pago_preference_id String?
-  user                       User         @relation(fields: [user_id], references: [id])
+  user                       User                @relation(fields: [user_id], references: [id])
   items                      order_item[]
-  status                     OrderStatus  @default(PENDING)
+  status                     OrderStatus         @default(PENDING)
   total_price                Decimal
   delivery_fee               Decimal
   observation                String?
   address_id                 String?
-  address                    address?     @relation(fields: [address_id], references: [id])
-  createdAt                  DateTime     @default(now())
-  updatedAt                  DateTime     @updatedAt
+  address                    address?            @relation(fields: [address_id], references: [id])
+  createdAt                  DateTime            @default(now())
+  updatedAt                  DateTime            @updatedAt
+  order_preferences          order_preferences[]
+}
+
+model order_preferences {
+  id            String   @id @default(uuid())
+  order_id      String
+  from          String?
+  to            String?
+  message       String?
+  phone         String
+  delivery_date DateTime
+
+  order order @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model order_item {
@@ -223,4 +237,15 @@ enum OrderStatus {
   SHIPPED
   DELIVERED
   CANCELED
+}
+
+model order_bump {
+  id              Int      @id @default(autoincrement())
+  product_id      Int
+  bump_product_id Int
+  bump_price      Float
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  bump_product product @relation(fields: [bump_product_id], references: [id], onDelete: NoAction)
 }
