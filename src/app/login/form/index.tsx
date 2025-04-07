@@ -22,39 +22,41 @@ const LoginForm = () => {
   return (
     <form
       ref={formRef}
-      className="flex flex-col gap-6 max-w-prose mx-auto w-full"
+      className="flex flex-col gap-6 max-w-prose mx-auto w-full px-4"
       action={formAction}
     >
-      <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-        <BiMailSend className="text-primary-foreground" size={24} />
+      <label className="flex items-center bg-neutral-200 p-3 gap-2 rounded-3xl">
+        <BiMailSend className="text-primary-foreground" size={20} />
         <input
           required
-          className="w-full bg-transparent outline-none placeholder:text-neutral-700"
+          className="w-full bg-transparent outline-none text-sm placeholder:text-neutral-700"
           type="email"
           name="email"
-          placeholder="Insira seu e-mail cadastrado para se autenticar!"
+          placeholder="E-mail"
         />
       </label>
-      <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-        <BiKey className="text-primary-foreground" size={24} />
+
+      <label className="flex items-center bg-neutral-200 p-3 gap-2 rounded-3xl">
+        <BiKey className="text-primary-foreground" size={20} />
         <input
           required
-          className="w-full bg-transparent outline-none placeholder:text-neutral-700"
+          className="w-full bg-transparent outline-none text-sm placeholder:text-neutral-700"
           type="password"
           name="password"
-          placeholder="Insira sua senha para se autenticar!"
+          placeholder="Senha"
         />
       </label>
 
       {state && (
-        <div className="bg-red-100 p-2 rounded-md">
-          <span className="text-red-900 font-semibold">Error:</span>{" "}
-          <p className="text-red-600">{state}</p>
+        <div className="bg-red-100 text-sm p-2 rounded-md text-red-700 border border-red-300">
+          <strong>Erro:</strong> {state}
         </div>
       )}
+
       <button
         type="submit"
-        className="border flex border-primary-foreground hover:bg-primary-foreground duration-200 hover:text-primary py-1 w-fit px-6 rounded-full mx-auto"
+        disabled={isPending}
+        className="border flex items-center gap-2 border-primary-foreground hover:bg-primary-foreground duration-200 hover:text-primary py-1 w-fit px-6 rounded-full mx-auto"
       >
         {isPending ? (
           <>

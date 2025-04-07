@@ -97,153 +97,173 @@ const CreateProductModal = ({ categories }: { categories: Category[] }) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Adicionar novo produto!</DialogTitle>
+          <DialogTitle className="text-xl font-bold text-center">
+            Adicionar novo produto
+          </DialogTitle>
+          <p className="text-sm text-muted-foreground text-center">
+            Preencha os campos abaixo para cadastrar um produto.
+          </p>
         </DialogHeader>
 
         <form
           onSubmit={handleSubmit(OnSubmit)}
-          className="w-full flex flex-col gap-4 mx-auto"
+          className="w-full flex flex-col gap-5 mx-auto mt-6"
         >
-          <h4 className="text-start text-sm my-6 font-semibold">
-            Preencha o campo abaixo para adicionar um novo produto!
-          </h4>
-          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-            <RectangleEllipsis className="text-primary-foreground" size={24} />
-            <input
-              {...register("name")}
-              required
-              className="w-full bg-transparent outline-none placeholder:text-neutral-700"
-              type="text"
-              placeholder="Insira o nome do produto!"
-            />
-          </label>
+          {/* Nome */}
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium">Nome do produto</label>
+            <div className="flex items-center bg-neutral-100 px-3 py-2 rounded-full">
+              <RectangleEllipsis
+                className="text-primary-foreground"
+                size={20}
+              />
+              <input
+                {...register("name")}
+                className="ml-2 w-full bg-transparent outline-none placeholder:text-neutral-500"
+                type="text"
+                placeholder="Ex: Camisa Polo"
+                required
+              />
+            </div>
+            {errors.name && (
+              <p className="text-red-600 text-sm">{errors.name.message}</p>
+            )}
+          </div>
 
-          {errors?.name && (
-            <p className="text-red-600">{errors?.name.message}</p>
-          )}
+          {/* Subcategoria */}
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium">Subcategoria</label>
+            <div className="flex items-center bg-neutral-100 px-3 py-2 rounded-full">
+              <ScrollText className="text-primary-foreground" size={20} />
+              <select
+                {...register("subcategory_id")}
+                className="ml-2 w-full bg-transparent outline-none text-neutral-700"
+                required
+                defaultValue={""}
+              >
+                <option disabled value="">
+                  Selecione uma subcategoria
+                </option>
+                {categories.map((c) =>
+                  c.subcategories?.map((sc) => (
+                    <option key={sc.id} value={sc.id}>
+                      {c.name} | {sc.name}
+                    </option>
+                  ))
+                )}
+              </select>
+            </div>
+            {errors.subcategory_id && (
+              <p className="text-red-600 text-sm">
+                {errors.subcategory_id.message}
+              </p>
+            )}
+          </div>
 
-          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-            <ScrollText className="text-primary-foreground" size={24} />
-            <select
-              {...register("subcategory_id")}
-              className="flex-grow bg-transparent outline-none text-neutral-700"
-              required
-              defaultValue={""}
-            >
-              <option disabled value={""}>
-                Selecione uma sub categoria!
-              </option>
-              {categories.map((c) =>
-                c.subcategories?.map((sc) => (
-                  <option key={sc.id} value={sc.id}>
-                    {c.name} | {sc.name}
-                  </option>
-                ))
-              )}
-            </select>
-          </label>
-          {errors?.subcategory_id && (
-            <p className="text-red-600">{errors?.subcategory_id.message}</p>
-          )}
+          {/* Estoque */}
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium">Quantidade em estoque</label>
+            <div className="flex items-center bg-neutral-100 px-3 py-2 rounded-full">
+              <Boxes className="text-primary-foreground" size={20} />
+              <input
+                {...register("stock_quantity")}
+                className="ml-2 w-full bg-transparent outline-none"
+                type="number"
+                placeholder="Ex: 100"
+                min={0}
+                required
+              />
+            </div>
+            {errors.stock_quantity && (
+              <p className="text-red-600 text-sm">
+                {errors.stock_quantity.message}
+              </p>
+            )}
+          </div>
 
-          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-            <Boxes className="text-primary-foreground" size={24} />
-            <input
-              {...register("stock_quantity")}
-              required
-              className="w-full bg-transparent outline-none placeholder:text-neutral-700"
-              type="number"
-              placeholder="Quantidade em estoque!"
-              min={0}
-            />
-          </label>
+          {/* Preço */}
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium">Preço</label>
+            <div className="flex items-center bg-neutral-100 px-3 py-2 rounded-full">
+              <Banknote className="text-primary-foreground" size={20} />
+              <input
+                {...register("price")}
+                className="ml-2 w-full bg-transparent outline-none"
+                placeholder="Ex: 99.90"
+                required
+                onInput={(e) => {
+                  e.currentTarget.value = e.currentTarget.value.replace(
+                    /[^0-9.,]/g,
+                    ""
+                  );
+                }}
+              />
+            </div>
+            {errors.price && (
+              <p className="text-red-600 text-sm">{errors.price.message}</p>
+            )}
+          </div>
 
-          {errors?.stock_quantity && (
-            <p className="text-red-600">{errors?.stock_quantity.message}</p>
-          )}
-
-          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-            <Banknote className="text-primary-foreground" size={24} />
-            <input
-              {...register("price")}
-              required
-              className="w-full bg-transparent outline-none placeholder:text-neutral-700"
-              placeholder="Preço do produto!"
-              onInput={(e) => {
-                e.currentTarget.value = e.currentTarget.value.replace(
-                  /[^0-9.,]/g,
-                  ""
-                );
-              }}
-            />
-          </label>
-
-          {errors?.price && (
-            <p className="text-red-600">{errors?.price.message}</p>
-          )}
-
-          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 rounded-3xl">
-            <NotepadText className="text-primary-foreground" size={24} />
+          {/* Descrição */}
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium">Descrição</label>
             <textarea
               {...register("description")}
-              rows={5}
+              rows={4}
+              className="w-full bg-neutral-100 px-3 py-2 rounded-lg outline-none resize-none"
+              placeholder="Detalhes sobre o produto"
               required
-              className="w-full bg-transparent outline-none placeholder:text-neutral-700"
-              placeholder="Descrição do produto!"
             />
-          </label>
+            {errors.description && (
+              <p className="text-red-600 text-sm">
+                {errors.description.message}
+              </p>
+            )}
+          </div>
 
-          {errors?.description && (
-            <p className="text-red-600">{errors?.description.message}</p>
-          )}
+          {/* Imagens */}
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium">Fotos do produto</label>
+            {previewImages.length > 0 && (
+              <div className="flex gap-2 flex-wrap">
+                {previewImages.map((src, index) => (
+                  <img
+                    key={index}
+                    src={src}
+                    alt={`Preview ${index}`}
+                    className="w-20 h-20 object-cover rounded-md"
+                  />
+                ))}
+              </div>
+            )}
+            <label
+              htmlFor="photos-input"
+              className="flex items-center gap-2 bg-neutral-100 p-2 rounded-xl cursor-pointer"
+            >
+              <CloudUpload className="text-primary" size={20} />
+              <span>Clique para selecionar fotos</span>
+              <input
+                id="photos-input"
+                type="file"
+                multiple
+                required
+                className="hidden"
+                name="photos"
+                onChange={handlePhotoChange}
+              />
+            </label>
+          </div>
 
-          {previewImages.length <= 0 ? (
-            <p>Nenhuma foto selecionada para o produto!</p>
-          ) : (
-            <div className="flex gap-2 mt-2">
-              {previewImages.map((src, index) => (
-                <img
-                  key={index}
-                  src={src}
-                  alt={`Preview ${index}`}
-                  className="w-20 h-20 object-cover rounded-md"
-                />
-              ))}
-            </div>
-          )}
-
-          <label
-            aria-required
-            htmlFor="photos-input"
-            className="flex flex-grow cursor-pointer bg-neutral-200 p-2 gap-2 rounded-3xl"
-          >
-            <CloudUpload className="text-primary-foreground" size={24} />
-            <p>Clique aqui para adicionar fotos</p>
-            <input
-              id="photos-input"
-              type="file"
-              multiple
-              required
-              className="hidden"
-              name="photos"
-              placeholder="Descrição do produto!"
-              onChange={handlePhotoChange}
-            />
-          </label>
-
-          {errors?.description && (
-            <p className="text-red-600">{errors?.description.message}</p>
-          )}
-
-          <Button type="submit" className="mt-4">
+          {/* Botão */}
+          <Button type="submit" className="mt-4 w-full">
             <div className="flex items-center justify-center gap-2">
               {isPending ? (
                 <>
-                  <span>Criando</span> <Loader className="animate-spin" />
+                  <span>Criando...</span> <Loader className="animate-spin" />
                 </>
               ) : (
                 <>
-                  <span>Criar</span> <Plus />
+                  <span>Criar produto</span> <Plus />
                 </>
               )}
             </div>

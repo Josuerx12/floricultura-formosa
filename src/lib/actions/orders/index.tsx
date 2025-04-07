@@ -101,6 +101,7 @@ export const getOrdersByUser = async ({
     skip: offset,
     include: {
       user: true,
+      order_preferences: true,
       items: {
         include: {
           product: {
@@ -141,6 +142,7 @@ export const getOrderById = async (id: string) => {
       id,
     },
     include: {
+      order_preferences: true,
       items: {
         include: {
           product: {
@@ -259,6 +261,7 @@ export const getCanceledOrders = async ({
     skip: offset,
     include: {
       user: true,
+      order_preferences: true,
       items: {
         include: {
           product: {
@@ -390,6 +393,7 @@ export const getProcessedOrders = async ({
     skip: offset,
     include: {
       user: true,
+      order_preferences: true,
       items: {
         include: {
           product: {
@@ -521,6 +525,7 @@ export const getDeliveredOrders = async ({
     skip: offset,
     include: {
       user: true,
+      order_preferences: true,
       items: {
         include: {
           product: {
@@ -652,6 +657,7 @@ export const getShippedOrders = async ({
     skip: offset,
     include: {
       user: true,
+      order_preferences: true,
       items: {
         include: {
           product: {
@@ -757,6 +763,7 @@ export const getPendingOrders = async ({
     skip: offset,
     include: {
       user: true,
+      order_preferences: true,
       items: {
         include: {
           product: {

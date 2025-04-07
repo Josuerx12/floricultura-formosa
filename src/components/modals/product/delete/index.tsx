@@ -27,10 +27,7 @@ const DeleteProductModal = ({
     mutationKey: ["delete-product", product.id],
     mutationFn: DeleteProduct,
     onSuccess: (data) => {
-      console.log(data);
-      toast({
-        title: data.success,
-      });
+      toast({ title: data.success });
       query.invalidateQueries({ queryKey: ["products-dash"] });
       handleClose();
     },
@@ -41,41 +38,57 @@ const DeleteProductModal = ({
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-
     await mutateAsync({ id: product.id });
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Deletar produto!</DialogTitle>
+      <DialogContent className="max-w-md">
+        <DialogHeader className="text-center">
+          <DialogTitle className="text-xl font-bold text-red-600">
+            Deletar produto
+          </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="w-full mx-auto">
-          <CircleX className="mx-auto text-red-600" size={200} />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="flex flex-col items-center gap-4 text-center">
+            <CircleX className="text-red-500" size={100} />
+            <p className="text-sm text-muted-foreground">
+              Tem certeza que deseja deletar o produto{" "}
+              <span className="font-semibold text-foreground">
+                {product.name}
+              </span>
+              ? Esta ação não poderá ser desfeita.
+            </p>
+          </div>
 
-          <h4 className="text-start text-sm my-6">
-            Tem certeza que deseja deletar o produto: <b>{product.name}</b>?
-          </h4>
-
-          <Button
-            type="submit"
-            variant={"destructive"}
-            className="mt-4 flex-grow w-full"
-          >
-            <div className="flex items-center justify-center gap-2">
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={handleClose}
+            >
+              Cancelar
+            </Button>
+            <Button
+              type="submit"
+              variant="destructive"
+              className="w-full flex items-center justify-center gap-2"
+            >
               {isPending ? (
                 <>
-                  <span>Deletando</span> <Loader className="animate-spin" />
+                  <Loader className="animate-spin" size={18} />
+                  <span>Deletando</span>
                 </>
               ) : (
                 <>
-                  <span>Confirmar</span> <Trash />
+                  <Trash size={18} />
+                  <span>Confirmar</span>
                 </>
               )}
-            </div>
-          </Button>
+            </Button>
+          </div>
         </form>
       </DialogContent>
     </Dialog>

@@ -24,83 +24,85 @@ const SignUpForm = () => {
   return (
     <form
       ref={formRef}
-      className="flex flex-col gap-6 max-w-prose mx-auto w-full"
+      className="flex flex-col gap-4 max-w-md mx-auto w-full px-4"
       action={formAction}
     >
-      <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-        <BiSolidUser className="text-primary-foreground" size={24} />
+      <label className="flex items-center gap-3 bg-neutral-200 p-3 rounded-2xl">
+        <BiSolidUser className="text-primary-foreground" size={20} />
         <input
           required
-          className="w-full bg-transparent outline-none placeholder:text-neutral-700"
+          className="w-full bg-transparent outline-none placeholder:text-neutral-600 text-sm"
           type="text"
           name="name"
-          placeholder="Insira seu nome para criar uma conta!"
+          placeholder="Nome completo"
         />
       </label>
       {state?.errors?.name && (
-        <p className="text-red-600">{state?.errors?.name}</p>
+        <p className="text-red-600 text-sm">{state.errors.name}</p>
       )}
-      <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-        <BiMailSend className="text-primary-foreground" size={24} />
+
+      <label className="flex items-center gap-3 bg-neutral-200 p-3 rounded-2xl">
+        <BiMailSend className="text-primary-foreground" size={20} />
         <input
           required
-          className="w-full bg-transparent outline-none placeholder:text-neutral-700"
+          className="w-full bg-transparent outline-none placeholder:text-neutral-600 text-sm"
           type="email"
           name="email"
-          placeholder="Insira seu e-mail para criar uma conta!"
+          placeholder="E-mail"
         />
       </label>
       {state?.errors?.email && (
-        <p className="text-red-600">{state?.errors?.email}</p>
+        <p className="text-red-600 text-sm">{state.errors.email}</p>
       )}
-      <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-        <BiSolidPhone className="text-primary-foreground" size={24} />
+
+      <label className="flex items-center gap-3 bg-neutral-200 p-3 rounded-2xl">
+        <BiSolidPhone className="text-primary-foreground" size={20} />
         <input
-          className="w-full bg-transparent outline-none placeholder:text-neutral-700"
+          className="w-full bg-transparent outline-none placeholder:text-neutral-600 text-sm"
           type="tel"
           name="phone"
-          placeholder="Insira seu numero de telefone para criar uma conta!"
+          placeholder="Telefone"
         />
       </label>
       {state?.errors?.phone && (
-        <p className="text-red-600">{state?.errors?.phone}</p>
+        <p className="text-red-600 text-sm">{state.errors.phone}</p>
       )}
-      <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-        <BiKey className="text-primary-foreground" size={24} />
+
+      <label className="flex items-center gap-3 bg-neutral-200 p-3 rounded-2xl">
+        <BiKey className="text-primary-foreground" size={20} />
         <input
           required
-          className="w-full bg-transparent outline-none placeholder:text-neutral-700"
+          className="w-full bg-transparent outline-none placeholder:text-neutral-600 text-sm"
           type="password"
           name="password"
-          placeholder="Insira uma senha para criar uma conta!"
+          placeholder="Senha"
         />
       </label>
       {state?.errors?.password && (
-        <p className="text-red-600">{state?.errors?.password}</p>
+        <p className="text-red-600 text-sm">{state.errors.password}</p>
       )}
 
       {state?.error && (
-        <div className="bg-red-100 p-2 rounded-md flex gap-2">
-          <span className="text-red-900 font-semibold">Error:</span>{" "}
-          <p className="text-red-600">{state.error}</p>
+        <div className="bg-red-100 p-3 rounded-md text-sm">
+          <strong className="text-red-700">Erro:</strong> {state.error}
         </div>
       )}
 
-      <p className="text-sm text-center">
-        Já possui uma conta? Vá até a pagina de login e autentique-se! Ou{" "}
-        <Link href={"/login"} className="text-blue-500">
-          clique aqui!
+      <p className="text-xs text-center text-neutral-600">
+        Já possui uma conta?{" "}
+        <Link href="/login" className="text-blue-500 underline">
+          Faça login
         </Link>
       </p>
 
       <button
         type="submit"
         disabled={isPending}
-        className="border border-primary-foreground flex items-center gap-2 hover:bg-primary-foreground duration-200 hover:text-primary py-1 w-fit px-6 rounded-full mx-auto"
+        className="border border-primary-foreground flex items-center justify-center gap-2 hover:bg-primary-foreground hover:text-primary duration-200 py-2 w-full sm:w-fit px-6 rounded-full mx-auto text-sm"
       >
         {isPending ? (
           <>
-            Fazendo cadastro <Loader className="animate-spin" />
+            Fazendo cadastro <Loader className="animate-spin" size={16} />
           </>
         ) : (
           <>Fazer Cadastro</>

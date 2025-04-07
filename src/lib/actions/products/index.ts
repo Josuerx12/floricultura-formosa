@@ -283,3 +283,9 @@ export async function getDeluxeProducts() {
 
   return products;
 }
+
+export async function getAllProducts() {
+  const products = await prisma.product.findMany();
+
+  return products;
+}

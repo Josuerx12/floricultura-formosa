@@ -13,10 +13,7 @@ import {
   GetProductImages,
 } from "@/lib/actions/product-images";
 import { EditProduct, Product } from "@/lib/actions/products";
-import {
-  EditProductSchema,
-  ProductSchema,
-} from "@/lib/schemas-validator/product.schema";
+import { EditProductSchema } from "@/lib/schemas-validator/product.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -27,14 +24,13 @@ import {
   CloudUpload,
   Loader,
   NotepadText,
-  Pen,
   PenBox,
   RectangleEllipsis,
   ScrollText,
   X,
 } from "lucide-react";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -58,6 +54,7 @@ const DetailProductModal = ({
 
   const [photos, setPhotos] = useState<File[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const [isEditing, setIsEditing] = useState(false);
 
   const {
     formState: { errors },
@@ -66,169 +63,157 @@ const DetailProductModal = ({
     reset,
   } = useForm({
     resolver: zodResolver(EditProductSchema),
+    defaultValues: {
+      name: product.name,
+      description: product.description,
+      price: product.price.toString(),
+      stock_quantity: product.stock_quantity,
+      subcategory_id: product.subcategory_id,
+    },
   });
 
-  const [isEditing, setIsEditing] = useState(false);
+  useEffect(() => {
+    reset({
+      name: product.name,
+      description: product.description,
+      price: product.price.toString(),
+      stock_quantity: product.stock_quantity,
+      subcategory_id: product.subcategory_id,
+    });
+  }, [product, reset]);
 
-  function onClose() {
+  const onClose = () => {
     setIsEditing(false);
     setPhotos([]);
     setPreviewImages([]);
     reset();
     handleClose();
-  }
+  };
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: EditProduct,
-    mutationKey: ["edit-product"],
     onSuccess: (data) => {
-      toast({
-        title: data.success,
-      });
+      toast({ title: data.success });
       query.invalidateQueries({ queryKey: ["products-dash"] });
       query.invalidateQueries({ queryKey: ["product-image"] });
       onClose();
     },
     onError: (err) => {
-      toast({
-        title: err.message,
-      });
+      toast({ title: err.message });
     },
   });
 
   const ref = useRef<HTMLFormElement | null>(null);
 
-  async function OnSubmit(data: z.infer<typeof EditProductSchema>) {
+  const OnSubmit = async (data: z.infer<typeof EditProductSchema>) => {
     const formData = new FormData();
 
-    data.name && formData.append("name", data.name);
-    data.description && formData.append("description", data.description);
-    data.price && formData.append("price", data.price);
-    data.stock_quantity &&
-      formData.append("stock_quantity", data.stock_quantity.toString());
-    data.subcategory_id &&
-      formData.append("subcategory_id", data.subcategory_id.toString());
+    formData.append("name", data.name!);
+    formData.append("description", data.description!);
+    formData.append("price", data.price!);
+    formData.append("stock_quantity", data.stock_quantity!.toString());
+    formData.append("subcategory_id", data.subcategory_id!.toString());
 
-    photos.map((p) => formData.append("photos", p));
-
+    photos.forEach((photo) => formData.append("photos", photo));
     await mutateAsync({ id: product.id, formData });
-  }
+  };
 
-  const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      const selectedFiles = Array.from(event.target.files);
-      setPhotos(selectedFiles);
-
-      const previews = selectedFiles.map((file) => URL.createObjectURL(file));
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      setPhotos(files);
+      const previews = files.map((file) => URL.createObjectURL(file));
       setPreviewImages(previews);
     }
   };
 
-  const { mutate } = useMutation({
-    mutationKey: ["delete-photo", product.id],
+  const { mutate: deleteImage } = useMutation({
     mutationFn: deleteProductPhoto,
     onSuccess: (data) => {
-      toast({
-        title: data.message,
-      });
+      toast({ title: data.message });
       query.invalidateQueries({ queryKey: ["product-image"] });
-      query.invalidateQueries({ queryKey: ["products-dash"] });
     },
     onError: (err) => {
-      toast({
-        variant: "destructive",
-        title: err.message,
-      });
+      toast({ variant: "destructive", title: err.message });
     },
   });
 
   return (
-    <Dialog
-      open={isOpen}
-      onOpenChange={() => {
-        handleClose();
-        setIsEditing(false);
-      }}
-    >
-      <DialogContent>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-h-[95vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Detalhes do produto</DialogTitle>
         </DialogHeader>
 
-        <h4 className="text-start text-sm font-semibold">
+        <p className="text-sm font-semibold mb-2">
           Veja os detalhes abaixo do produto - ID: {product.id}
-        </h4>
+        </p>
 
         <div className="flex overflow-auto gap-2 py-4">
-          {imagesLoading && <p>Carregando imagens...</p>}
-          {images &&
+          {imagesLoading ? (
+            <p>Carregando imagens...</p>
+          ) : images && images.length > 0 ? (
             images.map((i) => (
               <div key={i.id} className="relative">
                 <button
-                  onClick={() => mutate(i.id)}
-                  title="Deletar foto"
+                  onClick={() => deleteImage(i.id)}
                   type="button"
-                  className="absolute hover:bg-red-700 duration-200 bg-red-600 rounded-full z-30 -top-2 -right-2 text-white shadow"
+                  title="Deletar foto"
+                  className="absolute -top-2 -right-2 z-30 bg-red-600 hover:bg-red-700 text-white rounded-full p-1 shadow"
                 >
-                  <X size={24} />
+                  <X size={20} />
                 </button>
                 <Image
                   src={i.url}
                   alt="Imagem do produto"
                   width={100}
                   height={100}
+                  className="rounded-md border"
                 />
               </div>
-            ))}
-          {!images && <p>Nenhuma foto encontrada!</p>}
+            ))
+          ) : (
+            <p>Nenhuma foto encontrada!</p>
+          )}
         </div>
 
         <form
           ref={ref}
           onSubmit={handleSubmit(OnSubmit)}
-          className="w-full mx-auto flex flex-col gap-y-2"
+          className="flex flex-col gap-4"
         >
           {!isEditing && (
             <Button
-              onClick={() => setIsEditing((prev) => !prev)}
+              onClick={() => setIsEditing(true)}
               className="w-fit bg-blue-600 hover:bg-blue-500 text-white ml-auto"
+              type="button"
             >
-              Editar <PenBox />
+              Editar <PenBox className="ml-2" />
             </Button>
           )}
 
-          <input type="hidden" name="id" value={product.id} />
-
-          <span>Nome do produto</span>
-
-          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-            <RectangleEllipsis className="text-primary-foreground" size={24} />
+          {/* Nome */}
+          <label className="flex items-center gap-2 bg-neutral-200 rounded-3xl px-4 py-2">
+            <RectangleEllipsis />
             <input
               {...register("name")}
-              defaultValue={product.name}
-              required
               disabled={!isEditing}
-              className="w-full bg-transparent outline-none placeholder:text-neutral-700"
-              type="text"
-              placeholder="Insira o nome do produto!"
+              className="w-full bg-transparent outline-none"
+              placeholder="Nome do produto"
             />
           </label>
-
           {errors.name && <p className="text-red-600">{errors.name.message}</p>}
 
-          <span>Sub categoria</span>
-
-          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-            <ScrollText className="text-primary-foreground" size={24} />
+          {/* Subcategoria */}
+          <label className="flex items-center gap-2 bg-neutral-200 rounded-3xl px-4 py-2">
+            <ScrollText />
             <select
               {...register("subcategory_id")}
-              defaultValue={product.subcategory_id}
-              className="flex-grow bg-transparent outline-none text-neutral-700"
-              required
               disabled={!isEditing}
+              className="w-full bg-transparent outline-none"
             >
-              <option disabled value={""}>
-                Selecione uma sub categoria!
+              <option disabled value="">
+                Selecione uma subcategoria
               </option>
               {categories.map((c) =>
                 c.subcategories?.map((sc) => (
@@ -239,78 +224,64 @@ const DetailProductModal = ({
               )}
             </select>
           </label>
-
           {errors.subcategory_id && (
             <p className="text-red-600">{errors.subcategory_id.message}</p>
           )}
 
-          <span>Quantidade em estoque</span>
-
-          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-            <Boxes className="text-primary-foreground" size={24} />
+          {/* Quantidade */}
+          <label className="flex items-center gap-2 bg-neutral-200 rounded-3xl px-4 py-2">
+            <Boxes />
             <input
               {...register("stock_quantity")}
-              defaultValue={product.stock_quantity}
-              required
-              disabled={!isEditing}
-              className="w-full bg-transparent outline-none placeholder:text-neutral-700"
               type="number"
-              placeholder="Quantidade em estoque!"
               min={0}
+              disabled={!isEditing}
+              className="w-full bg-transparent outline-none"
+              placeholder="Quantidade em estoque"
             />
           </label>
-
           {errors.stock_quantity && (
             <p className="text-red-600">{errors.stock_quantity.message}</p>
           )}
 
-          <span>Preço</span>
-
-          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-            <Banknote className="text-primary-foreground" size={24} />
+          {/* Preço */}
+          <label className="flex items-center gap-2 bg-neutral-200 rounded-3xl px-4 py-2">
+            <Banknote />
             <input
               {...register("price")}
-              defaultValue={product.price}
-              required
-              className="w-full bg-transparent outline-none placeholder:text-neutral-700"
               disabled={!isEditing}
-              placeholder="Preço do produto!"
-              onInput={(e) => {
-                e.currentTarget.value = e.currentTarget.value.replace(
+              className="w-full bg-transparent outline-none"
+              placeholder="Preço"
+              onInput={(e) =>
+                (e.currentTarget.value = e.currentTarget.value.replace(
                   /[^0-9.,]/g,
                   ""
-                );
-              }}
+                ))
+              }
             />
           </label>
-
           {errors.price && (
             <p className="text-red-600">{errors.price.message}</p>
           )}
 
-          <span>Descrição</span>
-
-          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 rounded-3xl">
-            <NotepadText className="text-primary-foreground" size={24} />
+          {/* Descrição */}
+          <label className="flex gap-2 bg-neutral-200 rounded-3xl px-4 py-2">
+            <NotepadText />
             <textarea
               {...register("description")}
-              defaultValue={product.description}
-              rows={5}
+              rows={4}
               disabled={!isEditing}
-              required
-              className="w-full bg-transparent outline-none placeholder:text-neutral-700"
-              placeholder="Descrição do produto!"
+              className="w-full bg-transparent outline-none resize-none"
+              placeholder="Descrição do produto"
             />
           </label>
-
           {errors.description && (
             <p className="text-red-600">{errors.description.message}</p>
           )}
 
-          {previewImages.length <= 0 ? (
-            <p>Nenhuma foto selecionada para o produto!</p>
-          ) : (
-            <div className="flex gap-2 mt-2">
+          {/* Previews */}
+          {previewImages.length > 0 && (
+            <div className="flex flex-wrap gap-2">
               {previewImages.map((src, index) => (
                 <img
                   key={index}
@@ -322,68 +293,59 @@ const DetailProductModal = ({
             </div>
           )}
 
+          {/* Upload de novas fotos */}
           {isEditing && (
             <label
-              aria-required
               htmlFor="photos-input"
-              className="flex flex-grow cursor-pointer bg-neutral-200 p-2 gap-2 rounded-3xl"
+              className="flex items-center gap-2 cursor-pointer bg-neutral-200 rounded-3xl px-4 py-2"
             >
-              <CloudUpload className="text-primary-foreground" size={24} />
-              <p>Clique aqui para adicionar fotos</p>
+              <CloudUpload />
+              <span>Adicionar fotos</span>
               <input
                 id="photos-input"
                 type="file"
                 multiple
-                className="hidden"
-                name="photos"
-                placeholder="Descrição do produto!"
                 onChange={handlePhotoChange}
+                className="hidden"
               />
             </label>
           )}
 
-          <span>Data criação</span>
-
-          <label className="flex flex-grow bg-neutral-200   p-2 gap-2 items-center rounded-3xl">
-            <Calendar className="text-primary-foreground" size={24} />
+          {/* Data de criação */}
+          <label className="flex items-center gap-2 bg-neutral-200 rounded-3xl px-4 py-2">
+            <Calendar />
             <input
-              required
-              className="w-full bg-transparent outline-none  placeholder:text-neutral-700"
               type="text"
               disabled
-              value={product?.created_at?.toLocaleString("pt-BR")}
+              className="w-full bg-transparent outline-none"
+              value={new Date(product.created_at!).toLocaleString("pt-BR")}
             />
           </label>
 
           {isEditing && (
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2">
               <Button
-                disabled={isPending}
-                className="flex-grow"
+                type="button"
                 onClick={onClose}
-                variant={"destructive"}
+                variant="destructive"
+                className="flex-1"
+                disabled={isPending}
               >
-                <div className="flex items-center justify-center gap-2">
-                  Cancelar <Ban />
-                </div>
+                Cancelar <Ban className="ml-2" />
               </Button>
               <Button
-                disabled={isPending}
+                type="button"
                 onClick={() => ref.current?.requestSubmit()}
-                className="flex-grow z-50"
-                variant={"secondary"}
+                className="flex-1"
+                disabled={isPending}
               >
-                <div className="flex items-center justify-center gap-2">
-                  {isPending ? (
-                    <>
-                      <span>Editando</span> <Loader className="animate-spin" />
-                    </>
-                  ) : (
-                    <>
-                      <span>Editar</span> <Pen />
-                    </>
-                  )}
-                </div>
+                {isPending ? (
+                  <div className="flex items-center gap-2">
+                    Editando <Loader className="animate-spin" />
+                  </div>
+                ) : (
+                  <span>Salvar</span>
+                )}
               </Button>
             </div>
           )}
