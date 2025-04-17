@@ -75,7 +75,7 @@ const ListOrderBumpModal = ({ handleClose, isOpen, product }: ModalProps) => {
                       />
                       <span>{bump.bumpProduct.name}</span> |
                       <span>
-                        {bump.bumpPrice.toLocaleString("pt-BR", {
+                        {bump.bumpProduct.price.toLocaleString("pt-BR", {
                           style: "currency",
                           currency: "BRL",
                         })}

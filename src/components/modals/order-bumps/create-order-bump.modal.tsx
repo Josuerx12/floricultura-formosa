@@ -62,9 +62,6 @@ const CreateOrderBumpModal = ({ handleClose, isOpen, product }: ModalProps) => {
     await mutateAsync({
       bumpProductId: data.bumpProductId,
       productId: product.id,
-      bumpPrice: parseFloat(
-        data.bumpPrice.replace(/\./g, "").replace(",", ".")
-      ),
     });
   }
 
@@ -124,22 +121,6 @@ const CreateOrderBumpModal = ({ handleClose, isOpen, product }: ModalProps) => {
           {errors?.bumpProductId && (
             <p className="text-red-600">{errors?.bumpProductId.message}</p>
           )}
-
-          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-            <Banknote className="text-primary-foreground" size={24} />
-            <input
-              {...register("bumpPrice")}
-              required
-              className="w-full bg-transparent outline-none placeholder:text-neutral-700"
-              placeholder="Preço do produto do bump!"
-              onInput={(e) => {
-                e.currentTarget.value = e.currentTarget.value.replace(
-                  /[^0-9.,]/g,
-                  ""
-                );
-              }}
-            />
-          </label>
 
           <Button
             type="submit"

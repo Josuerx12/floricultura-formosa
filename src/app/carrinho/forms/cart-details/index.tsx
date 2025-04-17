@@ -7,6 +7,7 @@ import CartProductCard from "@/components/cards/cart-product-card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import CheckoutDialog from "@/components/modals/checkout";
 
 const CartDetails = ({ user }: { user?: User }) => {
   const { products, fee, totalPrice } = useCartStore();
@@ -72,7 +73,7 @@ const CartDetails = ({ user }: { user?: User }) => {
 
         <div className="w-full">
           {user ? (
-            <Button>Finalizar Pedido</Button>
+            <CheckoutDialog />
           ) : (
             <Button
               onClick={() => router.push("/login")}

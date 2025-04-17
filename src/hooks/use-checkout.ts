@@ -16,7 +16,7 @@ type Address = {
 
 type Checkout = {
   step: number;
-  delivery: boolean;
+  delivery?: boolean;
   address?: Address;
   deliveryDate?: Date;
   phone?: string;
@@ -29,16 +29,25 @@ type Checkout = {
   thirdStep: (phone: string, message: string, to: string, from: string) => void;
   getCheckoutSummary: () => object;
   resetCheckout: () => void;
+  goToStep: (step: number) => void;
+  previousStep: () => void;
 };
 
 export const useCheckout = create<Checkout>((set, get) => ({
   step: 1,
-  delivery: false,
+  delivery: undefined,
+
+  goToStep: (step) => set(() => ({ step })),
+
+  previousStep: () => {
+    const current = get().step;
+    set(() => ({ step: Math.max(1, current - 1) }));
+  },
 
   firstStep: (delivery) =>
     set(() => ({
       delivery,
-      step: delivery ? 2 : 3, // Pula o endereço se não for entrega
+      step: delivery ? 2 : 3,
     })),
 
   secondStep: (address) =>
@@ -73,7 +82,7 @@ export const useCheckout = create<Checkout>((set, get) => ({
   resetCheckout: () =>
     set(() => ({
       step: 1,
-      delivery: false,
+      delivery: undefined,
       address: undefined,
       deliveryDate: undefined,
       phone: undefined,

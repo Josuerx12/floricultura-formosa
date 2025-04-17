@@ -4,13 +4,11 @@ import { prisma } from "@/lib/db/prisma";
 import { OrderBump } from "../../domain/order-bump.entity";
 import { OrderBumpMapper } from "../mappers/order-bump.mapper";
 import { auth } from "@/lib/auth/auth";
-import { UserRoles } from "@prisma/client";
 import { SessionValidation } from "@/lib/actions/session-validation";
 
 export type CreateOrderBumpInput = {
   productId: number;
   bumpProductId: number;
-  bumpPrice: number;
 };
 
 export const CreateOrderBump = async (data: CreateOrderBumpInput) => {
