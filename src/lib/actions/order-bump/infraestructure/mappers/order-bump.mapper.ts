@@ -6,7 +6,6 @@ export type OrderBumpPlainedObject = {
   id: number;
   productId: number;
   bumpProductId: number;
-  bumpPrice: number;
   bumpProduct: Product;
   createdAt: Date;
   updatedAt: Date;
@@ -15,7 +14,6 @@ export type OrderBumpPlainedObject = {
 export class OrderBumpMapper {
   static toModel(entity: OrderBump): Prisma.order_bumpCreateInput {
     return {
-      bump_price: entity.bumpPrice,
       product_id: entity.productId,
       bump_product: {
         connect: {
@@ -32,7 +30,6 @@ export class OrderBumpMapper {
       id: model.id,
       productId: model.product_id,
       bumpProductId: model.bump_product.id,
-      bumpPrice: model.bump_price,
       createdAt: new Date(model.created_at),
       updatedAt: new Date(model.updated_at),
     });
@@ -45,7 +42,6 @@ export class OrderBumpMapper {
       id: model.id,
       productId: model.product_id,
       bumpProductId: model.bump_product.id,
-      bumpPrice: model.bump_price,
       bumpProduct: model.bump_product,
       createdAt: model.created_at,
       updatedAt: model.updated_at,

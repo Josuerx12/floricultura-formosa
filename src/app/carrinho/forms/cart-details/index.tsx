@@ -5,9 +5,12 @@ import { User } from "next-auth";
 import DeliveryForm from "../delivery-form";
 import CartProductCard from "@/components/cards/cart-product-card";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 const CartDetails = ({ user }: { user?: User }) => {
   const { products, fee, totalPrice } = useCartStore();
+  const router = useRouter();
 
   if (!products || products.length === 0)
     return (
@@ -67,7 +70,18 @@ const CartDetails = ({ user }: { user?: User }) => {
           </div>
         </div>
 
-        <DeliveryForm user={user} />
+        <div className="w-full">
+          {user ? (
+            <Button>Finalizar Pedido</Button>
+          ) : (
+            <Button
+              onClick={() => router.push("/login")}
+              className="bg-blue-600 hover:bg-blue-700 transition duration-300"
+            >
+              Autentique-se para continuar
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

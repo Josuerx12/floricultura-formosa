@@ -5,7 +5,6 @@ import {
   OrderBumpMapper,
   OrderBumpPlainedObject,
 } from "../mappers/order-bump.mapper";
-import { OrderBump } from "../../domain/order-bump.entity";
 
 export const GetBumpsByProductId = async (
   productId: number
@@ -27,5 +26,5 @@ export const GetBumpsByProductId = async (
     },
   });
 
-  return bumps.map((b) => OrderBumpMapper.toPlainObject(b));
+  return bumps?.map((b) => OrderBumpMapper.toPlainObject(b));
 };

@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,12 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserRoles {
-  ADMIN
-  USER
-  SELLER
-}
-
 model User {
   id            String          @id @default(cuid())
   name          String?
@@ -26,16 +14,15 @@ model User {
   phone         String?
   email         String          @unique
   emailVerified DateTime?
-  role          UserRoles?      @default(USER)
   image         String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  role          UserRoles?      @default(USER)
   accounts      Account[]
-  sessions      Session[]
   Authenticator Authenticator[]
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  order     order[]
-  address   address[]
+  sessions      Session[]
+  address       address[]
+  order         order[]
 }
 
 model Account {
@@ -50,11 +37,9 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
 }
@@ -63,10 +48,9 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model VerificationToken {
@@ -77,7 +61,6 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
-// Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
   userId               String
@@ -87,8 +70,7 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
 }
@@ -107,36 +89,36 @@ model subcategory {
   name        String
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
-  category    category  @relation(fields: [category_id], references: [id])
   products    product[]
+  category    category  @relation(fields: [category_id], references: [id])
 }
 
 model product {
   id             Int              @id @default(autoincrement())
   subcategory_id Int
-  occasions_id   Int?
   name           String
   description    String
-  is_visible     Boolean          @default(true)
   price          Float
   stock_quantity Int
-  subcategory    subcategory      @relation(fields: [subcategory_id], references: [id], onDelete: NoAction)
   created_at     DateTime         @default(now())
   updated_at     DateTime         @updatedAt
-  product_images product_images[]
-  promotions     promotions[]
+  occasions_id   Int?
+  is_visible     Boolean          @default(true)
+  order_bump     order_bump[]
   order_item     order_item[]
   occasions      occasions?       @relation(fields: [occasions_id], references: [id])
-  order_bump     order_bump[]
+  subcategory    subcategory      @relation(fields: [subcategory_id], references: [id], onDelete: NoAction)
+  product_images product_images[]
+  promotions     promotions[]
 }
 
 model product_images {
   id         Int      @id @default(autoincrement())
   product_id Int
   url        String
-  file_key   String
-  bucket     String
   created_at DateTime @default(now())
+  bucket     String
+  file_key   String
   product    product  @relation(fields: [product_id], references: [id], onDelete: NoAction)
 }
 
@@ -152,25 +134,25 @@ model promotions {
   discount_percentage Float
   start_date          DateTime
   end_date            DateTime
-  product             product  @relation(fields: [product_id], references: [id], onDelete: NoAction)
   created_at          DateTime @default(now())
   updated_at          DateTime @updatedAt
+  product             product  @relation(fields: [product_id], references: [id], onDelete: NoAction)
 }
 
 model order {
   id                         String              @id @default(cuid())
   user_id                    String
-  mercado_pago_preference_id String?
-  user                       User                @relation(fields: [user_id], references: [id])
-  items                      order_item[]
   status                     OrderStatus         @default(PENDING)
   total_price                Decimal
   delivery_fee               Decimal
-  observation                String?
   address_id                 String?
-  address                    address?            @relation(fields: [address_id], references: [id])
   createdAt                  DateTime            @default(now())
   updatedAt                  DateTime            @updatedAt
+  mercado_pago_preference_id String?
+  observation                String?
+  address                    address?            @relation(fields: [address_id], references: [id])
+  user                       User                @relation(fields: [user_id], references: [id])
+  items                      order_item[]
   order_preferences          order_preferences[]
 }
 
@@ -182,24 +164,22 @@ model order_preferences {
   message       String?
   phone         String
   delivery_date DateTime
-
-  order order @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  order         order    @relation(fields: [order_id], references: [id], onDelete: Cascade)
 }
 
 model order_item {
   id         String  @id @default(cuid())
   order_id   String
-  order      order   @relation(fields: [order_id], references: [id], onDelete: Cascade)
   product_id Int
-  product    product @relation(fields: [product_id], references: [id], onDelete: NoAction)
   quantity   Int
   price      Decimal
+  order      order   @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  product    product @relation(fields: [product_id], references: [id], onDelete: NoAction)
 }
 
 model address {
   id              String        @id @default(cuid())
   user_id         String
-  user            User          @relation(fields: [user_id], references: [id])
   street          String
   number          String
   complement      String?
@@ -209,6 +189,7 @@ model address {
   zipCode         String
   delivery_fee_id String?
   delivery_fee    delivery_fee? @relation(fields: [delivery_fee_id], references: [id])
+  user            User          @relation(fields: [user_id], references: [id])
   order           order[]
 }
 
@@ -223,12 +204,27 @@ model banners {
   id           Int      @id @default(autoincrement())
   title        String
   url          String
-  redirect_url String
   file_key     String
   bucket       String
-  is_active    Boolean  @default(true)
   created_at   DateTime @default(now())
+  is_active    Boolean  @default(true)
   updated_at   DateTime @updatedAt
+  redirect_url String
+}
+
+model order_bump {
+  id              Int      @id @default(autoincrement())
+  product_id      Int
+  bump_product_id Int
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+  bump_product    product  @relation(fields: [bump_product_id], references: [id], onDelete: NoAction)
+}
+
+enum UserRoles {
+  ADMIN
+  USER
+  SELLER
 }
 
 enum OrderStatus {
@@ -237,15 +233,4 @@ enum OrderStatus {
   SHIPPED
   DELIVERED
   CANCELED
-}
-
-model order_bump {
-  id              Int      @id @default(autoincrement())
-  product_id      Int
-  bump_product_id Int
-  bump_price      Float
-  created_at      DateTime @default(now())
-  updated_at      DateTime @updatedAt
-
-  bump_product product @relation(fields: [bump_product_id], references: [id], onDelete: NoAction)
 }

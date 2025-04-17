@@ -99,7 +99,7 @@ const CartProductCard = ({ product }: { product: ProductCart }) => {
                       addProduct({
                         id: bump.bumpProduct.id,
                         name: bump.bumpProduct.name,
-                        price: bump.bumpPrice,
+                        price: bump.bumpProduct.price,
                         quantity: 1,
                         total_stock: bump.bumpProduct.stock_quantity,
                         product_image:
@@ -120,7 +120,7 @@ const CartProductCard = ({ product }: { product: ProductCart }) => {
                       {bump.bumpProduct.name}
                     </span>
                     <span className="text-sm text-gray-600 font-medium">
-                      {bump.bumpPrice.toLocaleString("pt-BR", {
+                      {bump.bumpProduct.price.toLocaleString("pt-BR", {
                         style: "currency",
                         currency: "BRL",
                       })}
