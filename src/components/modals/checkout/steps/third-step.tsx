@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useCheckout } from "@/hooks/use-checkout";
 
 export default function ThirdStep() {
-  const { thirdStep, goToStep, phone, to, from, message } = useCheckout();
+  const { thirdStep, previousStep, phone, to, from, message } = useCheckout();
   const { register, handleSubmit } = useForm({
     defaultValues: {
       phone,
@@ -30,7 +30,7 @@ export default function ThirdStep() {
       <Input {...register("message")} placeholder="Mensagem" required />
 
       <div className="flex justify-between pt-4">
-        <Button variant="outline" type="button" onClick={() => goToStep(2)}>
+        <Button variant="outline" type="button" onClick={previousStep}>
           Voltar
         </Button>
         <Button variant="outline" type="submit">

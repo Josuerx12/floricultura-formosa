@@ -1,6 +1,7 @@
 "use client";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -14,30 +15,39 @@ import SummaryStep from "./steps/summary-step";
 import ThirdStep from "./steps/third-step";
 import CheckoutTimeline from "./checkout-timeline";
 
-export default function CheckoutDialog() {
-  const { step, delivery, address, phone, message, to, from } = useCheckout();
+const getVisualStepIndex = (step: number, delivery: boolean | undefined) => {
+  const stepMap = delivery ? [1, 2, 3, 4] : [1, 3, 4];
+  return stepMap.indexOf(step) + 1;
+};
+
+export default function CheckoutDialog({
+  isOpen,
+  handleClose,
+}: {
+  isOpen: boolean;
+  handleClose: VoidFunction;
+}) {
+  const { step, delivery, address, phone, message, to, from, resetCheckout } =
+    useCheckout();
+
+  const steps = delivery
+    ? ["Método de Entrega", "Endereço", "Destinatário", "Resumo"]
+    : ["Método de Entrega", "Destinatário", "Resumo"];
 
   return (
-    <Dialog>
-      <DialogTrigger className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-btn-body text-btn-text shadow hover:bg-btn-body/80">
-        Finalizar Pedido
-      </DialogTrigger>
+    <Dialog
+      open={isOpen}
+      onOpenChange={() => {
+        handleClose();
+        resetCheckout();
+      }}
+    >
       <DialogContent>
-        {step > 1 && (
-          <CheckoutTimeline
-            steps={[
-              "Método de Entrega",
-              "Endereço",
-              "Destinatário",
-              "Resumo",
-              "Pagamento",
-            ]}
-          />
-        )}
+        {step > 1 && <CheckoutTimeline steps={steps} delivery={delivery} />}
 
         <DialogHeader className="text-center">
           <DialogTitle className="text-xl font-semibold">
-            Passo {step}
+            Passo {getVisualStepIndex(step, delivery)}
           </DialogTitle>
           <DialogDescription>
             Preencha as informações para continuar o pedido.

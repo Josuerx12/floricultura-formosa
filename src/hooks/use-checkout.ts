@@ -40,8 +40,13 @@ export const useCheckout = create<Checkout>((set, get) => ({
   goToStep: (step) => set(() => ({ step })),
 
   previousStep: () => {
-    const current = get().step;
-    set(() => ({ step: Math.max(1, current - 1) }));
+    const { step, delivery } = get();
+
+    if (step === 3 && delivery === false) {
+      set(() => ({ step: 1 }));
+    } else {
+      set(() => ({ step: Math.max(1, step - 1) }));
+    }
   },
 
   firstStep: (delivery) =>
