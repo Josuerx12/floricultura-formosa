@@ -1,12 +1,10 @@
 "use client";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { useCheckout } from "@/hooks/use-checkout";
 import FirstStep from "./steps/first-step";
@@ -14,6 +12,7 @@ import SecondStep from "./steps/second-step";
 import SummaryStep from "./steps/summary-step";
 import ThirdStep from "./steps/third-step";
 import CheckoutTimeline from "./checkout-timeline";
+import { User } from "next-auth";
 
 const getVisualStepIndex = (step: number, delivery: boolean | undefined) => {
   const stepMap = delivery ? [1, 2, 3, 4] : [1, 3, 4];
@@ -23,9 +22,11 @@ const getVisualStepIndex = (step: number, delivery: boolean | undefined) => {
 export default function CheckoutDialog({
   isOpen,
   handleClose,
+  user,
 }: {
   isOpen: boolean;
   handleClose: VoidFunction;
+  user: User;
 }) {
   const { step, delivery, address, phone, message, to, from, resetCheckout } =
     useCheckout();
@@ -55,7 +56,7 @@ export default function CheckoutDialog({
         </DialogHeader>
 
         {step === 1 && <FirstStep />}
-        {step === 2 && delivery && <SecondStep />}
+        {step === 2 && delivery && <SecondStep user={user} />}
         {step === 3 && <ThirdStep />}
         {step === 4 && (
           <SummaryStep

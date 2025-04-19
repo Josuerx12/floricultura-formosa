@@ -32,7 +32,13 @@ const CartDetails = ({ user }: { user?: User }) => {
 
   return (
     <>
-      <CheckoutDialog handleClose={handleCheckoutOpen} isOpen={checkoutOpen} />
+      {user && (
+        <CheckoutDialog
+          handleClose={handleCheckoutOpen}
+          isOpen={checkoutOpen}
+          user={user}
+        />
+      )}
       <div className="flex flex-col lg:flex-row gap-6 w-full">
         {/* Lista de produtos */}
         <div className="flex-1 min-w-0">
