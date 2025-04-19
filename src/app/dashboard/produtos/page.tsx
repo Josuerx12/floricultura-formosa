@@ -1,7 +1,6 @@
 "use client";
 
-import { prisma } from "@/lib/db/prisma";
-import React, { Suspense } from "react";
+import React from "react";
 import {
   Table,
   TableBody,
@@ -16,7 +15,7 @@ import Image from "next/image";
 import ManageProductDropdown from "@/components/dropdowns/MenageProductDropdown";
 import CreateProductModal from "@/components/modals/product/create";
 import Pagination from "@/components/pagination";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { GetAllProductsWithPagination } from "@/lib/actions/products";
 import { useSearchParams } from "next/navigation";
 import { getAllCategoriesWithoutPagination } from "@/lib/actions/category";

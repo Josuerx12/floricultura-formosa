@@ -7,7 +7,9 @@ import {
   HandCoins,
   Home,
   Image,
+  Info,
   MapPin,
+  Package,
   Users,
 } from "lucide-react";
 
@@ -58,6 +60,26 @@ const data = {
         {
           title: "Ofertas",
           url: "/dashboard/ofertas",
+        },
+      ],
+    },
+    {
+      title: "Utilitarios e Informações",
+      url: "#",
+      icon: Info,
+      isActive: true,
+      items: [
+        {
+          title: "Sugestão de Mensagens",
+          url: "/dashboard/sugestao-messagens",
+        },
+        {
+          title: "Como cuidar",
+          url: "/dashboard/como-cuidar",
+        },
+        {
+          title: "Significados",
+          url: "/dashboard/significados",
         },
       ],
     },

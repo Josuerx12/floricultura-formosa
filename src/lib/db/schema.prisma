@@ -221,6 +221,32 @@ model order_bump {
   bump_product    product  @relation(fields: [bump_product_id], references: [id], onDelete: NoAction)
 }
 
+model message_suggestion {
+  id         String   @id @default(cuid())
+  title      String
+  content    String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model flower_meaning {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  image_url   String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+model flower_care {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  image_url   String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
 enum UserRoles {
   ADMIN
   USER
