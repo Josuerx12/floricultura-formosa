@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import {
+  Flower2,
   Home,
   LayoutDashboard,
   LogIn,
   LogOut,
   Menu,
+  MessageCircleHeart,
   ShoppingCart,
   User as UserIcon,
   UserPlus,
@@ -23,8 +25,9 @@ import { useQuery } from "@tanstack/react-query";
 import { User } from "next-auth";
 import Image from "next/image";
 import CategoryAccordeon from "@/components/accordeons/category-accordeon";
+import FlowerMeaningsAccordeon from "@/components/accordeons/meaning-accordeon";
 
-const NavbarMobile = ({ user }: { user?: User }) => {
+const NavbarMobile = ({ user, meanings }: { user?: User; meanings: any[] }) => {
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -102,7 +105,7 @@ const NavbarMobile = ({ user }: { user?: User }) => {
               handleOpen();
               router.push("/");
             }}
-            className="flex items-center justify-between gap-6 text-white cursor-pointer hover:bg-primary-soft_pink hover:text-primary-foreground duration-200 p-2 rounded-md"
+            className="flex items-center justify-between gap-6 text-white cursor-pointer hover:opacity-70 duration-200 p-2 rounded-md"
           >
             Pagina inicial <Home size={18} />
           </li>
@@ -113,6 +116,33 @@ const NavbarMobile = ({ user }: { user?: User }) => {
               <CategoryAccordeon handleClose={handleOpen} categories={data} />
             )}
           </li>
+          {meanings && (
+            <li>
+              <FlowerMeaningsAccordeon
+                handleClose={handleOpen}
+                meanings={meanings}
+              />
+            </li>
+          )}
+          <li
+            onClick={() => {
+              handleOpen();
+              router.push("/sugestao-mensagens");
+            }}
+            className="flex items-center justify-between gap-6 text-white cursor-pointer hover:opacity-70 duration-200 p-2 rounded-md"
+          >
+            Sugestão de Mensagens <MessageCircleHeart size={18} />
+          </li>
+
+          <li
+            onClick={() => {
+              handleOpen();
+              router.push("/como-cuidar");
+            }}
+            className="flex items-center justify-between gap-6 text-white cursor-pointer hover:opacity-70 duration-200 p-2 rounded-md"
+          >
+            Como Cuidar <Flower2 size={18} />
+          </li>
           {user ? (
             <>
               {(user.role == "ADMIN" || user.role == "SELLER") && (
@@ -121,7 +151,7 @@ const NavbarMobile = ({ user }: { user?: User }) => {
                     handleOpen();
                     router.push("/dashboard");
                   }}
-                  className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:bg-primary-soft_pink hover:text-primary-foreground duration-200 p-2 rounded-md"
+                  className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:opacity-70 duration-200 p-2 rounded-md"
                 >
                   Dashboard <LayoutDashboard size={18} />
                 </li>
@@ -131,7 +161,7 @@ const NavbarMobile = ({ user }: { user?: User }) => {
                   handleOpen();
                   router.push("/compras");
                 }}
-                className=" flex items-center justify-between text-white  gap-6 cursor-pointer hover:bg-primary-soft_pink hover:text-primary-foreground duration-200 p-2 rounded-md"
+                className=" flex items-center justify-between text-white  gap-6 cursor-pointer hover:opacity-70 duration-200 p-2 rounded-md"
               >
                 Compras <ShoppingCart size={18} />
               </li>
@@ -140,7 +170,7 @@ const NavbarMobile = ({ user }: { user?: User }) => {
                   handleOpen();
                   router.push("/perfil");
                 }}
-                className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:bg-primary-soft_pink hover:text-primary-foreground duration-200 p-2 rounded-md"
+                className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:opacity-70 duration-200 p-2 rounded-md"
               >
                 Perfil <UserIcon size={18} />
               </li>
@@ -159,7 +189,7 @@ const NavbarMobile = ({ user }: { user?: User }) => {
             <>
               <Link
                 onClick={handleOpen}
-                className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:bg-primary-soft_pink hover:text-primary-foreground duration-200 p-2 rounded-md"
+                className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:opacity-70 duration-200 p-2 rounded-md"
                 title="Cadastre-se para poder realizar suas compras!"
                 href={"/registre-se"}
               >
@@ -168,7 +198,7 @@ const NavbarMobile = ({ user }: { user?: User }) => {
               <Link
                 onClick={handleOpen}
                 title="Autentique-se para poder realizar suas compras"
-                className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:bg-primary-soft_pink hover:text-primary-foreground duration-200 p-2 rounded-md"
+                className="flex items-center justify-between  gap-6 text-white cursor-pointer hover:opacity-70 duration-200 p-2 rounded-md"
                 href={"/login"}
               >
                 Login <LogIn />

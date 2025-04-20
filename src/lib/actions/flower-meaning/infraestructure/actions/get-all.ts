@@ -36,7 +36,7 @@ export async function GetAllFlowerMeanings({
   return {
     totalItems,
     totalPages,
-    flowerMeanings: list.map((item) => ({
+    items: list.map((item) => ({
       id: item.id,
       name: item.name,
       description: item.description,

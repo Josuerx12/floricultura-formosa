@@ -40,6 +40,7 @@ const EntityPage = ({
     <div>
       <div className="flex mb-4 justify-end items-center gap-4">
         <SearchFilter placeholder={title.toLowerCase()} />
+        {ModalComponent && ModalComponent}
       </div>
 
       {isPending ? (

@@ -49,7 +49,7 @@ const CategoryAccordeon = ({
             <div key={category.id} className="py-1">
               <div
                 onClick={() => handleCategoryClick(category.name)}
-                className="cursor-pointer p-2 rounded-md text-primary hover:bg-primary-soft_pink hover:text-primary-foreground font-bold  text-lg my-2"
+                className="cursor-pointer p-2 rounded-md text-primary hover:opacity-80 font-bold  text-lg my-2"
               >
                 {category.name}
               </div>
@@ -57,7 +57,7 @@ const CategoryAccordeon = ({
                 <div
                   key={sub.id}
                   onClick={() => handleNavigate(category.name, sub.name)}
-                  className="pl-6 py-2 cursor-pointer rounded-md text-primary hover:bg-primary-soft_pink hover:text-primary-foreground font-semibold  my-2"
+                  className="pl-6 py-2 cursor-pointer rounded-md text-primary hover:opacity-80 font-semibold  my-2"
                 >
                   {sub.name}
                 </div>

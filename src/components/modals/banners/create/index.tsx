@@ -19,7 +19,6 @@ import {
   Plus,
   RectangleEllipsis,
 } from "lucide-react";
-import { revalidatePath } from "next/cache";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 

@@ -42,7 +42,7 @@ export async function GetAllFlowerCares({
   return {
     totalItems,
     totalPages,
-    flowerCares: list.map((item) => ({
+    items: list.map((item) => ({
       id: item.id,
       title: item.title,
       description: item.description,

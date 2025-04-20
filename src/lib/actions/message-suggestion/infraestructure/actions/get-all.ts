@@ -42,7 +42,7 @@ export async function GetAllMessageSuggestions({
   return {
     totalItems,
     totalPages,
-    suggestions: list.map((item) => ({
+    items: list.map((item) => ({
       id: item.id,
       title: item.title,
       content: item.content,
