@@ -27,7 +27,7 @@ import Image from "next/image";
 import CategoryAccordeon from "@/components/accordeons/category-accordeon";
 import FlowerMeaningsAccordeon from "@/components/accordeons/meaning-accordeon";
 
-const NavbarMobile = ({ user, meanings }: { user?: User; meanings: any[] }) => {
+const NavbarMobile = ({ user }: { user?: User }) => {
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -116,14 +116,17 @@ const NavbarMobile = ({ user, meanings }: { user?: User; meanings: any[] }) => {
               <CategoryAccordeon handleClose={handleOpen} categories={data} />
             )}
           </li>
-          {meanings && (
-            <li>
-              <FlowerMeaningsAccordeon
-                handleClose={handleOpen}
-                meanings={meanings}
-              />
-            </li>
-          )}
+
+          <li
+            onClick={() => {
+              handleOpen();
+              router.push("/significados");
+            }}
+            className="flex items-center justify-between gap-6 text-white cursor-pointer hover:opacity-70 duration-200 p-2 rounded-md"
+          >
+            Significado das Flores <Flower2 />
+          </li>
+
           <li
             onClick={() => {
               handleOpen();
