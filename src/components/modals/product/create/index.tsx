@@ -9,26 +9,23 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { CreateProduct } from "@/lib/actions/products";
-import { SubCategory } from "@/lib/actions/sub-category";
 import {
   Banknote,
   Boxes,
   CloudUpload,
-  ListPlus,
   Loader,
-  NotepadText,
   Plus,
   RectangleEllipsis,
   ScrollText,
 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useResetableActionState } from "@/hooks/use-resetable-action-state";
+import { useState } from "react";
 import { Category } from "@/lib/actions/category";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProductSchema } from "@/lib/schemas-validator/product.schema";
 import { z } from "zod";
+import { Switch } from "@/components/ui/switch";
 
 const CreateProductModal = ({ categories }: { categories: Category[] }) => {
   const [photos, setPhotos] = useState<File[]>([]);
@@ -42,11 +39,14 @@ const CreateProductModal = ({ categories }: { categories: Category[] }) => {
 
   const {
     reset: resetForm,
+    watch,
+    setValue,
     handleSubmit,
     register,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(ProductSchema),
+    defaultValues: { is_visible: false },
   });
 
   const query = useQueryClient();
@@ -55,13 +55,14 @@ const CreateProductModal = ({ categories }: { categories: Category[] }) => {
     mutationKey: ["create-product"],
     mutationFn: CreateProduct,
     onSuccess: () => {
-      query.invalidateQueries({ queryKey: ["products"] }), setIsOpen(false);
       resetForm();
       setPhotos([]);
       setPreviewImages([]);
       toast({
         title: "Produto criado com sucesso!",
       });
+      query.invalidateQueries({ queryKey: ["products-dash"] });
+      query.invalidateQueries({ queryKey: ["products"] });
       handleClose();
     },
   });
@@ -75,6 +76,7 @@ const CreateProductModal = ({ categories }: { categories: Category[] }) => {
     formData.append("subcategory_id", data.subcategory_id?.toString());
     formData.append("stock_quantity", data.stock_quantity?.toString());
     formData.append("description", data.description);
+    formData.append("is_visible", String(data.is_visible));
     formData.append("price", data.price);
 
     await mutateAsync(formData);
@@ -220,6 +222,18 @@ const CreateProductModal = ({ categories }: { categories: Category[] }) => {
               </p>
             )}
           </div>
+
+          <label
+            htmlFor="is-active"
+            className="flex  p-2 gap-2 items-center rounded-3xl"
+          >
+            <Switch
+              id="is-active"
+              checked={watch("is_visible")}
+              onCheckedChange={(c) => setValue("is_visible", c)}
+            />
+            <span>{watch("is_visible") ? "Ativo" : "Desativado"}</span>
+          </label>
 
           {/* Imagens */}
           <div className="flex flex-col gap-2">

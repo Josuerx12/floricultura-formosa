@@ -3,11 +3,11 @@ import HomeSlickSlider from "@/components/slider/home-slider";
 import Title from "@/components/title";
 import {
   getDeluxeProducts,
-  getTop10SelledProducts,
+  getTop20SelledProducts,
 } from "@/lib/actions/products";
 
 export default async function Home() {
-  const topProducts = await getTop10SelledProducts();
+  const topProducts = await getTop20SelledProducts();
 
   const deluxeProducts = await getDeluxeProducts();
 

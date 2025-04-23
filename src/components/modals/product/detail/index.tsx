@@ -6,6 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
 import { toast } from "@/hooks/use-toast";
 import { Category } from "@/lib/actions/category";
 import {
@@ -61,14 +62,17 @@ const DetailProductModal = ({
     handleSubmit,
     register,
     reset,
+    watch,
+    setValue,
   } = useForm({
     resolver: zodResolver(EditProductSchema),
     defaultValues: {
       name: product.name,
       description: product.description,
-      price: product.price.toString(),
+      price: product.price.toString().replace(".", ","),
       stock_quantity: product.stock_quantity,
       subcategory_id: product.subcategory_id,
+      is_visible: product.is_visible,
     },
   });
 
@@ -76,9 +80,10 @@ const DetailProductModal = ({
     reset({
       name: product.name,
       description: product.description,
-      price: product.price.toString(),
+      price: product.price.toString().replace(".", ","),
       stock_quantity: product.stock_quantity,
       subcategory_id: product.subcategory_id,
+      is_visible: product.is_visible,
     });
   }, [product, reset]);
 
@@ -113,6 +118,7 @@ const DetailProductModal = ({
     formData.append("price", data.price!);
     formData.append("stock_quantity", data.stock_quantity!.toString());
     formData.append("subcategory_id", data.subcategory_id!.toString());
+    formData.append("is_visible", String(data.is_visible));
 
     photos.forEach((photo) => formData.append("photos", photo));
     await mutateAsync({ id: product.id, formData });
@@ -209,6 +215,7 @@ const DetailProductModal = ({
             <ScrollText />
             <select
               {...register("subcategory_id")}
+              defaultValue={watch("subcategory_id")}
               disabled={!isEditing}
               className="w-full bg-transparent outline-none"
             >
@@ -278,6 +285,18 @@ const DetailProductModal = ({
           {errors.description && (
             <p className="text-red-600">{errors.description.message}</p>
           )}
+
+          <label
+            htmlFor="is-active"
+            className="flex  p-2 gap-2 items-center rounded-3xl"
+          >
+            <Switch
+              id="is-active"
+              checked={watch("is_visible")}
+              onCheckedChange={(c) => setValue("is_visible", c)}
+            />
+            <span>{watch("is_visible") ? "Ativo" : "Desativado"}</span>
+          </label>
 
           {/* Previews */}
           {previewImages.length > 0 && (

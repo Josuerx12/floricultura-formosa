@@ -1,10 +1,8 @@
 "use server";
 import { prisma } from "@/lib/db/prisma";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
 import { deleteFileAWS, uploadFileAWS } from "../aws";
 import { SubCategory } from "../sub-category";
-import { ProductSchema } from "@/lib/schemas-validator/product.schema";
 import { Promotion } from "../promotions";
 import { Prisma } from "@prisma/client";
 import { auth } from "@/lib/auth/auth";
@@ -31,6 +29,7 @@ export type Product = {
   stock_quantity: number;
   price: number;
   description: string;
+  is_visible: boolean;
   product_images?: any[];
   promotions?: Promotion[];
   subcategory?: SubCategory;
@@ -51,6 +50,7 @@ export async function CreateProduct(formData: FormData) {
       data: {
         description: rawObject?.description,
         name: rawObject.name,
+        is_visible: rawObject.is_visible === "true",
         stock_quantity: parseInt(rawObject.stock_quantity),
         subcategory_id: parseInt(rawObject.subcategory_id),
         price: parseFloat(rawObject.price.replace(/\./g, "").replace(",", ".")),
@@ -141,6 +141,9 @@ export async function EditProduct({
     where: { id: product.id },
     data: {
       name: rawObject.name ? rawObject.name : product.name,
+      is_visible: rawObject.is_visible
+        ? rawObject.is_visible === "true"
+        : product.is_visible,
       subcategory_id: rawObject.subcategory_id
         ? Number(rawObject.subcategory_id)
         : product.subcategory_id,
@@ -181,24 +184,31 @@ export async function GetAllProductsWithPagination({
   page = 1,
   perPage = 10,
   search,
+  isVisible = false,
 }: {
   page: number;
   perPage?: number;
   search: string;
+  isVisible?: boolean;
 }) {
   const where: Prisma.productWhereInput = {
-    OR: [
+    AND: [
       {
-        name: {
-          contains: search || "",
-          mode: "insensitive",
-        },
+        OR: [
+          {
+            name: {
+              contains: search || "",
+              mode: "insensitive",
+            },
+          },
+          !isNaN(Number(search))
+            ? {
+                id: Number(search),
+              }
+            : {},
+        ],
       },
-      !isNaN(Number(search))
-        ? {
-            id: Number(search),
-          }
-        : {},
+      ...(isVisible ? [{ is_visible: true }] : []),
     ],
   };
 
@@ -225,7 +235,7 @@ export async function GetAllProductsWithPagination({
   };
 }
 
-export async function getTop10SelledProducts() {
+export async function getTop20SelledProducts() {
   const topSellingProducts = await prisma.order_item.groupBy({
     by: ["product_id"],
     _sum: {
@@ -236,7 +246,7 @@ export async function getTop10SelledProducts() {
         quantity: "desc",
       },
     },
-    take: 10,
+    take: 20,
   });
 
   const productIds = topSellingProducts.map((item) => item.product_id);
@@ -246,6 +256,7 @@ export async function getTop10SelledProducts() {
       id: {
         in: productIds,
       },
+      is_visible: true,
     },
     orderBy: {
       created_at: "desc",
@@ -271,6 +282,7 @@ export async function getDeluxeProducts() {
           name: "categoria luxo",
         },
       },
+      is_visible: true,
     },
     include: {
       product_images: {
@@ -285,7 +297,11 @@ export async function getDeluxeProducts() {
 }
 
 export async function getAllProducts() {
-  const products = await prisma.product.findMany();
+  const products = await prisma.product.findMany({
+    where: {
+      is_visible: true,
+    },
+  });
 
   return products;
 }
