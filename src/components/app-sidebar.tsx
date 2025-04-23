@@ -81,6 +81,18 @@ const data = {
           title: "Significados",
           url: "/dashboard/significados",
         },
+        {
+          title: "Termos de Uso",
+          url: "/dashboard/termos-de-uso",
+        },
+        {
+          title: "Politica de Privacidade",
+          url: "/dashboard/politica-de-privacidade",
+        },
+        {
+          title: "Politica de Reembolso",
+          url: "/dashboard/politica-de-reembolso",
+        },
       ],
     },
     {

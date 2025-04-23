@@ -37,10 +37,7 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link
-                href="/politica-de-privacidade"
-                className="underline text-sm"
-              >
+              <Link href="/politica-de-reembolso" className="underline text-sm">
                 Política de Reembolso
               </Link>
             </li>

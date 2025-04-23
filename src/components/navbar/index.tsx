@@ -6,10 +6,9 @@ import { ListAllFlowerMeanings } from "@/lib/actions/flower-meaning/infraestruct
 
 const Navbar = async () => {
   const user = await auth();
-  const meanings = await ListAllFlowerMeanings();
   return (
     <>
-      <NavbarMobile user={user?.user} meanings={meanings} />
+      <NavbarMobile user={user?.user} />
     </>
   );
 };

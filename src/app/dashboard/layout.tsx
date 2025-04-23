@@ -7,14 +7,11 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import DashboardBreadcrumb from "@/components/DashboardBreadcrumb";
-import { Suspense } from "react";
-import { Loader2 } from "lucide-react";
 import { auth } from "@/lib/auth/auth";
 import { redirect } from "next/navigation";
-import Loading from "@/components/loading";
 
 export const metadata: Metadata = {
-  title: "Floricultura Formosa - Dashboard",
+  title: "Dashboard - ADM",
 };
 
 export default async function DashboardLayout({

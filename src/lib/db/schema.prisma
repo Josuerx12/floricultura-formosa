@@ -1,3 +1,17 @@
+enum UserRoles {
+  ADMIN
+  USER
+  SELLER
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELED
+}
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -247,16 +261,23 @@ model flower_care {
   updated_at  DateTime @updatedAt
 }
 
-enum UserRoles {
-  ADMIN
-  USER
-  SELLER
+model use_terms {
+  id         String   @id @default(uuid())
+  content    String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
-enum OrderStatus {
-  PENDING
-  PROCESSING
-  SHIPPED
-  DELIVERED
-  CANCELED
+model privacity_terms {
+  id         String   @id @default(uuid())
+  content    String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model refound_terms {
+  id         String   @id @default(uuid())
+  content    String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }

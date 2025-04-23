@@ -3,8 +3,8 @@ import React from "react";
 
 const Loading = () => {
   return (
-    <div className="w-full max-h-screen flex justify-center items-center text-3xl bg-primary text-primary-foreground">
-      Carregando dados <Loader2 className="animate-spin" />
+    <div className="w-full max-h-screen gap-3 h-full flex justify-center items-center text-3xl  text-primary-foreground">
+      Carregando dados <Loader2 size={30} className="animate-spin" />
     </div>
   );
 };
