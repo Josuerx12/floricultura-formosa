@@ -32,6 +32,7 @@ const OfertasPage = async ({ searchParams }: { searchParams: any }) => {
     select: {
       id: true,
       name: true,
+      is_visible: true,
       price: true,
       _count: true,
       stock_quantity: true,
