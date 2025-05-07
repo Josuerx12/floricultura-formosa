@@ -10,14 +10,16 @@ import { User } from "next-auth";
 import useCartStore from "@/hooks/use-cart-store";
 import CreateAddressModal from "../../address/create";
 import { Loader2 } from "lucide-react";
+import { useState } from "react";
 
 export default function SecondStep({ user }: { user: User }) {
   const { secondStep, goToStep } = useCheckout();
-  const { addFee, removeFee, fee_id } = useCartStore();
-  const { register, handleSubmit } = useForm();
+  const [address, setAddress] = useState<any>(null);
+  const { addFee, fee_id } = useCartStore();
+  const { handleSubmit } = useForm();
 
-  const onSubmit = (data: any) => {
-    secondStep(data);
+  const onSubmit = () => {
+    secondStep(address);
   };
 
   const { data, isPending } = useQuery({
@@ -31,19 +33,6 @@ export default function SecondStep({ user }: { user: User }) {
       <h2 className="text-xl font-semibold">
         Endereços de entrega cadastrados
       </h2>
-      {/* <Input {...register("street")} placeholder="Rua" required />
-      <Input {...register("number")} placeholder="Número" required />
-      <Input {...register("district")} placeholder="Bairro" required />
-      <Input {...register("city")} placeholder="Cidade" required />
-      <Input {...register("state")} placeholder="Estado" required />
-      <Input {...register("zipCode")} placeholder="CEP" required />
-      <Input {...register("complement")} placeholder="Complemento (opcional)" />
-      <Input
-        type="number"
-        {...register("delivery_fee.fee")}
-        placeholder="Taxa de entrega"
-        required
-      /> */}
 
       <div>
         {isPending && (
@@ -65,6 +54,7 @@ export default function SecondStep({ user }: { user: User }) {
                       checked={fee_id === a.id}
                       onChange={() => {
                         a.delivery_fee && addFee(a.delivery_fee.fee, a.id);
+                        setAddress(a);
                       }}
                       className="form-radio"
                     />

@@ -2,11 +2,18 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import useCartStore from "@/hooks/use-cart-store";
+import { useCheckout } from "@/hooks/use-checkout";
+import useMercadoPago from "@/hooks/use-mercado-pago";
+import { useMutation } from "@tanstack/react-query";
+import { User } from "next-auth";
+import Image from "next/image";
 
 interface SummaryProps {
   delivery: boolean;
   address?: any;
+  user: User;
   recipient: {
     phone?: string;
     message?: string;
@@ -17,9 +24,22 @@ interface SummaryProps {
 
 export default function SummaryStep({
   delivery,
+  user,
   address,
   recipient,
 }: SummaryProps) {
+  const { products, totalPrice, fee } = useCartStore();
+  const { getCheckoutSummary } = useCheckout();
+
+  console.log(getCheckoutSummary());
+
+  const { createMercadoPagoCheckout } = useMercadoPago();
+
+  const { mutateAsync, isPending: isRedirecting } = useMutation({
+    mutationKey: ["createMercadoPagoCheckout"],
+    mutationFn: createMercadoPagoCheckout,
+  });
+
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Resumo do Pedido</h2>
@@ -41,14 +61,9 @@ export default function SummaryStep({
             <p>
               <strong>Complemento:</strong> {address.complement || "Nenhum"}
             </p>
-            {/* <p>
-              <strong>Taxa de Entrega:</strong> R${" "}
-              {address}
-            </p> */}
           </CardContent>
         </Card>
       )}
-
       <Card>
         <CardContent className="p-4 space-y-1">
           <p>
@@ -66,8 +81,71 @@ export default function SummaryStep({
         </CardContent>
       </Card>
 
+      <Card>
+        <CardContent className="p-4 space-y-1">
+          {fee && (
+            <p>
+              <strong>Taxa de Entrega: </strong>{" "}
+              {fee?.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              })}
+            </p>
+          )}
+          <p>
+            <strong>Total à pagar:</strong>{" "}
+            {totalPrice().toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })}
+          </p>
+        </CardContent>
+      </Card>
+
+      <h4 className="text-xl font-semibold">Produtos</h4>
+      {products?.map((p) => {
+        return (
+          <Card className="flex" key={p.id}>
+            <CardHeader className="border-r-2">
+              <Image
+                width={50}
+                height={50}
+                src={p.product_image as string}
+                alt={p.name}
+              />
+            </CardHeader>
+            <CardContent className="p-4 space-y-1">
+              <p>
+                <strong>Nome do produto: </strong> {p.name}
+              </p>
+              <p>
+                <strong>Nome do produto: </strong> {p.quantity}{" "}
+                {p.quantity > 1 ? "un's" : "un"}
+              </p>
+              <p>
+                <strong>Preço unitario: </strong>{" "}
+                {p.price.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
+              </p>
+            </CardContent>
+          </Card>
+        );
+      })}
       <div className="flex justify-between pt-4">
-        <Button variant="outline">Ir para Pagamento</Button>
+        <Button
+          onClick={async () =>
+            await mutateAsync({
+              cart: products,
+              user,
+              address,
+            })
+          }
+          variant="outline"
+        >
+          Ir para Pagamento
+        </Button>
       </div>
     </div>
   );

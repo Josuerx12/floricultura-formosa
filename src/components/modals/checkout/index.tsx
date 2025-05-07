@@ -13,6 +13,7 @@ import SummaryStep from "./steps/summary-step";
 import ThirdStep from "./steps/third-step";
 import CheckoutTimeline from "./checkout-timeline";
 import { User } from "next-auth";
+import useCartStore from "@/hooks/use-cart-store";
 
 const getVisualStepIndex = (step: number, delivery: boolean | undefined) => {
   const stepMap = delivery ? [1, 2, 3, 4] : [1, 3, 4];
@@ -31,6 +32,8 @@ export default function CheckoutDialog({
   const { step, delivery, address, phone, message, to, from, resetCheckout } =
     useCheckout();
 
+  const { removeFee } = useCartStore();
+
   const steps = delivery
     ? ["Método de Entrega", "Endereço", "Destinatário", "Resumo"]
     : ["Método de Entrega", "Destinatário", "Resumo"];
@@ -41,6 +44,7 @@ export default function CheckoutDialog({
       onOpenChange={() => {
         handleClose();
         resetCheckout();
+        removeFee();
       }}
     >
       <DialogContent>
@@ -60,6 +64,7 @@ export default function CheckoutDialog({
         {step === 3 && <ThirdStep />}
         {step === 4 && (
           <SummaryStep
+            user={user}
             delivery={delivery!}
             address={address}
             recipient={{ phone, message, to, from }}
