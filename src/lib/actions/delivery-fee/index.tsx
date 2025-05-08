@@ -3,8 +3,8 @@
 import { prisma } from "@/lib/db/prisma";
 import { Prisma } from "@prisma/client";
 import { DeliveryFeeSchema } from "@/lib/schemas-validator/delivery-fee.schema";
-import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { fromCents, toCents } from "@/lib/utils";
 
 export type PaginationProps = {
   page?: number;
@@ -16,7 +16,7 @@ export async function CreateDeliveryFee(
 ) {
   await prisma.delivery_fee.create({
     data: {
-      fee: parseFloat(data.fee.replace(/\./g, "").replace(",", ".")),
+      fee: toCents(data.fee),
       district: data.district,
     },
   });
@@ -29,7 +29,7 @@ export async function CreateDeliveryFee(
 export async function getDeliveryFees() {
   const deliveryFee = await prisma.delivery_fee.findMany();
 
-  return deliveryFee;
+  return deliveryFee.map((df) => ({ ...df, fee: fromCents(df.fee) }));
 }
 
 export async function GetAllDeliveryFeesWithPagination({
@@ -64,9 +64,8 @@ export async function GetAllDeliveryFeesWithPagination({
     totalItems,
     totalPages,
     deliveryFees: deliveryFees.map((df) => ({
-      id: df.id,
-      district: df.district,
-      fee: df.fee.toNumber(),
+      ...df,
+      fee: fromCents(df.fee),
     })),
   };
 }

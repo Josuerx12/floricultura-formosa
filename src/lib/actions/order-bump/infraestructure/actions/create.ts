@@ -7,7 +7,7 @@ import { auth } from "@/lib/auth/auth";
 import { SessionValidation } from "@/lib/actions/session-validation";
 
 export type CreateOrderBumpInput = {
-  productId: number;
+  categoryId: number;
   bumpProductId: number;
 };
 
@@ -16,13 +16,13 @@ export const CreateOrderBump = async (data: CreateOrderBumpInput) => {
   const validator = new SessionValidation(session);
   validator.IsSellerOrAdmin();
 
-  const principalProduct = await prisma.product.findUnique({
-    where: { id: data.productId },
+  const category = await prisma.category.findUnique({
+    where: { id: data.categoryId },
     select: { id: true },
   });
 
-  if (!principalProduct) {
-    throw new Error("Produto principal não encontrado.");
+  if (!category) {
+    throw new Error("Categoria não encontrada.");
   }
 
   const bumpProduct = await prisma.product.findUnique({

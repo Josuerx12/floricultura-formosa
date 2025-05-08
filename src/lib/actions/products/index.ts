@@ -7,6 +7,7 @@ import { Promotion } from "../promotions";
 import { Prisma } from "@prisma/client";
 import { auth } from "@/lib/auth/auth";
 import { SessionValidation } from "../session-validation";
+import { fromCents, toCents } from "@/lib/utils";
 
 export type ProductErrorsT = {
   name?: string[];
@@ -53,7 +54,7 @@ export async function CreateProduct(formData: FormData) {
         is_visible: rawObject.is_visible === "true",
         stock_quantity: parseInt(rawObject.stock_quantity),
         subcategory_id: parseInt(rawObject.subcategory_id),
-        price: parseFloat(rawObject.price.replace(/\./g, "").replace(",", ".")),
+        price: toCents(rawObject.price),
       },
     });
 
@@ -147,9 +148,7 @@ export async function EditProduct({
       subcategory_id: rawObject.subcategory_id
         ? Number(rawObject.subcategory_id)
         : product.subcategory_id,
-      price: rawObject.price
-        ? parseFloat(rawObject.price.replace(/\./g, "").replace(",", "."))
-        : product.price,
+      price: rawObject.price ? toCents(rawObject.price) : product.price,
       description: rawObject.description
         ? rawObject.description
         : product.description,
@@ -231,7 +230,10 @@ export async function GetAllProductsWithPagination({
   return {
     totalItems,
     totalPages,
-    products,
+    products: products.map((p) => ({
+      ...p,
+      price: fromCents(p.price),
+    })),
   };
 }
 
@@ -271,7 +273,10 @@ export async function getTop20SelledProducts() {
     },
   });
 
-  return products;
+  return products.map((p) => ({
+    ...p,
+    price: fromCents(p.price),
+  }));
 }
 
 export async function getDeluxeProducts() {
@@ -293,7 +298,10 @@ export async function getDeluxeProducts() {
     },
   });
 
-  return products;
+  return products.map((p) => ({
+    ...p,
+    price: fromCents(p.price),
+  }));
 }
 
 export async function getAllProducts() {
@@ -303,5 +311,43 @@ export async function getAllProducts() {
     },
   });
 
-  return products;
+  return products.map((p) => ({
+    ...p,
+    price: fromCents(p.price),
+  }));
+}
+
+export async function getProductById(id: number) {
+  const product = await prisma.product.findUnique({
+    where: { id: Number(id) },
+    include: {
+      product_images: true,
+      subcategory: {
+        include: {
+          category: true,
+        },
+      },
+      promotions: {
+        where: {
+          start_date: { lte: new Date() },
+          end_date: { gte: new Date() },
+        },
+        orderBy: { start_date: "asc" },
+        take: 1,
+        select: {
+          discount_percentage: true,
+          end_date: true,
+          start_date: true,
+        },
+      },
+    },
+  });
+
+  if (!product) {
+    throw new Error("Producto não encontrado");
+  }
+
+  product.price = fromCents(product?.price);
+
+  return product;
 }

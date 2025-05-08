@@ -5,8 +5,15 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import AddCartModal from "@/components/modals/add-cart";
 
 const ProductDetails = ({ product, finalPrice, discount }: any) => {
+  const [isBumpOpen, setIsBumOpen] = useState(false);
+
+  function handleBumpOpen() {
+    setIsBumOpen((prev) => !prev);
+  }
+
   const [selectedImage, setSelectedImage] = useState(
     product.product_images[0]?.url || "/images/placeholder.png"
   );
@@ -21,22 +28,28 @@ const ProductDetails = ({ product, finalPrice, discount }: any) => {
       quantity: parseInt(data.quantity as unknown as string),
       total_stock: parseInt(data.total_stock as unknown as string),
     });
+    handleBumpOpen();
   }
 
   return (
     <div className="mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+      <AddCartModal
+        product={product}
+        handleClose={handleBumpOpen}
+        isOpen={isBumpOpen}
+      />
       <div className="flex flex-col gap-4">
         <div className="flex-1">
           <Image
             src={selectedImage}
             alt={product.name}
-            width={800}
-            height={600}
+            width={500}
+            height={500}
             quality={100}
-            className="w-full object-cover rounded-md"
+            className="object-contain w-full h-96 rounded-md"
           />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex  gap-2">
           {product.product_images.map((img: any, index: number) => (
             <Image
               key={index}
@@ -84,7 +97,7 @@ const ProductDetails = ({ product, finalPrice, discount }: any) => {
           <input
             {...register("price")}
             type="hidden"
-            value={finalPrice.toFixed(2)}
+            value={product.price.toFixed(2)}
           />
           <input {...register("name")} type="hidden" value={product.name} />
           <input

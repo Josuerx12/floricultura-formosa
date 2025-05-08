@@ -8,22 +8,27 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
+import { Category } from "@/lib/actions/category";
 import { CreateOrderBump } from "@/lib/actions/order-bump/infraestructure/actions/create";
 import { OrderBumpShema } from "@/lib/actions/order-bump/infraestructure/schemas/order-bump.schema";
 import { getAllProducts, Product } from "@/lib/actions/products";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Banknote, Loader, Plus } from "lucide-react";
+import { Loader, Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 type ModalProps = {
   isOpen: boolean;
   handleClose: () => void;
-  product: Product;
+  category: Category;
 };
 
-const CreateOrderBumpModal = ({ handleClose, isOpen, product }: ModalProps) => {
+const CreateOrderBumpModal = ({
+  handleClose,
+  isOpen,
+  category,
+}: ModalProps) => {
   const query = useQueryClient();
 
   const {
@@ -40,10 +45,10 @@ const CreateOrderBumpModal = ({ handleClose, isOpen, product }: ModalProps) => {
     isPending: isMutating,
     reset,
   } = useMutation({
-    mutationKey: ["AddBumpToProduct", product.id],
+    mutationKey: ["AddBumpToCategory", category.id],
     mutationFn: CreateOrderBump,
     onSuccess: (data) => {
-      query.invalidateQueries({ queryKey: ["listBumpProducts", product.id] });
+      query.invalidateQueries({ queryKey: ["listBumpProducts", category.id] });
       resetForm();
       toast({
         title: data.message,
@@ -61,12 +66,12 @@ const CreateOrderBumpModal = ({ handleClose, isOpen, product }: ModalProps) => {
   async function onSubmit(data: z.infer<typeof OrderBumpShema>) {
     await mutateAsync({
       bumpProductId: data.bumpProductId,
-      productId: product.id,
+      categoryId: category.id,
     });
   }
 
   const { isPending, data: products } = useQuery({
-    queryKey: ["bumpProducts", product.id],
+    queryKey: ["bumpProducts", category.id],
     queryFn: getAllProducts,
   });
 
@@ -89,7 +94,8 @@ const CreateOrderBumpModal = ({ handleClose, isOpen, product }: ModalProps) => {
           className="w-full flex flex-col gap-4 mx-auto"
         >
           <h4 className="text-start text-sm my-6 font-semibold">
-            Preencha o campo abaixo para criar um novo order bump!
+            Preencha o campo abaixo para adicionar um novo produto ao order
+            bump!
           </h4>
           <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
             <select
@@ -100,7 +106,7 @@ const CreateOrderBumpModal = ({ handleClose, isOpen, product }: ModalProps) => {
             >
               {isPending && (
                 <option disabled value={""}>
-                  Carregando categorias
+                  Carregando produtos
                 </option>
               )}
 

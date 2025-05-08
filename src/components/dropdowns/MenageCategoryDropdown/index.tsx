@@ -8,15 +8,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Info, Settings2, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { DollarSign, Info, Settings2, Trash2 } from "lucide-react";
 import DeleteCategoriaModal from "@/components/modals/category/delete";
 import { Category } from "@/lib/actions/category";
 import DetailCategoriaModal from "../../modals/category/detail";
+import CreateOrderBumpModal from "@/components/modals/order-bumps/create-order-bump.modal";
+import ListOrderBumpModal from "@/components/modals/order-bumps/list-order-bump.modal";
+import { FaCartPlus } from "react-icons/fa";
 
 const ManageCategoryDropdown = ({ category }: { category: Category }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeletailing, setIsDeletailing] = useState(false);
+  const [isOrderBumpsShowing, setIsOrderBumpsShowing] = useState(false);
+  const [isOrderBumpAdding, setIsOrderBumpAdding] = useState(false);
   return (
     <>
       <DeleteCategoriaModal
@@ -29,6 +33,16 @@ const ManageCategoryDropdown = ({ category }: { category: Category }) => {
         handleClose={() => setIsDeletailing((prev) => !prev)}
         category={category}
       />
+      <CreateOrderBumpModal
+        handleClose={() => setIsOrderBumpAdding((prev) => !prev)}
+        isOpen={isOrderBumpAdding}
+        category={category}
+      />
+      <ListOrderBumpModal
+        handleClose={() => setIsOrderBumpsShowing((prev) => !prev)}
+        isOpen={isOrderBumpsShowing}
+        category={category}
+      />
       <DropdownMenu>
         <DropdownMenuTrigger className="w-fit items-center gap-2 inline-flex  flex-grow-0 bg-secondary text-primary-foreground p-2 rounded font-medium text-sm drop-shadow">
           Gerenciar <Settings2 size={16} />
@@ -36,6 +50,18 @@ const ManageCategoryDropdown = ({ category }: { category: Category }) => {
         <DropdownMenuContent>
           <DropdownMenuLabel>Gerenciar Categoria</DropdownMenuLabel>
           <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => setIsOrderBumpAdding((prev) => !prev)}
+            className="flex items-center justify-between cursor-pointer"
+          >
+            Adicionar Order Bump <DollarSign />
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => setIsOrderBumpsShowing((prev) => !prev)}
+            className="flex items-center justify-between cursor-pointer"
+          >
+            Order Bumps <FaCartPlus />
+          </DropdownMenuItem>
           <DropdownMenuItem
             className="flex items-center justify-between cursor-pointer"
             onClick={() => setIsDeletailing((prev) => !prev)}

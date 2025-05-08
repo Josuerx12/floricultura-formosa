@@ -6,12 +6,12 @@ import {
   OrderBumpPlainedObject,
 } from "../mappers/order-bump.mapper";
 
-export const GetBumpsByProductId = async (
-  productId: number
+export const GetBumpsByCategoryId = async (
+  categoryId: number
 ): Promise<OrderBumpPlainedObject[]> => {
   const bumps = await prisma.order_bump.findMany({
     where: {
-      product_id: productId,
+      category_id: categoryId,
     },
     include: {
       bump_product: {

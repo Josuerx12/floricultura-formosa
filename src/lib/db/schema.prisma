@@ -26,6 +26,8 @@ model User {
   name          String?
   password      String?
   phone         String?
+  document      String?
+  birthdate     DateTime?
   email         String          @unique
   emailVerified DateTime?
   image         String?
@@ -112,7 +114,7 @@ model product {
   subcategory_id Int
   name           String
   description    String
-  price          Float
+  price          Int
   stock_quantity Int
   created_at     DateTime         @default(now())
   updated_at     DateTime         @updatedAt
@@ -186,7 +188,7 @@ model order_item {
   order_id   String
   product_id Int
   quantity   Int
-  price      Decimal
+  price      Int
   order      order   @relation(fields: [order_id], references: [id], onDelete: Cascade)
   product    product @relation(fields: [product_id], references: [id], onDelete: NoAction)
 }
@@ -210,7 +212,7 @@ model address {
 model delivery_fee {
   id       String    @id @default(cuid())
   district String    @unique
-  fee      Decimal
+  fee      Int
   address  address[]
 }
 
@@ -228,7 +230,7 @@ model banners {
 
 model order_bump {
   id              Int      @id @default(autoincrement())
-  product_id      Int
+  category_id     Int
   bump_product_id Int
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt

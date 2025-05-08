@@ -3,6 +3,7 @@
 import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/db/prisma";
 import { AddressSchema } from "@/lib/schemas-validator/address.schema";
+import { fromCents } from "@/lib/utils";
 import { User } from "next-auth";
 import { revalidatePath } from "next/cache";
 
@@ -75,7 +76,7 @@ export async function getUserAddresses(user?: User) {
   const addr = addresses.map((a) => ({
     ...a,
     delivery_fee: {
-      fee: a.delivery_fee!.fee.toNumber(),
+      fee: fromCents(a.delivery_fee!.fee),
     },
   }));
 

@@ -2,7 +2,7 @@ import { Product } from "../../products";
 
 export class OrderBump {
   id?: number;
-  productId: number;
+  categoryId: number;
   bumpProductId: number;
   bumpProduct?: Product;
   createdAt: Date;
@@ -10,7 +10,7 @@ export class OrderBump {
 
   constructor(props: any) {
     this.id = props.id;
-    this.productId = props.productId;
+    this.categoryId = props.categoryId;
     this.bumpProductId = props.bumpProductId;
     this.bumpProduct = props.bumpProduct;
     this.createdAt = new Date(props.createdAt);

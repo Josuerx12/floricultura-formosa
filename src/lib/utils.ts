@@ -80,3 +80,23 @@ export function parseOrderStatus(order: any): {
       };
   }
 }
+
+export function toCents(value: string | number): number {
+  if (typeof value === "string") {
+    // Troca vírgula por ponto para conversão
+    value = value.replace(",", ".");
+  }
+
+  const parsed = parseFloat(value as string);
+  if (isNaN(parsed))
+    throw new Error("Valor inválido para conversão em centavos.");
+
+  return Math.round(parsed * 100);
+}
+export function fromCents(value: number): number {
+  if (typeof value !== "number" || isNaN(value)) {
+    throw new Error("Valor inválido para conversão de centavos.");
+  }
+
+  return parseFloat((value / 100).toFixed(2));
+}

@@ -7,8 +7,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
+import { Category } from "@/lib/actions/category";
 import { DeleteOrderBump } from "@/lib/actions/order-bump/infraestructure/actions/delete";
-import { GetBumpsByProductId } from "@/lib/actions/order-bump/infraestructure/actions/get-bumps-by-product";
+import { GetBumpsByCategoryId } from "@/lib/actions/order-bump/infraestructure/actions/get-bumps-by-category";
 import { Product } from "@/lib/actions/products";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
@@ -17,20 +18,20 @@ import Image from "next/image";
 type ModalProps = {
   isOpen: boolean;
   handleClose: () => void;
-  product: Product;
+  category: Category;
 };
 
-const ListOrderBumpModal = ({ handleClose, isOpen, product }: ModalProps) => {
+const ListOrderBumpModal = ({ handleClose, isOpen, category }: ModalProps) => {
   const query = useQueryClient();
 
   const { mutateAsync } = useMutation({
-    mutationKey: ["RemoveBumpToProduct", product.id],
+    mutationKey: ["RemoveBumpToCategory", category.id],
     mutationFn: DeleteOrderBump,
     onSuccess: (data) => {
       toast({
         title: data.message,
       });
-      query.invalidateQueries({ queryKey: ["listBumpProducts", product.id] });
+      query.invalidateQueries({ queryKey: ["listBumpProducts", category.id] });
     },
     onError: (error) => {
       toast({
@@ -45,8 +46,8 @@ const ListOrderBumpModal = ({ handleClose, isOpen, product }: ModalProps) => {
   }
 
   const { isPending, data: bumps } = useQuery({
-    queryKey: ["listBumpProducts", product.id],
-    queryFn: () => GetBumpsByProductId(product.id),
+    queryKey: ["listBumpProducts", category.id],
+    queryFn: () => GetBumpsByCategoryId(category.id),
   });
 
   return (
@@ -60,7 +61,7 @@ const ListOrderBumpModal = ({ handleClose, isOpen, product }: ModalProps) => {
           {bumps && (
             <>
               <h4 className="text-start text-sm my-6 font-semibold">
-                Lista de Order Bumps para o produto: {product.name}
+                Lista de Order Bumps para a categoria: {category.name}
               </h4>
               <div className="flex justify-between flex-wrap gap-4">
                 {bumps &&

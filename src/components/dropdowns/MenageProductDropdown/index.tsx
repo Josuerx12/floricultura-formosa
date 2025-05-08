@@ -8,11 +8,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DollarSign, Info, PackagePlus, Settings2, Trash2 } from "lucide-react";
+import { DollarSign, Info, Settings2, Trash2 } from "lucide-react";
 import { Product } from "@/lib/actions/products";
 import DeleteProductModal from "@/components/modals/product/delete";
 import DetailProductModal from "@/components/modals/product/detail";
-import { SubCategory } from "@/lib/actions/sub-category";
 import { Category } from "@/lib/actions/category";
 import { FaCartPlus } from "react-icons/fa";
 import CreateOrderBumpModal from "@/components/modals/order-bumps/create-order-bump.modal";
@@ -27,8 +26,7 @@ const ManageProductDropdown = ({
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeletailing, setIsDeletailing] = useState(false);
-  const [isOrderBumpsShowing, setIsOrderBumpsShowing] = useState(false);
-  const [isOrderBumpAdding, setIsOrderBumpAdding] = useState(false);
+
   return (
     <>
       <DeleteProductModal
@@ -42,16 +40,7 @@ const ManageProductDropdown = ({
         product={product}
         categories={categories}
       />
-      <CreateOrderBumpModal
-        handleClose={() => setIsOrderBumpAdding((prev) => !prev)}
-        isOpen={isOrderBumpAdding}
-        product={product}
-      />
-      <ListOrderBumpModal
-        handleClose={() => setIsOrderBumpsShowing((prev) => !prev)}
-        isOpen={isOrderBumpsShowing}
-        product={product}
-      />
+
       <DropdownMenu>
         <DropdownMenuTrigger className="w-fit items-center gap-2 inline-flex  flex-grow-0 bg-secondary text-primary-foreground p-2 rounded font-medium text-sm drop-shadow">
           Gerenciar <Settings2 size={16} />
@@ -59,18 +48,6 @@ const ManageProductDropdown = ({
         <DropdownMenuContent>
           <DropdownMenuLabel>Gerenciar Produto</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => setIsOrderBumpAdding((prev) => !prev)}
-            className="flex items-center justify-between cursor-pointer"
-          >
-            Adicionar Order Bump <DollarSign />
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => setIsOrderBumpsShowing((prev) => !prev)}
-            className="flex items-center justify-between cursor-pointer"
-          >
-            Order Bumps <FaCartPlus />
-          </DropdownMenuItem>
           <DropdownMenuItem
             className="flex items-center justify-between cursor-pointer"
             onClick={() => setIsDeletailing((prev) => !prev)}
