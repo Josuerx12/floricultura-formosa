@@ -26,7 +26,7 @@ model User {
   name          String?
   password      String?
   phone         String?
-  document      String?
+  document      String?         @unique
   birthdate     DateTime?
   email         String          @unique
   emailVerified DateTime?

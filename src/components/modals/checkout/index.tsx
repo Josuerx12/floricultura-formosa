@@ -29,8 +29,17 @@ export default function CheckoutDialog({
   handleClose: VoidFunction;
   user: User;
 }) {
-  const { step, delivery, address, phone, message, to, from, resetCheckout } =
-    useCheckout();
+  const {
+    step,
+    delivery,
+    address,
+    phone,
+    message,
+    to,
+    from,
+    deliveryDate,
+    resetCheckout,
+  } = useCheckout();
 
   const { removeFee } = useCartStore();
 
@@ -67,7 +76,7 @@ export default function CheckoutDialog({
             user={user}
             delivery={delivery!}
             address={address}
-            recipient={{ phone, message, to, from }}
+            orderPreferences={{ phone, message, to, from, deliveryDate }}
           />
         )}
       </DialogContent>

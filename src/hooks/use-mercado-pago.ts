@@ -10,6 +10,7 @@ export type checkoutInput = {
   address?: any;
   user: User;
   observation?: string;
+  orderPreferences?: any;
 };
 
 const useMercadoPago = () => {

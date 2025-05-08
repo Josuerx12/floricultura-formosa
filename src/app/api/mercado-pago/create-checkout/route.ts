@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   const cart: ProductCart[] = body.cart;
   const user: User = body.user;
   const address = body.address;
-  const orderPreferences = body.preference;
+  const orderPreferences = body.orderPreferences;
 
   try {
     await prisma.$connect();
@@ -46,9 +46,15 @@ export async function POST(req: NextRequest) {
             })),
           },
         },
-        // order_preferences: {
-        //   create: {},
-        // },
+        order_preferences: {
+          create: {
+            delivery_date: orderPreferences.deliveryDate,
+            from: orderPreferences.from,
+            phone: orderPreferences.phone,
+            message: orderPreferences.message,
+            to: orderPreferences.to,
+          },
+        },
       },
     });
 

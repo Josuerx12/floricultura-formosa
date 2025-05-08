@@ -1,16 +1,43 @@
 "use client";
+import { toast } from "@/hooks/use-toast";
 import { signUp } from "@/lib/actions/auth";
-import { Loader } from "lucide-react";
+import { UserSchema, UserType } from "@/lib/schemas-validator/user.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { IdCard, Loader } from "lucide-react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import React, { useActionState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { BiSolidUser, BiMailSend, BiSolidPhone, BiKey } from "react-icons/bi";
 
 const SignUpForm = () => {
-  const [state, formAction, isPending] = useActionState(signUp, null);
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(UserSchema),
+  });
 
-  if (state?.success) {
-    redirect("/login");
+  const [birthDate, setBirthDate] = useState<Date | undefined>(undefined);
+
+  const router = useRouter();
+
+  const { mutateAsync, isPending, error } = useMutation({
+    mutationKey: ["signUp"],
+    mutationFn: signUp,
+    onSuccess: () => {
+      toast({ title: "Conta criada com sucesso!" });
+      reset();
+      setBirthDate(undefined);
+      router.push("/login");
+    },
+  });
+
+  async function OnSubmit(data: UserType) {
+    await mutateAsync({ credentials: data });
   }
 
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -25,11 +52,12 @@ const SignUpForm = () => {
     <form
       ref={formRef}
       className="flex flex-col gap-4 max-w-md mx-auto w-full px-4"
-      action={formAction}
+      onSubmit={handleSubmit(OnSubmit)}
     >
       <label className="flex items-center gap-3 bg-neutral-200 p-3 rounded-2xl">
         <BiSolidUser className="text-primary-foreground" size={20} />
         <input
+          {...register("name")}
           required
           className="w-full bg-transparent outline-none placeholder:text-neutral-600 text-sm"
           type="text"
@@ -37,13 +65,14 @@ const SignUpForm = () => {
           placeholder="Nome completo"
         />
       </label>
-      {state?.errors?.name && (
-        <p className="text-red-600 text-sm">{state.errors.name}</p>
+      {errors?.name && (
+        <p className="text-red-600 text-sm">{errors.name.message}</p>
       )}
 
       <label className="flex items-center gap-3 bg-neutral-200 p-3 rounded-2xl">
         <BiMailSend className="text-primary-foreground" size={20} />
         <input
+          {...register("email")}
           required
           className="w-full bg-transparent outline-none placeholder:text-neutral-600 text-sm"
           type="email"
@@ -51,26 +80,52 @@ const SignUpForm = () => {
           placeholder="E-mail"
         />
       </label>
-      {state?.errors?.email && (
-        <p className="text-red-600 text-sm">{state.errors.email}</p>
+      {errors?.email && (
+        <p className="text-red-600 text-sm">{errors.email.message}</p>
       )}
 
       <label className="flex items-center gap-3 bg-neutral-200 p-3 rounded-2xl">
         <BiSolidPhone className="text-primary-foreground" size={20} />
         <input
+          {...register("phone")}
           className="w-full bg-transparent outline-none placeholder:text-neutral-600 text-sm"
           type="tel"
           name="phone"
           placeholder="Telefone"
         />
       </label>
-      {state?.errors?.phone && (
-        <p className="text-red-600 text-sm">{state.errors.phone}</p>
+      {errors?.phone && (
+        <p className="text-red-600 text-sm">{errors.phone.message}</p>
       )}
+
+      <label className="flex items-center gap-3 bg-neutral-200 p-3 rounded-2xl">
+        <IdCard />
+        <input
+          {...register("document")}
+          className="w-full bg-transparent outline-none placeholder:text-neutral-600 text-sm"
+          type="text"
+          name="document"
+          placeholder="CPF ou CNPJ"
+        />
+      </label>
+      {errors?.document && (
+        <p className="text-red-600 text-sm">{errors.document.message}</p>
+      )}
+
+      <label className="flex flex-col gap-3 bg-neutral-200 p-3 rounded-2xl">
+        <span className="text-sm text-neutral-600">Data de nascimento</span>
+
+        <input
+          {...register("birthdate")}
+          type="date"
+          className="w-full bg-transparent outline-none placeholder:text-neutral-600 text-sm appearance-none [&::-webkit-calendar-picker-indicator]:invert"
+        />
+      </label>
 
       <label className="flex items-center gap-3 bg-neutral-200 p-3 rounded-2xl">
         <BiKey className="text-primary-foreground" size={20} />
         <input
+          {...register("password")}
           required
           className="w-full bg-transparent outline-none placeholder:text-neutral-600 text-sm"
           type="password"
@@ -78,14 +133,14 @@ const SignUpForm = () => {
           placeholder="Senha"
         />
       </label>
-      {state?.errors?.password && (
-        <p className="text-red-600 text-sm">{state.errors.password}</p>
+      {errors?.password && (
+        <p className="text-red-600 text-sm">{errors.password.message}</p>
       )}
 
-      {state?.error && (
-        <div className="bg-red-100 p-3 rounded-md text-sm">
-          <strong className="text-red-700">Erro:</strong> {state.error}
-        </div>
+      {error && (
+        <p className="bg-red-800 p-3 rounded text-white text-sm">
+          {error.message}
+        </p>
       )}
 
       <p className="text-xs text-center text-neutral-600">

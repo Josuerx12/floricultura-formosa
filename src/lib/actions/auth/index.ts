@@ -2,7 +2,7 @@
 import { signIn, signOut } from "@/lib/auth/auth";
 import { prisma } from "@/lib/db/prisma";
 import { transporter } from "@/lib/mail/transporter";
-import { UserSchema } from "@/lib/schemas-validator/user.schema";
+import { UserSchema, UserType } from "@/lib/schemas-validator/user.schema";
 import { hash } from "bcryptjs";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { z } from "zod";
@@ -45,29 +45,24 @@ export async function signInWithCredentials(
   }
 }
 
-export async function signUp(
-  state: SignUpStateActionT | null,
-  formData: FormData
-) {
+export async function signUp({ credentials }: { credentials: UserType }) {
   try {
-    const rawObject: Record<string, string> = {};
-
-    formData.forEach((value, key) => {
-      rawObject[key] = value.toString();
-    });
-
-    const credentials = UserSchema.parse(rawObject);
-
-    const user = await prisma.user.findUnique({
+    const emailAlreadyInUse = await prisma.user.findUnique({
       where: { email: credentials.email },
+      select: { id: true },
     });
 
-    if (user) {
-      return {
-        success: false,
-        error: "Não é possível criar uma conta com o e-mail informado!",
-        errors: null,
-      };
+    if (emailAlreadyInUse) {
+      throw new Error("Email informado já em uso.");
+    }
+
+    const documentAlreadyInUse = await prisma.user.findFirst({
+      where: { document: credentials.document },
+      select: { document: true },
+    });
+
+    if (documentAlreadyInUse) {
+      throw new Error("Documento informado já em uso.");
     }
 
     const hashPassword = await hash(credentials.password as string, 10);
@@ -85,28 +80,8 @@ export async function signUp(
       subject: "Floricultura Formosa - Conta criada!",
       text: `Seja muito bem vindo ${credentials.name} à floricultura formosa a sua floricultura de confiaça!`,
     });
-
-    return {
-      success: true,
-    };
-  } catch (err: any) {
-    let formattedErrors: UserErrorsT | null = null;
-
-    if (err instanceof z.ZodError) {
-      formattedErrors = Object.fromEntries(
-        Object.entries(err.format()).map(([key, value]) => [
-          key,
-          (value as any)._errors,
-        ])
-      ) as UserErrorsT;
-    }
-
-    console.log(formattedErrors);
-
-    return {
-      success: false,
-      error: err instanceof z.ZodError ? null : err.message,
-      errors: formattedErrors,
-    };
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
 }

@@ -14,11 +14,12 @@ interface SummaryProps {
   delivery: boolean;
   address?: any;
   user: User;
-  recipient: {
+  orderPreferences: {
     phone?: string;
     message?: string;
     to?: string;
     from?: string;
+    deliveryDate?: Date;
   };
 }
 
@@ -26,7 +27,7 @@ export default function SummaryStep({
   delivery,
   user,
   address,
-  recipient,
+  orderPreferences,
 }: SummaryProps) {
   const { products, totalPrice, fee } = useCartStore();
   const { getCheckoutSummary } = useCheckout();
@@ -67,17 +68,23 @@ export default function SummaryStep({
       <Card>
         <CardContent className="p-4 space-y-1">
           <p>
-            <strong>Telefone:</strong> {recipient.phone}
+            <strong>Telefone:</strong> {orderPreferences.phone}
           </p>
           <p>
-            <strong>Para:</strong> {recipient.to}
+            <strong>De:</strong> {orderPreferences.from}
           </p>
           <p>
-            <strong>De:</strong> {recipient.from}
+            <strong>Para:</strong> {orderPreferences.to}
           </p>
           <p>
-            <strong>Mensagem:</strong> {recipient.message}
+            <strong>Mensagem:</strong> {orderPreferences.message}
           </p>
+          {orderPreferences.deliveryDate && (
+            <p>
+              <strong>Data de entrega:</strong>{" "}
+              {orderPreferences.deliveryDate?.toLocaleDateString("pt-BR")}
+            </p>
+          )}
         </CardContent>
       </Card>
 
@@ -140,6 +147,7 @@ export default function SummaryStep({
               cart: products,
               user,
               address,
+              orderPreferences,
             })
           }
           variant="outline"

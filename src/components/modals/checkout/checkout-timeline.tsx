@@ -1,7 +1,6 @@
 "use client";
 
 import { useCheckout } from "@/hooks/use-checkout";
-import { cn } from "@/lib/utils";
 
 interface TimelineProps {
   steps: string[];

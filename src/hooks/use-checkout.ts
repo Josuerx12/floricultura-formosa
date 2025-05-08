@@ -25,7 +25,7 @@ type Checkout = {
   from?: string;
 
   firstStep: (delivery: boolean) => void;
-  secondStep: (address: Address) => void;
+  secondStep: (address: Address, deliveryDate: Date) => void;
   thirdStep: (phone: string, message: string, to: string, from: string) => void;
   getCheckoutSummary: () => object;
   resetCheckout: () => void;
@@ -52,12 +52,14 @@ export const useCheckout = create<Checkout>((set, get) => ({
   firstStep: (delivery) =>
     set(() => ({
       delivery,
+
       step: delivery ? 2 : 3,
     })),
 
-  secondStep: (address) =>
+  secondStep: (address, deliveryDate) =>
     set(() => ({
       address,
+      deliveryDate,
       step: 3,
     })),
 
