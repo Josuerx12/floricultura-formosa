@@ -3,6 +3,8 @@ import { Payment } from "mercadopago";
 import mpClient from "@/lib/mercado-pago";
 import { prisma } from "@/lib/db/prisma";
 import { transporter } from "@/lib/mail/transporter";
+import { WppRepository } from "@/lib/actions/jcwpp/infra/wpp.repository";
+import { parseOrderStatus } from "@/lib/utils";
 
 export async function GET(request: Request) {
   // Rota para lidar com pagamentos pendentes do Mercado Pago (i.e Pix)
@@ -17,6 +19,8 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
+  const wpp = new WppRepository();
+
   const payment = new Payment(mpClient);
   const paymentData = await payment.get({ id: paymentId });
 
@@ -27,9 +31,11 @@ export async function GET(request: Request) {
       },
       include: {
         items: true,
+        order_preferences: true,
         user: {
           select: {
             email: true,
+            phone: true,
           },
         },
       },
@@ -42,14 +48,28 @@ export async function GET(request: Request) {
         },
         data: { status: "PROCESSING" },
       });
-    }
 
-    transporter.sendMail({
-      from: "Floricultura Formosa <contato@jcdev.com.br>",
-      to: order!.user.email,
-      subject: "Pedido Processado",
-      text: `Seu pedido numero: ${order?.id} foi processado com sucesso.`,
-    });
+      if (order.user.phone) {
+        wpp.sendMessageText(
+          order.user.phone,
+          `
+           *🎉 🎉 Compra aprovada 🎉 🎉* \n\n 
+           *ID:* ${order.id} \n
+           *Status do pedido:*: ${parseOrderStatus(order).message} \n
+           *De:* ${order.order_preferences[0].from} \n
+           *Para:* ${order.order_preferences[0].to} \n
+           *Entregar:* _${order.order_preferences[0].delivery_date}_
+           `.trim()
+        );
+      }
+
+      transporter.sendMail({
+        from: "Floricultura Formosa <contato@jcdev.com.br>",
+        to: order!.user.email,
+        subject: "Pedido Processado",
+        text: `Seu pedido numero: ${order?.id} foi processado com sucesso.`,
+      });
+    }
 
     return NextResponse.redirect(
       new URL(`/pagamentos?status=sucesso`, request.url)

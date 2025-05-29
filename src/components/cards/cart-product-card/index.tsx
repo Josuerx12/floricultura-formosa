@@ -28,12 +28,6 @@ const CartProductCard = ({ product }: { product: ProductCart }) => {
             <span className="text-base md:text-lg font-semibold uppercase text-gray-700">
               {product.name}
             </span>
-            <span className="text-primary text-lg font-bold">
-              {product.price.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })}
-            </span>
           </div>
 
           {/* Quantidade */}

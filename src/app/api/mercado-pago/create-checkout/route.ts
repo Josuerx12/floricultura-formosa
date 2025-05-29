@@ -141,19 +141,6 @@ async function verifyAndUpdateStock(products: ProductCart[]) {
   for (const product of products) {
     const stockedProduct = await prisma.product.findUnique({
       where: { id: Number(product.id) },
-      include: {
-        promotions: {
-          where: {
-            start_date: { lte: new Date() },
-            end_date: { gte: new Date() },
-          },
-          orderBy: { start_date: "asc" },
-          take: 1,
-          select: {
-            discount_percentage: true,
-          },
-        },
-      },
     });
 
     if (!stockedProduct) {
@@ -164,15 +151,7 @@ async function verifyAndUpdateStock(products: ProductCart[]) {
       throw new Error(`Estoque insuficiente para o produto "${product.name}".`);
     }
 
-    const discount =
-      stockedProduct.promotions && stockedProduct.promotions.length > 0
-        ? Number(stockedProduct.promotions[0]?.discount_percentage)
-        : 0;
-
-    const finalPrice =
-      stockedProduct.price - (stockedProduct.price * discount) / 100;
-
-    if (product.price < finalPrice) {
+    if (product.price < stockedProduct.price / 100) {
       throw new Error(
         `O preço do produto "${product.name}" parece estar adulterado.`
       );

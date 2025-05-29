@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { transporter } from "@/lib/mail/transporter";
+import { WppRepository } from "@/lib/actions/jcwpp/infra/wpp.repository";
 
 export async function GET(request: Request) {
   // Rota para lidar com pagamentos pendentes do Mercado Pago (i.e Pix)
@@ -9,7 +10,7 @@ export async function GET(request: Request) {
   // Pegamos o ID do pagamento do nosso sistema
   const orderId = searchParams.get("external_reference");
 
-  console.log(orderId);
+  const wpp = new WppRepository();
 
   if (!orderId) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
@@ -25,6 +26,7 @@ export async function GET(request: Request) {
         user: {
           select: {
             email: true,
+            phone: true,
           },
         },
       },
@@ -37,6 +39,25 @@ export async function GET(request: Request) {
         },
         data: { status: "CANCELED" },
       });
+
+      if (order.user.phone) {
+        wpp.sendMessageText(
+          order.user.phone,
+          `
+          *❌ ❌ Compra não aprovada ❌ ❌*\n\n
+          *ID: * ${order.id}\n
+          Não foi possivel processar seu pagamento.\n\n
+          _Acredita que foi um erro, entre em contato com suporte imediatamente com as provas._
+          `.trim()
+        );
+
+        transporter.sendMail({
+          from: "Floricultura Formosa <contato@jcdev.com.br>",
+          to: order!.user.email,
+          subject: "Pedido Cancelado",
+          text: `Seu pedido número: ${order?.id} foi cancelado.`,
+        });
+      }
     }
 
     const promisseArray =
@@ -55,13 +76,6 @@ export async function GET(request: Request) {
     if (promisseArray.length > 0) {
       await Promise.all(promisseArray);
     }
-
-    transporter.sendMail({
-      from: "Floricultura Formosa <contato@jcdev.com.br>",
-      to: order!.user.email,
-      subject: "Pedido Cancelado",
-      text: `Seu pedido número: ${order?.id} foi cancelado.`,
-    });
   });
 
   return NextResponse.redirect(
