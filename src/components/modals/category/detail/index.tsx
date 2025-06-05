@@ -5,21 +5,16 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Category,
-  CreateCategoryAction,
-  EditCategoryAction,
-} from "@/lib/actions/category";
+import { Category, EditCategoryAction } from "@/lib/actions/category";
 import {
   Ban,
   Calendar,
+  Link2,
   ListPlus,
   Loader,
   Pen,
   PenBox,
-  Plus,
 } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 
@@ -68,23 +63,37 @@ const DetailCategoriaModal = ({
             Veja os detalhes abaixo da categoria - ID: {category.id}
           </h4>
           <input type="hidden" name="id" value={category.id} />
-          <label className="flex flex-grow bg-neutral-200  p-2 gap-2 items-center rounded-3xl">
+          <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
             <ListPlus className="text-primary-foreground" size={24} />
             <input
               required
-              className="w-full bg-transparent outline-none  placeholder:text-neutral-700"
+              className="w-full bg-transparent outline-none placeholder:text-neutral-500"
               type="text"
               name="name"
               defaultValue={category.name}
               disabled={!isEditing}
-              placeholder="Insira o nome da nova categoria!"
+              placeholder="Insira o nome da categoria!"
             />
           </label>
-          <label className="flex flex-grow bg-neutral-200   p-2 gap-2 items-center rounded-3xl">
+
+          <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
+            <Link2 className="text-primary-foreground" size={24} />
+            <input
+              required
+              className="w-full bg-transparent outline-none placeholder:text-neutral-500"
+              type="text"
+              name="slug"
+              defaultValue={category.slug}
+              disabled={!isEditing}
+              placeholder="Insira o slug da categoria!"
+            />
+          </label>
+
+          <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
             <Calendar className="text-primary-foreground" size={24} />
             <input
               required
-              className="w-full bg-transparent outline-none  placeholder:text-neutral-700"
+              className="w-full bg-transparent outline-none placeholder:text-neutral-500"
               type="text"
               disabled
               defaultValue={category.created_at?.toLocaleString("pt-BR")}

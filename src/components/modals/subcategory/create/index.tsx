@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,7 +9,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { CreateSubCategoryAction } from "@/lib/actions/sub-category";
-import { ListPlus, Loader, Plus, ScrollText } from "lucide-react";
+import { Loader, Plus, Text, Link2, ListTree } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 
 const CreateSubCategoryModal = ({
@@ -45,25 +46,40 @@ const CreateSubCategoryModal = ({
           <h4 className="text-start text-sm font-semibold">
             Preencha o campo abaixo para criar uma nova sub categoria!
           </h4>
-          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-            <ListPlus className="text-primary-foreground" size={24} />
+
+          <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
+            <Text className="text-primary-foreground" size={20} />
             <input
               required
-              className="w-full bg-transparent outline-none placeholder:text-neutral-700"
+              className="w-full bg-transparent outline-none placeholder:text-neutral-500"
               type="text"
               name="name"
               placeholder="Insira o nome da nova sub categoria!"
             />
           </label>
-
           {state?.errors?.name && (
-            <p className="text-red-600">{state?.errors?.name}</p>
+            <p className="text-red-600 text-sm">{state.errors.name}</p>
           )}
-          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-            <ScrollText className="text-primary-foreground" size={24} />
+
+          <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
+            <Link2 className="text-primary-foreground" size={20} />
+            <input
+              required
+              className="w-full bg-transparent outline-none placeholder:text-neutral-500"
+              type="text"
+              name="slug"
+              placeholder="Insira o slug da nova sub categoria!"
+            />
+          </label>
+          {state?.errors?.slug && (
+            <p className="text-red-600 text-sm">{state.errors.slug}</p>
+          )}
+
+          <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
+            <ListTree className="text-primary-foreground" size={20} />
             <select
               name="category_id"
-              className="flex-grow bg-transparent outline-none text-neutral-700"
+              className="w-full bg-transparent outline-none text-neutral-700"
               required
               defaultValue={""}
             >
@@ -78,20 +94,24 @@ const CreateSubCategoryModal = ({
             </select>
           </label>
           {state?.errors?.category_id && (
-            <p className="text-red-600">{state?.errors?.category_id}</p>
+            <p className="text-red-600 text-sm">{state.errors.category_id}</p>
           )}
-          <Button type="submit">
-            <div className="flex items-center justify-center gap-2">
-              {isPending ? (
-                <>
-                  <span>Criando</span> <Loader className="animate-spin" />
-                </>
-              ) : (
-                <>
-                  <span>Criar</span> <Plus />
-                </>
-              )}
-            </div>
+
+          <Button
+            type="submit"
+            className="flex items-center justify-center gap-2"
+          >
+            {isPending ? (
+              <>
+                <span>Criando</span>
+                <Loader className="animate-spin" />
+              </>
+            ) : (
+              <>
+                <span>Criar</span>
+                <Plus />
+              </>
+            )}
           </Button>
         </form>
       </DialogContent>

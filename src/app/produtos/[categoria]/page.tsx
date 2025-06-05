@@ -1,6 +1,9 @@
 import { ProductCard } from "@/components/cards/product-card";
 import Pagination from "@/components/pagination";
+import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/db/prisma";
+import { fromCents } from "@/lib/utils";
+import Link from "next/link";
 import React from "react";
 
 const CategoryPage = async ({
@@ -21,7 +24,7 @@ const CategoryPage = async ({
     where: {
       subcategory: {
         category: {
-          name: category,
+          slug: category,
         },
       },
     },
@@ -33,7 +36,7 @@ const CategoryPage = async ({
     where: {
       subcategory: {
         category: {
-          name: category,
+          slug: category,
         },
       },
     },
@@ -55,31 +58,36 @@ const CategoryPage = async ({
           },
         },
       },
-      promotions: {
-        where: {
-          start_date: { lte: new Date() },
-          end_date: { gte: new Date() },
-        },
-        orderBy: { start_date: "asc" },
-        take: 1,
-        select: {
-          discount_percentage: true,
-        },
-      },
     },
     take: perPage,
     skip: (page - 1) * perPage,
   });
 
+  if (!products || products.length <= 0) {
+    return (
+      <div className="flex flex-col min-h-screen w-full item-center">
+        <h2 className="text-center">
+          Nenhum produto encontrado para esta categoria.
+        </h2>
+        <Link className="mx-auto" href={"/"}>
+          <Button variant={"link"}>Voltar para pagina inicial.</Button>
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className="px-4 pb-6">
       <h3 className="my-6 text-xl text-center uppercase font-medium">
-        {category?.replaceAll("-", " ")}
+        {products[0]?.subcategory?.category?.name}
       </h3>
 
       <div className="max-w-screen-xl w-full mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-4">
         {products?.length > 0 ? (
-          products.map((p) => <ProductCard key={p.id} product={p} />)
+          products.map((p) => {
+            p.price = fromCents(p.price);
+            return <ProductCard key={p.id} product={p as any} />;
+          })
         ) : (
           <p className="text-center w-full">
             Nenhum produto foi encontrado para essa categoria!

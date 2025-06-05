@@ -8,6 +8,7 @@ import { Product } from "../products";
 export type SubCategoryErrorsT = {
   name?: string[];
   category_id?: string[];
+  slug?: string[];
 };
 
 export type SubCategoryStateActionT = {
@@ -19,6 +20,7 @@ export type SubCategoryStateActionT = {
 export type SubCategory = {
   id: number;
   category_id?: number;
+  slug: string;
   name: string;
   products?: Product[];
   created_at?: Date;
@@ -39,6 +41,7 @@ export async function CreateSubCategoryAction(
     const credentials = SubCategorySchema.parse({
       name: rawObject.name,
       category_id: Number(rawObject.category_id),
+      slug: rawObject.slug,
     });
 
     const subCategory = await prisma.subcategory.findFirst({
@@ -135,33 +138,30 @@ export async function EditSubCategoryAction(
       rawObject[key] = value.toString();
     });
 
-    const subCategoryById = await prisma.subcategory.findFirst({
+    const subCategory = await prisma.subcategory.findFirst({
       where: { id: Number(rawObject.id) },
-      select: {
-        id: true,
-      },
     });
-    const subCategoryName = await prisma.subcategory.findFirst({
-      where: { name: rawObject.name },
+
+    if (!subCategory) {
+      return {
+        success: false,
+        error: "Sub-categoria não encontrada para o id informado.",
+        errors: null,
+      };
+    }
+
+    const subCategorySlug = await prisma.subcategory.findFirst({
+      where: { slug: rawObject.slug },
       select: {
         name: true,
       },
     });
 
-    if (!subCategoryById) {
+    if (subCategorySlug) {
       return {
         success: false,
         error:
-          "Não é possível editar a sub categoria selecionada pois ela não foi encontrada no banco de dados, atualize a pagina e tente novamente!",
-        errors: null,
-      };
-    }
-
-    if (subCategoryName) {
-      return {
-        success: false,
-        error:
-          "Nome da sub categoria não pode ser igual a outra sub categoria já cadastrada, tente outro nome!",
+          "Slug da sub categoria não pode ser igual a outra sub categoria já cadastrada, tente outro nome!",
         errors: null,
       };
     }
@@ -169,7 +169,8 @@ export async function EditSubCategoryAction(
     await prisma.subcategory.update({
       where: { id: Number(rawObject.id) },
       data: {
-        name: rawObject.name,
+        name: rawObject.name || subCategory.name,
+        slug: rawObject.slug || subCategory.slug,
       },
     });
 

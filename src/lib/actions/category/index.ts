@@ -7,6 +7,7 @@ import { SubCategory } from "../sub-category";
 
 export type CategoryErrorsT = {
   category?: string[];
+  slug?: string[];
 };
 
 export type CategoryStateActionT = {
@@ -19,6 +20,7 @@ export type Category = {
   id: number;
   name: string;
   subcategories?: SubCategory[];
+  slug: string;
   created_at?: Date;
   updated_at?: Date;
 };
@@ -36,15 +38,16 @@ export async function CreateCategoryAction(
 
     const credentials = CategorySchema.parse(rawObject);
 
-    const category = await prisma.category.findFirst({
-      where: { name: credentials.category },
+    const slugAlreadyExists = await prisma.category.findFirst({
+      where: { slug: credentials.slug },
+      select: { slug: true },
     });
 
-    if (category) {
+    if (slugAlreadyExists) {
       return {
         success: false,
         error:
-          "Não é possível criar uma categoria com esse nome pois, já existe uma cadastrada com o mesmo nome!",
+          "Não é possível criar uma categoria com esse slug pois, já existe uma cadastrada com o mesmo nome!",
         errors: null,
       };
     }
@@ -52,6 +55,7 @@ export async function CreateCategoryAction(
     await prisma.category.create({
       data: {
         name: credentials.category,
+        slug: credentials.slug,
       },
     });
 
@@ -71,8 +75,6 @@ export async function CreateCategoryAction(
         ])
       ) as CategoryErrorsT;
     }
-
-    console.log(formattedErrors);
 
     return {
       success: false,
@@ -125,11 +127,13 @@ export async function getCategories() {
   const categories = await prisma.category.findMany({
     select: {
       name: true,
+      slug: true,
       id: true,
       subcategories: {
         select: {
           name: true,
           id: true,
+          slug: true,
         },
       },
     },
@@ -205,10 +209,12 @@ export async function getAllCategoriesWithoutPagination() {
     select: {
       id: true,
       name: true,
+      slug: true,
       subcategories: {
         select: {
           name: true,
           id: true,
+          slug: true,
         },
       },
     },

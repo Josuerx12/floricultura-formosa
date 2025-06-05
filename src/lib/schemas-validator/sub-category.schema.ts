@@ -8,4 +8,7 @@ export const SubCategorySchema = z.object({
     message:
       "Categoria não informada, selecione uma categoria para criar uma nova sub-categoria.",
   }),
+  slug: z
+    .string({ message: "Slug deve ser informado." })
+    .min(2, "Slug deve conter pelo menos 2 caracteres."),
 });

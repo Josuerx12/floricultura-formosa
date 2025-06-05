@@ -58,7 +58,7 @@ export default function HomeSlider() {
               src={slide.src}
               alt={slide.alt}
               quality={100}
-              className="object-cover"
+              className="object-fill"
             />
           </Link>
         ))}

@@ -18,19 +18,14 @@ const CategoryAccordeon = ({
   const router = useRouter();
   const [expanded, setExpanded] = useState<string | undefined>(undefined);
 
-  const handleNavigate = (category: string, subcategory: string) => {
-    router.push(
-      `/produtos/${category.replaceAll(" ", "-")}/${subcategory.replaceAll(
-        " ",
-        "-"
-      )}`
-    );
+  const handleNavigate = (categorySlug: string, subCategorySlug: string) => {
+    router.push(`/produtos/${categorySlug}/${subCategorySlug}`);
     setExpanded(undefined);
     handleClose();
   };
 
   const handleCategoryClick = (categoryName: string) => {
-    router.push("/produtos/" + categoryName.replaceAll(" ", "-"));
+    router.push("/produtos/" + categoryName);
     setExpanded(undefined);
     handleClose();
   };
@@ -48,7 +43,7 @@ const CategoryAccordeon = ({
           {categories.map((category) => (
             <div key={category.id} className="py-1">
               <div
-                onClick={() => handleCategoryClick(category.name)}
+                onClick={() => handleCategoryClick(category.slug)}
                 className="cursor-pointer p-2 rounded-md text-primary hover:opacity-80 font-bold  text-lg my-2"
               >
                 {category.name}
@@ -56,7 +51,7 @@ const CategoryAccordeon = ({
               {category.subcategories?.map((sub) => (
                 <div
                   key={sub.id}
-                  onClick={() => handleNavigate(category.name, sub.name)}
+                  onClick={() => handleNavigate(category.slug, sub.slug)}
                   className="pl-6 py-2 cursor-pointer rounded-md text-primary hover:opacity-80 font-semibold  my-2"
                 >
                   {sub.name}
