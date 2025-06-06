@@ -26,6 +26,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ProductSchema } from "@/lib/schemas-validator/product.schema";
 import { z } from "zod";
 import { Switch } from "@/components/ui/switch";
+import { RichTextEditor } from "@/components/rich-text-editor";
 
 const CreateProductModal = ({ categories }: { categories: Category[] }) => {
   const [photos, setPhotos] = useState<File[]>([]);
@@ -209,12 +210,9 @@ const CreateProductModal = ({ categories }: { categories: Category[] }) => {
           {/* Descrição */}
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium">Descrição</label>
-            <textarea
-              {...register("description")}
-              rows={4}
-              className="w-full bg-neutral-100 px-3 py-2 rounded-lg outline-none resize-none"
-              placeholder="Detalhes sobre o produto"
-              required
+            <RichTextEditor
+              value={watch("description")}
+              onChange={(html) => setValue("description", html)}
             />
             {errors.description && (
               <p className="text-red-600 text-sm">

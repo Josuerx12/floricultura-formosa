@@ -1,4 +1,5 @@
 "use client";
+import { RichTextEditor } from "@/components/rich-text-editor";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -68,7 +69,7 @@ const DetailProductModal = ({
     resolver: zodResolver(EditProductSchema),
     defaultValues: {
       name: product.name,
-      description: product.description,
+      description: product.description || "",
       price: product.price.toString().replace(".", ","),
       stock_quantity: product.stock_quantity,
       subcategory_id: product.subcategory_id,
@@ -274,12 +275,9 @@ const DetailProductModal = ({
           {/* Descrição */}
           <label className="flex gap-2 bg-neutral-200 rounded-3xl px-4 py-2">
             <NotepadText />
-            <textarea
-              {...register("description")}
-              rows={4}
-              disabled={!isEditing}
-              className="w-full bg-transparent outline-none resize-none"
-              placeholder="Descrição do produto"
+            <RichTextEditor
+              value={watch("description") as string}
+              onChange={(html) => setValue("description", html)}
             />
           </label>
           {errors.description && (

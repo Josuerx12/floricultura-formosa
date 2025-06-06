@@ -1,6 +1,6 @@
-import DeliveryMethodsComponent from "./components/DeliveryMethodsComponent";
 import { auth } from "@/lib/auth/auth";
 import { redirect } from "next/navigation";
+import DeliveryMethodsComponent from "./components/DeliveryMethodsComponent";
 
 const EntregaPage = async () => {
   const user = await auth();

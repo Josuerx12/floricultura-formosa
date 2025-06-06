@@ -1,12 +1,11 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { useCheckout } from "@/hooks/use-checkout";
 import { Truck, Store } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
 import { motion } from "framer-motion";
 import useCartStore, { ProductCart } from "@/hooks/use-cart-store";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useEffect, useState } from "react";
 
 const DeliveryMethodsComponent = () => {
   const { firstStep } = useCheckout();
@@ -15,7 +14,7 @@ const DeliveryMethodsComponent = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (products.length <= 0) {
+    if (products && products.length <= 0) {
       router.push("/");
     }
   }, [products, router]);
@@ -73,9 +72,3 @@ const DeliveryMethodsComponent = () => {
 };
 
 export default DeliveryMethodsComponent;
-function useEffect(
-  arg0: () => void,
-  arg1: (ProductCart[] | AppRouterInstance)[]
-) {
-  throw new Error("Function not implemented.");
-}
