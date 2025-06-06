@@ -12,6 +12,7 @@ export async function POST(req: NextRequest) {
   const user: User = body.user;
   const address = body.address;
   const orderPreferences = body.orderPreferences;
+  const deliveryDate = body.deliveryDate;
 
   try {
     await prisma.$connect();
@@ -48,7 +49,7 @@ export async function POST(req: NextRequest) {
         },
         order_preferences: {
           create: {
-            delivery_date: orderPreferences.deliveryDate,
+            delivery_date: deliveryDate,
             from: orderPreferences.from,
             phone: orderPreferences.phone,
             message: orderPreferences.message,
