@@ -21,7 +21,7 @@ export const AddressSchema = z.object({
   state: z.string({ message: "Estado deve ser informado!" }),
   zipCode: z
     .string({ message: "CEP deve ser informado!" })
-    .regex(/^\d{5}-\d{3}$/, {
+    .regex(/^\d{5}\d{3}$/, {
       message: "CEP inválido! O formato correto é 00000-000.",
     }),
   delivery_fee_id: z.string({

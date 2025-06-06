@@ -7,25 +7,59 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Loader, Plus, RectangleEllipsis, ScrollText } from "lucide-react";
-import { useRef, useState } from "react";
+import {
+  MapPin,
+  ScrollText,
+  Landmark,
+  Building2,
+  Hash,
+  BadgePlus,
+  Loader,
+  Plus,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { AddressSchema } from "@/lib/schemas-validator/address.schema";
 import { CreateAddressAction, getDistricts } from "@/lib/actions/address";
 import { Button } from "@/components/ui/button";
+import { Autocomplete } from "@/components/ui/autocomplete";
+import useDebounce from "@/hooks/use-debounce";
+import { SelectInput } from "@/components/select-input";
 
 const CreateAddressModal = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const [bairro, setBairro] = useState("");
+  const [cepValue, setCepValue] = useState("");
+  const debouncedCep = useDebounce(cepValue, 500);
+  const [autoAddress, setAutoAddress] = useState<any>(null);
+
   const {
     register,
     handleSubmit,
+    watch,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(AddressSchema),
   });
+
+  useEffect(() => {
+    if (debouncedCep && debouncedCep.length === 8) {
+      fetch(`https://viacep.com.br/ws/${debouncedCep}/json/`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (!data.erro) {
+            setAutoAddress(data);
+            if (data.localidade) setValue("city", data.localidade);
+            if (data.uf) setValue("state", data.uf);
+            if (data.logradouro) setValue("street", data.logradouro);
+          }
+        });
+    }
+  }, [debouncedCep]);
 
   const queryClient = useQueryClient();
 
@@ -49,7 +83,7 @@ const CreateAddressModal = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={() => setIsOpen((prev) => !prev)}>
-      <DialogTrigger className="text-blue-500 p-2 rounded font-medium text-sm drop-shadow">
+      <DialogTrigger className="text-blue-500 my-6 font-medium text-sm drop-shadow">
         Adicionar endereço
       </DialogTrigger>
       <DialogContent>
@@ -65,14 +99,17 @@ const CreateAddressModal = () => {
           <h4 className="text-start text-sm my-6 font-semibold">
             Preencha o campo abaixo para criar um novo endereço!
           </h4>
-          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-            <RectangleEllipsis className="text-primary-foreground" size={24} />
+          <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
+            <MapPin className="text-primary-foreground" size={20} />
             <input
               {...register("zipCode")}
               required
-              className="w-full bg-transparent outline-none placeholder:text-neutral-700"
+              className="w-full bg-transparent outline-none placeholder:text-neutral-500"
               type="text"
-              placeholder="Insira o cep da sua residencia!"
+              placeholder="Insira o cep da sua residência!"
+              value={cepValue}
+              onChange={(e) => setCepValue(e.target.value.replace(/\D/g, ""))}
+              maxLength={8}
             />
           </label>
 
@@ -80,28 +117,15 @@ const CreateAddressModal = () => {
             <p className="text-red-500 text-sm">{errors.zipCode.message}</p>
           )}
 
-          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-            <ScrollText className="text-primary-foreground" size={24} />
-            <select
-              {...register("delivery_fee_id")}
-              className="flex-grow bg-transparent outline-none text-neutral-700"
-              required
-              defaultValue={""}
-            >
-              <option disabled value={""}>
-                Selecione seu bairro
-              </option>
-              {data?.map((d) => (
-                <option key={d.id} value={d.id}>
-                  {d.district} -{" "}
-                  {Number(d.fee).toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  })}
-                </option>
-              ))}
-            </select>
-          </label>
+          <SelectInput
+            data={
+              data?.map((d: any) => ({ label: d.district, value: d.id })) || []
+            }
+            setValue={setValue}
+            inputName="bairros"
+            label="Bairros"
+            value={watch("delivery_fee_id")}
+          />
 
           {errors.delivery_fee_id && (
             <p className="text-red-500 text-sm">
@@ -109,14 +133,15 @@ const CreateAddressModal = () => {
             </p>
           )}
 
-          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-            <RectangleEllipsis className="text-primary-foreground" size={24} />
+          <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
+            <Landmark className="text-primary-foreground" size={20} />
             <input
               {...register("street")}
               required
-              className="w-full bg-transparent outline-none placeholder:text-neutral-700"
+              className="w-full bg-transparent outline-none placeholder:text-neutral-500"
               type="text"
               placeholder="Insira o nome da rua!"
+              defaultValue={autoAddress?.logradouro || ""}
             />
           </label>
 
@@ -124,12 +149,12 @@ const CreateAddressModal = () => {
             <p className="text-red-500 text-sm">{errors.street.message}</p>
           )}
 
-          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-            <RectangleEllipsis className="text-primary-foreground" size={24} />
+          <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
+            <Building2 className="text-primary-foreground" size={20} />
             <input
               {...register("number")}
               required
-              className="w-full bg-transparent outline-none placeholder:text-neutral-700"
+              className="w-full bg-transparent outline-none placeholder:text-neutral-500"
               type="text"
               placeholder="Insira o numero da residencia!"
             />
@@ -139,12 +164,12 @@ const CreateAddressModal = () => {
             <p className="text-red-500 text-sm">{errors.number.message}</p>
           )}
 
-          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-            <RectangleEllipsis className="text-primary-foreground" size={24} />
+          <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
+            <Landmark className="text-primary-foreground" size={24} />
             <input
               {...register("state")}
               required
-              className="w-full bg-transparent outline-none placeholder:text-neutral-700"
+              className="w-full bg-transparent outline-none placeholder:text-neutral-500"
               type="text"
               placeholder="Insira o nome do seu estado!"
             />
@@ -154,12 +179,12 @@ const CreateAddressModal = () => {
             <p className="text-red-500 text-sm">{errors.state.message}</p>
           )}
 
-          <label className="flex flex-grow bg-neutral-200 p-2 gap-2 items-center rounded-3xl">
-            <RectangleEllipsis className="text-primary-foreground" size={24} />
+          <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
+            <Landmark className="text-primary-foreground" size={24} />
             <input
               {...register("city")}
               required
-              className="w-full bg-transparent outline-none placeholder:text-neutral-700"
+              className="w-full bg-transparent outline-none placeholder:text-neutral-500"
               type="text"
               placeholder="Insira o nome da sua cidade!"
             />

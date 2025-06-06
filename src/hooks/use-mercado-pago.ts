@@ -11,6 +11,7 @@ export type checkoutInput = {
   user: User;
   observation?: string;
   orderPreferences?: any;
+  deliveryDate?: Date;
 };
 
 const useMercadoPago = () => {

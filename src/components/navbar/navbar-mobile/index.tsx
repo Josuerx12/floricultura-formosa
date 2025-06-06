@@ -25,10 +25,13 @@ import { useQuery } from "@tanstack/react-query";
 import { User } from "next-auth";
 import Image from "next/image";
 import CategoryAccordeon from "@/components/accordeons/category-accordeon";
-import FlowerMeaningsAccordeon from "@/components/accordeons/meaning-accordeon";
+import { ptBR } from "date-fns/locale";
+import { registerLocale } from "react-datepicker";
 
 const NavbarMobile = ({ user }: { user?: User }) => {
   const router = useRouter();
+
+  registerLocale("pt-BR", ptBR);
 
   const [isOpen, setIsOpen] = useState(false);
 

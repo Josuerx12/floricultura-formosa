@@ -1,3 +1,4 @@
+import { boolean } from "zod";
 import { create } from "zustand";
 
 type Address = {
@@ -27,7 +28,17 @@ type Checkout = {
   firstStep: (delivery: boolean) => void;
   secondStep: (address: Address, deliveryDate: Date) => void;
   thirdStep: (phone: string, message: string, to: string, from: string) => void;
-  getCheckoutSummary: () => object;
+  getCheckoutSummary: () => {
+    delivery: boolean;
+    address?: Address | null;
+    deliveryDate?: Date;
+    recipient: {
+      phone?: string;
+      message?: string;
+      to?: string;
+      from?: string;
+    };
+  };
   resetCheckout: () => void;
   goToStep: (step: number) => void;
   previousStep: () => void;
@@ -73,10 +84,12 @@ export const useCheckout = create<Checkout>((set, get) => ({
     })),
 
   getCheckoutSummary: () => {
-    const { delivery, address, phone, message, to, from } = get();
+    const { delivery, address, deliveryDate, phone, message, to, from } = get();
     return {
-      delivery,
-      ...(delivery ? { address } : {}),
+      delivery:
+        typeof delivery != "boolean" && delivery == "true" ? false : true,
+      address: delivery ? address : null,
+      deliveryDate,
       recipient: {
         phone,
         message,

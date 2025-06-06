@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import CheckoutDialog from "@/components/modals/checkout";
 
 const CartDetails = ({ user }: { user?: User }) => {
-  const { products, fee, totalPrice } = useCartStore();
+  const { products, totalPrice } = useCartStore();
   const router = useRouter();
 
   const [checkoutOpen, setCheckoutOpen] = useState(false);
@@ -90,7 +90,10 @@ const CartDetails = ({ user }: { user?: User }) => {
 
           <div className="w-full mt-4">
             {user ? (
-              <Button className="w-full" onClick={handleCheckoutOpen}>
+              <Button
+                className="w-full"
+                onClick={() => router.push("/carrinho/steps/entrega")}
+              >
                 Finalizar Pedido
               </Button>
             ) : (
