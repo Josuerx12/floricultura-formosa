@@ -133,8 +133,11 @@ const ProductDetails = ({ product, finalPrice, discount }: any) => {
         </form>
 
         <div className="mt-6">
-          <h2 className="text-xl font-semibold text-title">Descrição</h2>
-          <p className="text-price mt-2">{product.description}</p>
+          <h2 className="text-xl font-semibold text-title">Descrição:</h2>
+          <article
+            className="text-price mt-2 prose"
+            dangerouslySetInnerHTML={{ __html: product.description }}
+          />
         </div>
       </div>
     </div>

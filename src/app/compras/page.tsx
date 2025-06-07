@@ -21,6 +21,8 @@ const Compras = () => {
     queryFn: () => getOrdersByUser({ page, perPage, search }),
   });
 
+  console.log(orders);
+
   if (isPending) return <Loading />;
   if (error) return <div>Erro ao carregar os pedidos.</div>;
 

@@ -8,14 +8,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DollarSign, Info, Settings2, Trash2 } from "lucide-react";
+import { Info, Settings2, Trash2 } from "lucide-react";
 import { Product } from "@/lib/actions/products";
 import DeleteProductModal from "@/components/modals/product/delete";
 import DetailProductModal from "@/components/modals/product/detail";
 import { Category } from "@/lib/actions/category";
-import { FaCartPlus } from "react-icons/fa";
-import CreateOrderBumpModal from "@/components/modals/order-bumps/create-order-bump.modal";
-import ListOrderBumpModal from "@/components/modals/order-bumps/list-order-bump.modal";
 
 const ManageProductDropdown = ({
   product,
@@ -41,7 +38,7 @@ const ManageProductDropdown = ({
         categories={categories}
       />
 
-      <DropdownMenu>
+      <DropdownMenu key={product.id}>
         <DropdownMenuTrigger className="w-fit items-center gap-2 inline-flex  flex-grow-0 bg-secondary text-primary-foreground p-2 rounded font-medium text-sm drop-shadow">
           Gerenciar <Settings2 size={16} />
         </DropdownMenuTrigger>

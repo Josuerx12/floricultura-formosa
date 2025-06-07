@@ -273,13 +273,12 @@ const DetailProductModal = ({
           )}
 
           {/* Descrição */}
-          <label className="flex gap-2 bg-neutral-200 rounded-3xl px-4 py-2">
-            <NotepadText />
-            <RichTextEditor
-              value={watch("description") as string}
-              onChange={(html) => setValue("description", html)}
-            />
-          </label>
+
+          <RichTextEditor
+            value={watch("description") as string}
+            onChange={(html) => setValue("description", html)}
+          />
+
           {errors.description && (
             <p className="text-red-600">{errors.description.message}</p>
           )}

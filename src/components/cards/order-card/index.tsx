@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Order } from "@/lib/actions/orders";
 import { useState } from "react";
 import ReciveOrderModal from "@/components/modals/orders/recive";
+import { fromCents } from "@/lib/utils";
 
 const OrderCard = ({ order }: { order: Order }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -110,7 +111,7 @@ const OrderCard = ({ order }: { order: Order }) => {
                   <TableCell>{item.product.name}</TableCell>
                   <TableCell>{item.quantity}</TableCell>
                   <TableCell>
-                    {item.price.toLocaleString("pt-BR", {
+                    {fromCents(item.product.price).toLocaleString("pt-BR", {
                       style: "currency",
                       currency: "BRL",
                     })}

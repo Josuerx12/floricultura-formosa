@@ -1,4 +1,3 @@
-import { prisma } from "@/lib/db/prisma";
 import ProductDetails from "./product-details";
 import BackBtn from "@/components/buttons/back-btn";
 import { getProductById } from "@/lib/actions/products";

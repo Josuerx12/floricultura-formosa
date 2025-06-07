@@ -2,6 +2,7 @@ import DeliverToClientModal from "@/components/modals/orders/deliver-to-client";
 import ReciveOrderModal from "@/components/modals/orders/recive";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { fromCents } from "@/lib/utils";
 import { OrderStatus } from "@prisma/client";
 import { Box, Info, PackageCheck, Truck } from "lucide-react";
 import Image from "next/image";
@@ -41,12 +42,12 @@ const SalesCard = ({ sale }: { sale: any }) => {
                     <p className="text-gray-600 text-sm">
                       {i.quantity} unidades
                     </p>
-                    <p className="text-gray-600 text-sm">
-                      {i.price.toLocaleString("pt-BR", {
+                    {/* <p className="text-gray-600 text-sm">
+                      {fromCents(i.product.price).toLocaleString("pt-BR", {
                         style: "currency",
                         currency: "BRL",
                       })}
-                    </p>
+                    </p> */}
                   </div>
                 </div>
               );
