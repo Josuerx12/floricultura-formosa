@@ -38,7 +38,11 @@ export async function POST(req: NextRequest) {
 
     const order = await prisma.order.create({
       data: {
-        address_id: address?.id,
+        address: {
+          connect: {
+            id: address?.id,
+          },
+        },
         delivery_fee: address ? Number(address.delivery_fee.fee) : 0,
         total_price: Number(totalPrice) + fee,
         items: {
