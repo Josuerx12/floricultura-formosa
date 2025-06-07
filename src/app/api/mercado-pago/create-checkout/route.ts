@@ -4,12 +4,12 @@ import { User } from "next-auth";
 import { randomUUID } from "crypto";
 import { prisma } from "@/lib/db/prisma";
 import { Preference } from "mercadopago";
+import { auth } from "@/lib/auth/auth";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
 
   const cart: ProductCart[] = body.cart;
-  const user: User = body.user;
   const address = body.address;
   const orderPreferences = body.orderPreferences;
   const deliveryDate = body.deliveryDate;
@@ -19,6 +19,10 @@ export async function POST(req: NextRequest) {
     const preference = new Preference({
       accessToken: process.env.MERCADO_PAGO_ACCESS_TOKEN!,
     });
+
+    const session = await auth();
+
+    const user = session!.user;
 
     const products = await verifyAndUpdateStock(cart);
 
@@ -37,7 +41,6 @@ export async function POST(req: NextRequest) {
         address_id: address?.id,
         delivery_fee: address ? Number(address.delivery_fee.fee) : 0,
         total_price: Number(totalPrice) + fee,
-        user_id: user.id as string,
         items: {
           createMany: {
             data: products.map((p) => ({
@@ -45,6 +48,11 @@ export async function POST(req: NextRequest) {
               product_id: Number(p.id),
               quantity: Number(p.quantity),
             })),
+          },
+        },
+        user: {
+          connect: {
+            id: user.id,
           },
         },
         order_preferences: {
