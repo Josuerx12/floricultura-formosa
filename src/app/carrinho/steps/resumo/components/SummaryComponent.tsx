@@ -7,6 +7,7 @@ import { useCheckout } from "@/hooks/use-checkout";
 import useMercadoPago from "@/hooks/use-mercado-pago";
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -162,13 +163,13 @@ const SummaryComponent = ({ user }: { user: any }) => {
           />
           <label htmlFor="usageTerms" className="text-sm">
             Li e aceito a{" "}
-            <button
-              type="button"
-              onClick={() => router.push("/politica-de-privacidade")}
+            <Link
+              target="_blank"
+              href={"/politica-de-privacidade"}
               className="text-blue-600 underline"
             >
               Politica de Privacidade
-            </button>
+            </Link>
           </label>
         </div>
 
@@ -186,13 +187,13 @@ const SummaryComponent = ({ user }: { user: any }) => {
           />
           <label htmlFor="purchaseTerms" className="text-sm">
             Li e aceito os{" "}
-            <button
-              type="button"
-              onClick={() => router.push("/termos-de-uso")}
+            <Link
+              target="_blank"
+              href={"/termos-de-uso"}
               className="text-blue-600 underline"
             >
               Termos de Uso
-            </button>
+            </Link>
           </label>
         </div>
       </div>
