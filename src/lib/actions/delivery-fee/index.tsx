@@ -2,7 +2,10 @@
 
 import { prisma } from "@/lib/db/prisma";
 import { Prisma } from "@prisma/client";
-import { DeliveryFeeSchema } from "@/lib/schemas-validator/delivery-fee.schema";
+import {
+  DeliveryFeeSchema,
+  DeliveryFeeType,
+} from "@/lib/schemas-validator/delivery-fee.schema";
 import { z } from "zod";
 import { fromCents, toCents } from "@/lib/utils";
 
@@ -67,5 +70,47 @@ export async function GetAllDeliveryFeesWithPagination({
       ...df,
       fee: fromCents(df.fee),
     })),
+  };
+}
+
+export async function DeleteDeliveryFee(id: string) {
+  await prisma.delivery_fee.delete({
+    where: {
+      id,
+    },
+  });
+}
+
+export async function EditDeliveryFee(data: DeliveryFeeType) {
+  console.log(data);
+  const deliveryFee = await prisma.delivery_fee.findUnique({
+    where: {
+      id: data!.id,
+    },
+  });
+
+  if (!deliveryFee) {
+    throw new Error(
+      "Taxa de entrega não encontrada, atualize a pagina e tente novamente."
+    );
+  }
+
+  if (data.district) {
+    deliveryFee.district = data.district;
+  }
+
+  if (data.fee) {
+    deliveryFee.fee = toCents(data.fee);
+  }
+
+  await prisma.delivery_fee.update({
+    where: {
+      id: deliveryFee.id,
+    },
+    data: deliveryFee,
+  });
+
+  return {
+    message: "Taxa de entrega atualizada com sucesso!",
   };
 }

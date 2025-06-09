@@ -1,6 +1,7 @@
 import { ProductCard } from "@/components/cards/product-card";
 import HomeSlickSlider from "@/components/slider/home-slider";
 import Title from "@/components/title";
+import { getBanners } from "@/lib/actions/banners";
 import {
   getDeluxeProducts,
   getTop20SelledProducts,
@@ -11,10 +12,12 @@ export default async function Home() {
 
   const deluxeProducts = await getDeluxeProducts();
 
+  const banners = await getBanners();
+
   return (
     <main className="flex w-full flex-col  items-center justify-center pb-6">
       <section className="w-full">
-        <HomeSlickSlider />
+        <HomeSlickSlider banners={banners} />
       </section>
 
       {topProducts && topProducts.length > 0 && (

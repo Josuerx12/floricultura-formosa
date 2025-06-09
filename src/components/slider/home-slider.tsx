@@ -3,19 +3,12 @@ import Image from "next/image";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useQuery } from "@tanstack/react-query";
-import { getBanners } from "@/lib/actions/banners";
 import Link from "next/link";
 
-export default function HomeSlider() {
-  const { data } = useQuery({
-    queryKey: ["banners"],
-    queryFn: getBanners,
-  });
-
+export default function HomeSlider({ banners }: { banners: any[] }) {
   const slides =
-    data && data.length > 0
-      ? data.map((b) => ({
+    banners && banners.length > 0
+      ? banners.map((b) => ({
           id: b.id,
           src: b.url,
           alt: b.title,

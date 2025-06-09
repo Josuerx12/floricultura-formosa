@@ -18,6 +18,7 @@ import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { findAllBannersWithPagination } from "@/lib/actions/banners";
 import Loading from "@/components/loading";
+import BannerTableRow from "./components/BannerTableRow";
 
 const BannersPage = () => {
   const searchParams = useSearchParams();
@@ -56,17 +57,7 @@ const BannersPage = () => {
             <TableBody>
               {data &&
                 data.banners?.map((banner) => (
-                  <TableRow key={banner.id}>
-                    <TableCell className="font-medium">{banner.id}</TableCell>
-                    <TableCell>{banner.title}</TableCell>
-                    <TableCell>{banner.is_active ? "Sim" : "Não"}</TableCell>
-                    <TableCell>
-                      {banner.created_at.toLocaleString("pt-BR")}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <ManageBannerDropdown banner={banner} />
-                    </TableCell>
-                  </TableRow>
+                  <BannerTableRow key={banner.id} banner={banner} />
                 ))}
             </TableBody>
           </Table>

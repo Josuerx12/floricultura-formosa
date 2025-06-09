@@ -8,7 +8,7 @@ import useMercadoPago from "@/hooks/use-mercado-pago";
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const SummaryComponent = ({ user }: { user: any }) => {
   const { products, totalPrice, fee, clearCart } = useCartStore();
@@ -16,6 +16,11 @@ const SummaryComponent = ({ user }: { user: any }) => {
   const router = useRouter();
 
   const { delivery, recipient, address, deliveryDate } = getCheckoutSummary();
+
+  const [acceptedTerms, setAcceptedTerms] = useState({
+    usage: false,
+    purchase: false,
+  });
 
   useEffect(() => {
     if (!recipient && !address && !delivery) {
@@ -41,6 +46,7 @@ const SummaryComponent = ({ user }: { user: any }) => {
     mutationKey: ["createMercadoPagoCheckout"],
     mutationFn: createMercadoPagoCheckout,
   });
+
   return (
     <div className="space-y-4">
       {delivery && address && (
@@ -125,11 +131,11 @@ const SummaryComponent = ({ user }: { user: any }) => {
                 <strong>Nome do produto: </strong> {p.name}
               </p>
               <p>
-                <strong>Nome do produto: </strong> {p.quantity}{" "}
+                <strong>Quantidade: </strong> {p.quantity}{" "}
                 {p.quantity > 1 ? "un's" : "un"}
               </p>
               <p>
-                <strong>Preço unitario: </strong>{" "}
+                <strong>Preço unitário: </strong>{" "}
                 {p.price.toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
@@ -139,6 +145,59 @@ const SummaryComponent = ({ user }: { user: any }) => {
           </Card>
         );
       })}
+
+      {/* Termos de Uso e Compra */}
+      <div className="space-y-2 pt-4">
+        <div className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            id="usageTerms"
+            checked={acceptedTerms.usage}
+            onChange={(e) =>
+              setAcceptedTerms((prev) => ({
+                ...prev,
+                usage: e.target.checked,
+              }))
+            }
+          />
+          <label htmlFor="usageTerms" className="text-sm">
+            Li e aceito os{" "}
+            <button
+              type="button"
+              onClick={() => router.push("/termos-de-uso")}
+              className="text-blue-600 underline"
+            >
+              Termos de Uso
+            </button>
+          </label>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            id="purchaseTerms"
+            checked={acceptedTerms.purchase}
+            onChange={(e) =>
+              setAcceptedTerms((prev) => ({
+                ...prev,
+                purchase: e.target.checked,
+              }))
+            }
+          />
+          <label htmlFor="purchaseTerms" className="text-sm">
+            Li e aceito os{" "}
+            <button
+              type="button"
+              onClick={() => router.push("/termos-de-compra")}
+              className="text-blue-600 underline"
+            >
+              Termos de Compra
+            </button>
+          </label>
+        </div>
+      </div>
+
+      {/* Botões */}
       <div className="flex gap-4 pt-4">
         <Button
           type="button"
@@ -152,6 +211,9 @@ const SummaryComponent = ({ user }: { user: any }) => {
           Cancelar Pagamento
         </Button>
         <Button
+          disabled={
+            !acceptedTerms.usage || !acceptedTerms.purchase || isRedirecting
+          }
           onClick={async () =>
             await mutateAsync({
               cart: products,

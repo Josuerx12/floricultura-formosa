@@ -1,4 +1,5 @@
 import UserDetailsModal from "@/components/modals/user/details";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,11 +8,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Info, Settings2, Trash2 } from "lucide-react";
+import { Info, Settings2 } from "lucide-react";
 import { User } from "next-auth";
 import React, { useState } from "react";
 
-const ManageUserDropdown = ({ user }: { user: User & { createdAt: Date } }) => {
+const ManageUserDropdown = ({
+  user,
+  handleOpen,
+  isOpen,
+}: {
+  user: User & { createdAt: Date };
+  isOpen: boolean;
+  handleOpen: VoidFunction;
+}) => {
   const [isDeletailing, setIsDeletailing] = useState(false);
 
   return (
@@ -21,16 +30,21 @@ const ManageUserDropdown = ({ user }: { user: User & { createdAt: Date } }) => {
         handleClose={() => setIsDeletailing((prev) => !prev)}
         user={user}
       />
-      <DropdownMenu>
-        <DropdownMenuTrigger className="w-fit items-center gap-2 inline-flex  flex-grow-0 bg-secondary text-primary-foreground p-2 rounded font-medium text-sm drop-shadow">
-          Gerenciar <Settings2 size={16} />
+      <DropdownMenu open={isOpen} onOpenChange={handleOpen}>
+        <DropdownMenuTrigger>
+          <Button onClick={handleOpen} variant={"outline"}>
+            Gerenciar <Settings2 size={16} />
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuLabel>Gerenciar Banner</DropdownMenuLabel>
+          <DropdownMenuLabel>Gerenciar Usuário</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="flex items-center justify-between cursor-pointer"
-            onClick={() => setIsDeletailing((prev) => !prev)}
+            onClick={() => {
+              setIsDeletailing((prev) => !prev);
+              handleOpen();
+            }}
           >
             Detalhes <Info />
           </DropdownMenuItem>

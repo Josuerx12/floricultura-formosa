@@ -18,6 +18,7 @@ import { useSearchParams } from "next/navigation";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { GetAllDeliveryFeesWithPagination } from "@/lib/actions/delivery-fee";
 import Loading from "@/components/loading";
+import NeighborhoodTableRow from "./components/NeighborhookTableRow";
 
 const BairrosPage = () => {
   const searchParams = useSearchParams();
@@ -40,7 +41,6 @@ const BairrosPage = () => {
         <Loading />
       ) : (
         <>
-          {" "}
           <Table className="overflow-auto">
             {data!.deliveryFees?.length <= 0 && (
               <TableCaption>
@@ -57,19 +57,7 @@ const BairrosPage = () => {
             </TableHeader>
             <TableBody className="overflow-auto">
               {data!.deliveryFees.map((fee) => (
-                <TableRow key={fee.id}>
-                  <TableCell className="font-medium">{fee.id}</TableCell>
-                  <TableCell>{fee.district}</TableCell>
-                  <TableCell>
-                    {fee.fee.toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    })}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {/* <ManagefeeDropdown fee={fee as any} /> */}
-                  </TableCell>
-                </TableRow>
+                <NeighborhoodTableRow fee={fee} key={fee.id} />
               ))}
             </TableBody>
           </Table>

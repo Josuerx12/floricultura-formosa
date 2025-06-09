@@ -174,7 +174,7 @@ const useCartStore = create<CartState>()(
           duration: 2000,
         });
 
-        set({ products: [] });
+        set({ products: [], fee: 0, fee_id: null });
       },
 
       totalPrice: () => {

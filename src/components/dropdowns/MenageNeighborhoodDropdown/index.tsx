@@ -9,40 +9,46 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Info, Settings2, Trash2 } from "lucide-react";
-import { Banner } from "@/lib/actions/banners";
-import DeleteBannerModal from "@/components/modals/banners/delete";
-import DetailBannerModal from "@/components/modals/banners/detail";
+import { Button } from "@/components/ui/button";
+import { delivery_fee } from "@prisma/client";
+import DeleteNeighborhoodModal from "@/components/modals/delivery-fee/delete";
+import DetailNeighborhoodModal from "@/components/modals/delivery-fee/detail";
 
-const ManageBannerDropdown = ({
-  banner,
+const ManageNeighborhoodDropdown = ({
+  fee,
   handleOpen,
   isOpen,
 }: {
-  banner: Banner;
+  fee: delivery_fee;
   isOpen: boolean;
   handleOpen: VoidFunction;
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeletailing, setIsDeletailing] = useState(false);
-
   return (
     <>
-      <DeleteBannerModal
+      <DeleteNeighborhoodModal
         isOpen={isDeleting}
-        handleClose={() => setIsDeleting((prev) => !prev)}
-        banner={banner}
+        handleClose={() => {
+          setIsDeleting((prev) => !prev);
+        }}
+        fee={fee}
       />
-      <DetailBannerModal
+      <DetailNeighborhoodModal
         isOpen={isDeletailing}
-        handleClose={() => setIsDeletailing((prev) => !prev)}
-        banner={banner}
+        handleClose={() => {
+          setIsDeletailing((prev) => !prev);
+        }}
+        fee={fee}
       />
       <DropdownMenu open={isOpen} onOpenChange={handleOpen}>
-        <DropdownMenuTrigger className="w-fit items-center gap-2 inline-flex  flex-grow-0 bg-secondary text-primary-foreground p-2 rounded font-medium text-sm drop-shadow">
-          Gerenciar <Settings2 size={16} />
+        <DropdownMenuTrigger>
+          <Button variant={"outline"} onClick={handleOpen}>
+            Gerenciar <Settings2 size={16} />
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuLabel>Gerenciar Banner</DropdownMenuLabel>
+          <DropdownMenuLabel>Gerenciar Bairro / Taxa</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="flex items-center justify-between cursor-pointer"
@@ -68,4 +74,4 @@ const ManageBannerDropdown = ({
   );
 };
 
-export default ManageBannerDropdown;
+export default ManageNeighborhoodDropdown;

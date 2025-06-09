@@ -5,17 +5,20 @@ import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { CheckCircle, XCircle, Hourglass } from "lucide-react";
 import Link from "next/link";
+import { useCheckout } from "@/hooks/use-checkout";
 
 const PaymentPage = () => {
   const searchParams = useSearchParams();
   const status = searchParams.get("status");
 
   const { removeFee, clearCart } = useCartStore();
+  const { resetCheckout } = useCheckout();
 
   useEffect(() => {
     if (status === "sucesso") {
       removeFee();
       clearCart();
+      resetCheckout();
     }
   }, [status, removeFee, clearCart]);
 

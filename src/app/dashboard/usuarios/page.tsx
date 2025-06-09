@@ -17,6 +17,7 @@ import { getAllUsersWithPagination } from "@/lib/actions/users";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import React from "react";
+import UsersTableRow from "./components/UsersTableRow";
 
 const UsersPage = () => {
   const searchParams = useSearchParams();
@@ -56,17 +57,7 @@ const UsersPage = () => {
             <TableBody>
               {data &&
                 data.users?.map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell className="font-medium">{user.id}</TableCell>
-                    <TableCell>{user.name}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>
-                      {user.createdAt.toLocaleString("pt-BR")}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <ManageUserDropdown user={user} />
-                    </TableCell>
-                  </TableRow>
+                  <UsersTableRow user={user} key={user.id} />
                 ))}
             </TableBody>
           </Table>
