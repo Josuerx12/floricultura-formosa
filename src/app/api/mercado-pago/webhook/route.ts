@@ -21,8 +21,6 @@ export async function POST(request: Request) {
         const payment = new Payment(mpClient);
         const paymentData = await payment.get({ id: data.id });
 
-        console.log(paymentData);
-
         if (
           paymentData.status === "approved" ||
           paymentData.date_approved !== null
