@@ -16,8 +16,12 @@ import DetailSubCategoriaModal from "@/components/modals/subcategory/detail";
 
 const ManageSubCategoryDropdown = ({
   subCategory,
+  handleOpen,
+  isOpen,
 }: {
   subCategory: SubCategory;
+  isOpen: boolean;
+  handleOpen: VoidFunction;
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeletailing, setIsDeletailing] = useState(false);
@@ -25,30 +29,42 @@ const ManageSubCategoryDropdown = ({
     <>
       <DeleteSubCategoriaModal
         isOpen={isDeleting}
-        handleClose={() => setIsDeleting((prev) => !prev)}
+        handleClose={() => {
+          setIsDeleting((prev) => !prev);
+        }}
         subCategory={subCategory}
       />
       <DetailSubCategoriaModal
         isOpen={isDeletailing}
-        handleClose={() => setIsDeletailing((prev) => !prev)}
+        handleClose={() => {
+          setIsDeletailing((prev) => !prev);
+        }}
         subCategory={subCategory}
       />
-      <DropdownMenu>
-        <DropdownMenuTrigger className="w-fit items-center gap-2 inline-flex  flex-grow-0 bg-secondary text-primary-foreground p-2 rounded font-medium text-sm drop-shadow">
-          Gerenciar <Settings2 size={16} />
+      <DropdownMenu open={isOpen} onOpenChange={handleOpen}>
+        <DropdownMenuTrigger>
+          <Button variant={"outline"} onClick={handleOpen}>
+            Gerenciar <Settings2 size={16} />
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>Gerenciar Sub Categoria</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="flex items-center justify-between cursor-pointer"
-            onClick={() => setIsDeletailing((prev) => !prev)}
+            onClick={() => {
+              setIsDeletailing((prev) => !prev);
+              handleOpen();
+            }}
           >
             Detalhes <Info />
           </DropdownMenuItem>
           <DropdownMenuItem
             className="flex items-center justify-between cursor-pointer"
-            onClick={() => setIsDeleting((prev) => !prev)}
+            onClick={() => {
+              setIsDeleting((prev) => !prev);
+              handleOpen();
+            }}
           >
             Deletar <Trash2 />
           </DropdownMenuItem>

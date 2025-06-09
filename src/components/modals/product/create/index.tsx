@@ -19,8 +19,11 @@ import {
   ScrollText,
 } from "lucide-react";
 import { useState } from "react";
-import { Category } from "@/lib/actions/category";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  Category,
+  getAllCategoriesWithoutPagination,
+} from "@/lib/actions/category";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProductSchema } from "@/lib/schemas-validator/product.schema";
@@ -28,11 +31,16 @@ import { z } from "zod";
 import { Switch } from "@/components/ui/switch";
 import { RichTextEditor } from "@/components/rich-text-editor";
 
-const CreateProductModal = ({ categories }: { categories: Category[] }) => {
+const CreateProductModal = () => {
   const [photos, setPhotos] = useState<File[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
 
   const [isOpen, setIsOpen] = useState(false);
+
+  const { data: categories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: getAllCategoriesWithoutPagination,
+  });
 
   function handleClose() {
     setIsOpen((prev) => !prev);
@@ -147,7 +155,7 @@ const CreateProductModal = ({ categories }: { categories: Category[] }) => {
                 <option disabled value="">
                   Selecione uma subcategoria
                 </option>
-                {categories.map((c) =>
+                {categories?.map((c) =>
                   c.subcategories?.map((sc) => (
                     <option key={sc.id} value={sc.id}>
                       {c.name} | {sc.name}

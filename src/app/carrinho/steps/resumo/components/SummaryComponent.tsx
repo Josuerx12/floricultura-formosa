@@ -22,11 +22,11 @@ const SummaryComponent = ({ user }: { user: any }) => {
       router.push("/carrinho/steps/entrega");
     }
 
-    if (delivery && !address) {
+    if (typeof delivery === "boolean" && delivery && !address) {
       router.push("/carrinho/steps/endereco");
     }
 
-    if (delivery && !recipient) {
+    if (typeof delivery === "boolean" && delivery && !recipient) {
       router.push("/carrinho/steps/destinatario");
     }
 
@@ -89,7 +89,7 @@ const SummaryComponent = ({ user }: { user: any }) => {
 
       <Card>
         <CardContent className="p-4 space-y-1">
-          {fee && (
+          {delivery && fee && fee > 0 && (
             <p>
               <strong>Taxa de Entrega: </strong>{" "}
               {fee?.toLocaleString("pt-BR", {

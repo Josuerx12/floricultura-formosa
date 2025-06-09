@@ -12,14 +12,16 @@ import { Info, Settings2, Trash2 } from "lucide-react";
 import { Product } from "@/lib/actions/products";
 import DeleteProductModal from "@/components/modals/product/delete";
 import DetailProductModal from "@/components/modals/product/detail";
-import { Category } from "@/lib/actions/category";
+import { Button } from "@/components/ui/button";
 
 const ManageProductDropdown = ({
   product,
-  categories,
+  handleOpen,
+  isOpen,
 }: {
   product: Product;
-  categories: Category[];
+  isOpen: boolean;
+  handleOpen: VoidFunction;
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeletailing, setIsDeletailing] = useState(false);
@@ -35,25 +37,32 @@ const ManageProductDropdown = ({
         isOpen={isDeletailing}
         handleClose={() => setIsDeletailing((prev) => !prev)}
         product={product}
-        categories={categories}
       />
 
-      <DropdownMenu key={product.id}>
-        <DropdownMenuTrigger className="w-fit items-center gap-2 inline-flex  flex-grow-0 bg-secondary text-primary-foreground p-2 rounded font-medium text-sm drop-shadow">
-          Gerenciar <Settings2 size={16} />
+      <DropdownMenu open={isOpen} onOpenChange={handleOpen} key={product.id}>
+        <DropdownMenuTrigger>
+          <Button variant={"outline"} onClick={handleOpen}>
+            Gerenciar <Settings2 size={16} />
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>Gerenciar Produto</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="flex items-center justify-between cursor-pointer"
-            onClick={() => setIsDeletailing((prev) => !prev)}
+            onClick={() => {
+              setIsDeletailing((prev) => !prev);
+              handleOpen();
+            }}
           >
             Detalhes <Info />
           </DropdownMenuItem>
           <DropdownMenuItem
             className="flex items-center justify-between cursor-pointer"
-            onClick={() => setIsDeleting((prev) => !prev)}
+            onClick={() => {
+              setIsDeleting((prev) => !prev);
+              handleOpen();
+            }}
           >
             Deletar <Trash2 />
           </DropdownMenuItem>

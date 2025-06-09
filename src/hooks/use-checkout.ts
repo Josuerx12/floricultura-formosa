@@ -1,4 +1,3 @@
-import { boolean } from "zod";
 import { create } from "zustand";
 
 type Address = {
@@ -62,8 +61,7 @@ export const useCheckout = create<Checkout>((set, get) => ({
 
   firstStep: (delivery) =>
     set(() => ({
-      delivery,
-
+      delivery: delivery,
       step: delivery ? 2 : 3,
     })),
 
@@ -87,7 +85,10 @@ export const useCheckout = create<Checkout>((set, get) => ({
     const { delivery, address, deliveryDate, phone, message, to, from } = get();
     return {
       delivery:
-        typeof delivery != "boolean" && delivery == "true" ? false : true,
+        typeof delivery == "undefined" ||
+        (typeof delivery == "boolean" && !delivery)
+          ? false
+          : true,
       address: delivery ? address : null,
       deliveryDate,
       recipient: {

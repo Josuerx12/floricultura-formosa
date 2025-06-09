@@ -12,6 +12,7 @@ import CreateCategoriaModal from "@/components/modals/category/create";
 import SearchFilter from "@/components/filters/search-filter";
 import ManageCategoryDropdown from "@/components/dropdowns/MenageCategoryDropdown";
 import Pagination from "@/components/pagination";
+import CategoriesTableRow from "./components/CategoriesTableRow";
 
 const CategoriasPage = async ({ searchParams }: { searchParams: any }) => {
   const { search, page } = await searchParams;
@@ -80,16 +81,7 @@ const CategoriasPage = async ({ searchParams }: { searchParams: any }) => {
         </TableHeader>
         <TableBody>
           {categorias.map((categoria) => (
-            <TableRow key={categoria.id}>
-              <TableCell className="font-medium">{categoria.id}</TableCell>
-              <TableCell>{categoria.name}</TableCell>
-              <TableCell>
-                {categoria.created_at.toLocaleString("pt-BR")}
-              </TableCell>
-              <TableCell className="text-right">
-                <ManageCategoryDropdown category={categoria} />
-              </TableCell>
-            </TableRow>
+            <CategoriesTableRow category={categoria} key={categoria.id} />
           ))}
         </TableBody>
       </Table>

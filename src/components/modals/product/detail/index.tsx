@@ -9,7 +9,10 @@ import {
 } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/hooks/use-toast";
-import { Category } from "@/lib/actions/category";
+import {
+  Category,
+  getAllCategoriesWithoutPagination,
+} from "@/lib/actions/category";
 import {
   deleteProductPhoto,
   GetProductImages,
@@ -25,7 +28,6 @@ import {
   Calendar,
   CloudUpload,
   Loader,
-  NotepadText,
   PenBox,
   RectangleEllipsis,
   ScrollText,
@@ -40,16 +42,19 @@ const DetailProductModal = ({
   product,
   isOpen,
   handleClose,
-  categories,
 }: {
   isOpen: boolean;
   handleClose: VoidFunction;
   product: Product;
-  categories: Category[];
 }) => {
   const { data: images, isPending: imagesLoading } = useQuery({
     queryKey: ["product-image", product.id],
     queryFn: () => GetProductImages({ product_id: product.id }),
+  });
+
+  const { data: categories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: getAllCategoriesWithoutPagination,
   });
 
   const query = useQueryClient();
@@ -223,7 +228,7 @@ const DetailProductModal = ({
               <option disabled value="">
                 Selecione uma subcategoria
               </option>
-              {categories.map((c) =>
+              {categories?.map((c) =>
                 c.subcategories?.map((sc) => (
                   <option key={sc.id} value={sc.id}>
                     {c.name} / {sc.name}

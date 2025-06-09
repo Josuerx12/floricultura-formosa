@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 
 const DestinatarioFormComponent = () => {
   const { thirdStep, delivery, phone, to, from, message } = useCheckout();
+
   const { register, handleSubmit } = useForm({
     defaultValues: {
       phone,

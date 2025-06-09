@@ -14,6 +14,7 @@ import SearchFilter from "@/components/filters/search-filter";
 import CreateSubCategoryModal from "@/components/modals/subcategory/create";
 import ManageSubCategoryDropdown from "@/components/dropdowns/MenageSubCategoryDropdown";
 import Pagination from "@/components/pagination";
+import SubCategoriesTableRow from "./components/SubCategoriesTableRow";
 
 const SubCategoriasPage = async ({ searchParams }: { searchParams: any }) => {
   const { search, page } = await searchParams;
@@ -112,17 +113,10 @@ const SubCategoriasPage = async ({ searchParams }: { searchParams: any }) => {
         </TableHeader>
         <TableBody className="overflow-auto">
           {subCategories.map((subCategory) => (
-            <TableRow key={subCategory.id}>
-              <TableCell className="font-medium">{subCategory.id}</TableCell>
-              <TableCell>{subCategory.name}</TableCell>
-              <TableCell>{subCategory.category.name}</TableCell>
-              <TableCell>
-                {subCategory.created_at.toLocaleString("pt-BR")}
-              </TableCell>
-              <TableCell className="text-right">
-                <ManageSubCategoryDropdown subCategory={subCategory as any} />
-              </TableCell>
-            </TableRow>
+            <SubCategoriesTableRow
+              subCategory={subCategory}
+              key={subCategory.id}
+            />
           ))}
         </TableBody>
       </Table>
