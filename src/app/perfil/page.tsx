@@ -5,6 +5,7 @@ import { FileImage } from "lucide-react";
 import Title from "@/components/title";
 import { getOrdersByUser } from "@/lib/actions/orders";
 import { parseOrderStatus } from "@/lib/utils";
+import ProfileForm from "./components/ProfileForm";
 
 const ProfilePage = async () => {
   const session = await auth();
@@ -15,69 +16,8 @@ const ProfilePage = async () => {
   return (
     <main className="max-w-screen-xl w-full mx-auto">
       <Title>Perfil</Title>
-
-      <form className="w-full mx-auto shadow-lg p-4 mb-4 rounded-md border">
-        <div className="flex flex-col w-fit items-center mx-auto">
-          <Image
-            src={user?.image ? user.image : "/no-profile.svg"}
-            width={100}
-            height={100}
-            quality={100}
-            alt="profile pic"
-            className="rounded-full"
-          />
-
-          <input
-            type="file"
-            id="file"
-            multiple={false}
-            accept="image/png, image/jpeg"
-            className="hidden"
-          />
-          <label
-            title="Alterar foto de perfil!"
-            htmlFor="file"
-            className="w-fit bg-primary p-2 rounded mt-3 text-sm text-primary-foreground cursor-pointer hover:text-primary hover:bg-primary-foreground duration-200 flex gap-2 items-center"
-          >
-            <p>Alterar foto</p>
-            <FileImage size={16} />
-          </label>
-        </div>
-        <div className="flex flex-col gap-y-4 items-center w-full">
-          <label className="w-full flex-grow">
-            <span className="font-semibold text-sm">Nome:</span>
-            <input
-              className="w-full"
-              type="text"
-              defaultValue={user?.name ?? "Nome do usuário não identificado!"}
-              disabled
-            />
-          </label>
-
-          <label className="w-full flex-grow">
-            <span className="font-semibold text-sm">Email:</span>
-            <input
-              className="w-full"
-              type="email"
-              defaultValue={user?.email ?? "Email não identificado!"}
-              disabled
-            />
-          </label>
-
-          <label className="w-full flex-grow">
-            <span className="font-semibold text-sm">Telefone:</span>
-            <input
-              className="w-full"
-              type="tel"
-              defaultValue={user?.phone ?? "Sem numero cadastrado!"}
-              disabled
-            />
-          </label>
-        </div>
-      </form>
-
+      <ProfileForm user={user as any} />
       <Title>Historico de compras</Title>
-
       <div className="w-full max-h-[30rem] overflow-y-auto mx-auto shadow-lg p-4 mb-4 rounded-md border">
         {orders.data.length > 0 ? (
           <ul className="flex flex-col gap-4">

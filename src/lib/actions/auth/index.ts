@@ -75,7 +75,7 @@ export async function signUp({ credentials }: { credentials: UserType }) {
     });
 
     transporter.sendMail({
-      from: process.env.MAIL,
+      from: `Floricultura Formosa <${process.env.MAIL}>`,
       to: credentials.email,
       subject: "Floricultura Formosa - Conta criada!",
       text: `Seja muito bem vindo ${credentials.name} à floricultura formosa a sua floricultura de confiaça!`,
