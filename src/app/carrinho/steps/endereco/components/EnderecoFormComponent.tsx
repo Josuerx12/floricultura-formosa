@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 
 const EnderecoFormComponent = ({ user }: { user: User }) => {
   const { secondStep, resetCheckout, deliveryDate } = useCheckout();
-  const { products } = useCartStore();
+  const { products, removeFee } = useCartStore();
   const [address, setAddress] = useState<any>(null);
   const { addFee, fee_id } = useCartStore();
   const { handleSubmit } = useForm();
@@ -175,6 +175,7 @@ const EnderecoFormComponent = ({ user }: { user: User }) => {
             type="button"
             onClick={() => {
               resetCheckout();
+              removeFee();
               router.push("/carrinho/steps/entrega");
             }}
           >
