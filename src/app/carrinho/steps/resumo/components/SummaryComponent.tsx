@@ -161,13 +161,13 @@ const SummaryComponent = ({ user }: { user: any }) => {
             }
           />
           <label htmlFor="usageTerms" className="text-sm">
-            Li e aceito os{" "}
+            Li e aceito a{" "}
             <button
               type="button"
-              onClick={() => router.push("/termos-de-uso")}
+              onClick={() => router.push("/politica-de-privacidade")}
               className="text-blue-600 underline"
             >
-              Termos de Uso
+              Politica de Privacidade
             </button>
           </label>
         </div>
@@ -188,10 +188,10 @@ const SummaryComponent = ({ user }: { user: any }) => {
             Li e aceito os{" "}
             <button
               type="button"
-              onClick={() => router.push("/termos-de-compra")}
+              onClick={() => router.push("/termos-de-uso")}
               className="text-blue-600 underline"
             >
-              Termos de Compra
+              Termos de Uso
             </button>
           </label>
         </div>
