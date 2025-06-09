@@ -26,7 +26,8 @@ const ProdutosPage = () => {
 
   const { data, isLoading } = useQuery({
     queryKey: ["products-dash", search, page],
-    queryFn: () => GetAllProductsWithPagination({ page, search }),
+    queryFn: () =>
+      GetAllProductsWithPagination({ page, search, isAdmin: true }),
   });
 
   return (

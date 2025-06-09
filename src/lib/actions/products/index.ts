@@ -184,11 +184,13 @@ export async function GetAllProductsWithPagination({
   perPage = 10,
   search,
   isVisible = false,
+  isAdmin = false,
 }: {
   page: number;
   perPage?: number;
   search: string;
   isVisible?: boolean;
+  isAdmin?: boolean;
 }) {
   const where: Prisma.productWhereInput = {
     AND: [
@@ -208,6 +210,15 @@ export async function GetAllProductsWithPagination({
         ],
       },
       ...(isVisible ? [{ is_visible: true }] : []),
+      ...(!isAdmin
+        ? [
+            {
+              stock_quantity: {
+                gt: 0,
+              },
+            },
+          ]
+        : []),
     ],
   };
 
@@ -259,6 +270,9 @@ export async function getTop20SelledProducts() {
         in: productIds,
       },
       is_visible: true,
+      stock_quantity: {
+        gt: 0,
+      },
     },
     orderBy: {
       created_at: "desc",
@@ -287,6 +301,9 @@ export async function getDeluxeProducts() {
           name: "categoria luxo",
         },
       },
+      stock_quantity: {
+        gt: 0,
+      },
       is_visible: true,
     },
     include: {
@@ -308,6 +325,9 @@ export async function getAllProducts() {
   const products = await prisma.product.findMany({
     where: {
       is_visible: true,
+      stock_quantity: {
+        gt: 0,
+      },
     },
   });
 
