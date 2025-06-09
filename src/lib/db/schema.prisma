@@ -175,14 +175,14 @@ model order {
 }
 
 model order_preferences {
-  id            String   @id @default(uuid())
+  id            String    @id @default(uuid())
   order_id      String
   from          String?
   to            String?
   message       String?
   phone         String
-  delivery_date DateTime
-  order         order    @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  delivery_date DateTime?
+  order         order     @relation(fields: [order_id], references: [id], onDelete: Cascade)
 }
 
 model order_item {
