@@ -251,41 +251,60 @@ export async function GetAllProductsWithPagination({
 export async function getTop20SelledProducts() {
   const topSellingProducts = await prisma.order_item.groupBy({
     by: ["product_id"],
-    _sum: {
-      quantity: true,
-    },
-    orderBy: {
-      _sum: {
-        quantity: "desc",
-      },
-    },
+    _sum: { quantity: true },
+    orderBy: { _sum: { quantity: "desc" } },
     take: 20,
   });
 
   const productIds = topSellingProducts.map((item) => item.product_id);
 
-  const products = await prisma.product.findMany({
-    where: {
-      id: {
-        in: productIds,
+  let products: any[] = [];
+  if (productIds.length > 0) {
+    products = await prisma.product.findMany({
+      where: {
+        id: { in: productIds },
+        is_visible: true,
+        stock_quantity: { gt: 0 },
       },
-      is_visible: true,
-      stock_quantity: {
-        gt: 0,
+      include: {
+        product_images: { select: { url: true, id: true } },
       },
-    },
-    orderBy: {
-      created_at: "desc",
-    },
-    include: {
-      product_images: {
-        select: {
-          url: true,
-          id: true,
-        },
+    });
+
+    products.sort(
+      (a, b) => productIds.indexOf(a.id) - productIds.indexOf(b.id)
+    );
+  }
+
+  if (products.length < 20) {
+    const moreProducts = await prisma.product.findMany({
+      where: {
+        id: { notIn: productIds },
+        is_visible: true,
+        stock_quantity: { gt: 0 },
       },
-    },
-  });
+      orderBy: { created_at: "desc" },
+      take: 20 - products.length,
+      include: {
+        product_images: { select: { url: true, id: true } },
+      },
+    });
+    products = [...products, ...moreProducts];
+  }
+
+  if (products.length === 0) {
+    products = await prisma.product.findMany({
+      where: {
+        is_visible: true,
+        stock_quantity: { gt: 0 },
+      },
+      orderBy: { created_at: "desc" },
+      take: 20,
+      include: {
+        product_images: { select: { url: true, id: true } },
+      },
+    });
+  }
 
   return products.map((p) => ({
     ...p,
