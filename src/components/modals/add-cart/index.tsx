@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { fromCents } from "@/lib/utils";
 
 type Props = {
   product: Product;
@@ -67,10 +68,13 @@ const AddCartModal = ({ product, handleClose, isOpen }: Props) => {
                       {item.bumpProduct.name}
                     </p>
                     <p className="text-muted-foreground text-xs">
-                      {item.bumpProduct.price.toLocaleString("pt-BR", {
-                        style: "currency",
-                        currency: "BRL",
-                      })}
+                      {fromCents(item.bumpProduct.price).toLocaleString(
+                        "pt-BR",
+                        {
+                          style: "currency",
+                          currency: "BRL",
+                        }
+                      )}
                     </p>
                   </div>
                 </div>
