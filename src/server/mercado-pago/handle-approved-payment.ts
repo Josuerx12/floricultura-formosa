@@ -47,14 +47,16 @@ export async function handleApprovedPayment(paymentData: PaymentResponse) {
   });
 
   transporter.sendMail({
-    from: "Floricultura Formosa <contato@jcdev.com.br>",
+    from: `Floricultura Formosa <${process.env.MAIL}>`,
     to: order.user.email,
     subject: "Pedido Processado",
     text: `Seu pedido numero: ${order.id} foi processado com sucesso.`,
   });
   if (order.user.phone) {
     wpp.sendMessageText(
-      order.user.phone,
+      order.user.phone.includes("55")
+        ? order.user.phone
+        : `55${order.user.phone}`,
       `
      *🎉 🎉 Compra aprovada 🎉 🎉* \n\n 
      *ID:* ${order.id} \n

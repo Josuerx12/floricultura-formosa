@@ -42,7 +42,9 @@ export async function GET(request: Request) {
 
       if (order.user.phone) {
         wpp.sendMessageText(
-          order.user.phone,
+          order.user.phone.includes("55")
+            ? order.user.phone
+            : `55${order.user.phone}`,
           `
           *❌ ❌ Compra não aprovada ❌ ❌*\n\n
           *ID: * ${order.id}\n
@@ -52,7 +54,7 @@ export async function GET(request: Request) {
         );
 
         transporter.sendMail({
-          from: "Floricultura Formosa <contato@jcdev.com.br>",
+          from: `Floricultura Formosa <${process.env.MAIL}>`,
           to: order!.user.email,
           subject: "Pedido Cancelado",
           text: `Seu pedido número: ${order?.id} foi cancelado.`,
