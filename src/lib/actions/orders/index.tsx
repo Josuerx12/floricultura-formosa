@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/db/prisma";
-import { OrderStatus } from "@prisma/client";
+import { OrderStatus, Prisma } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { SessionValidation } from "../session-validation";
 import { User } from "next-auth";
@@ -43,60 +43,26 @@ export const getOrdersByUser = async ({
 
   const offset = (parseInt(page) - 1) * parseInt(perPage);
 
-  const totalOrders = await prisma.order.count({
-    where: {
-      user_id: user.id,
-      OR: [
-        {
-          items: {
-            some: {
-              product: {
-                name: {
-                  contains: search,
-                  mode: "insensitive",
-                },
-              },
-            },
+  const whereOptions: Prisma.orderWhereInput = {
+    user_id: user.id,
+    items: {
+      some: {
+        product: {
+          name: {
+            contains: search,
+            mode: "insensitive",
           },
         },
-        {
-          address: {
-            city: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-        },
-      ],
+      },
     },
+  };
+
+  const totalOrders = await prisma.order.count({
+    where: whereOptions,
   });
 
   const orders = await prisma.order.findMany({
-    where: {
-      user_id: user.id,
-      OR: [
-        {
-          items: {
-            some: {
-              product: {
-                name: {
-                  contains: search,
-                  mode: "insensitive",
-                },
-              },
-            },
-          },
-        },
-        {
-          address: {
-            city: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-        },
-      ],
-    },
+    where: whereOptions,
     take: parseInt(perPage),
     skip: offset,
     include: {

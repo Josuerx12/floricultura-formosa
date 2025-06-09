@@ -3,7 +3,6 @@ import React from "react";
 import Image from "next/image";
 import { FileImage } from "lucide-react";
 import Title from "@/components/title";
-import { prisma } from "@/lib/db/prisma";
 import { getOrdersByUser } from "@/lib/actions/orders";
 import { parseOrderStatus } from "@/lib/utils";
 
