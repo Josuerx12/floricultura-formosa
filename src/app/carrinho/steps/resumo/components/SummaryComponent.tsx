@@ -17,6 +17,8 @@ const SummaryComponent = ({ user }: { user: any }) => {
   const { getCheckoutSummary, resetCheckout } = useCheckout();
   const router = useRouter();
 
+  console.log(user);
+
   const { delivery, recipient, address, deliveryDate } = getCheckoutSummary();
 
   const [acceptedTerms, setAcceptedTerms] = useState({
@@ -204,15 +206,18 @@ const SummaryComponent = ({ user }: { user: any }) => {
         <Button
           type="button"
           onClick={() => {
-            resetCheckout();
-            clearCart();
             router.push("/");
+
+            setTimeout(() => {
+              resetCheckout();
+              clearCart();
+            }, 2000);
           }}
           variant={"destructive"}
         >
           Cancelar Pagamento
         </Button>
-        {user && !user.phone ? (
+        {user.user && !user.user.phone ? (
           <Button>
             <CompleteRegister />
           </Button>
