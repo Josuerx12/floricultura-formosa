@@ -1,10 +1,14 @@
+"use client";
 import React from "react";
 import CompleteRegister from "../modals/complete-register/CompleteRegister";
 import { AlertTriangle } from "lucide-react";
-import { auth } from "@/lib/auth/auth";
-import { User } from "next-auth";
+import { useSession } from "next-auth/react";
 
-const CompleteRegisterFloatComponent = async ({ user }: { user?: User }) => {
+const CompleteRegisterFloatComponent = () => {
+  const { data } = useSession();
+
+  const user = data?.user;
+
   if (!user) return null;
   if (user.document && user.birthdate && user.phone) return null;
 

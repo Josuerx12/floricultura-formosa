@@ -127,14 +127,16 @@ export async function CompleteUserAction(data: CompleteUserInput) {
 
   const document = data.document.replace(/\D/g, "");
 
-  const documentAlreadyInUse = await prisma.user.findUnique({
-    where: {
-      document,
-    },
-  });
+  if (document !== user.document) {
+    const documentAlreadyInUse = await prisma.user.findUnique({
+      where: {
+        document,
+      },
+    });
 
-  if (documentAlreadyInUse) {
-    throw new Error("Documento já em uso!");
+    if (documentAlreadyInUse) {
+      throw new Error("Documento já em uso!");
+    }
   }
 
   await prisma.user.update({
@@ -143,8 +145,8 @@ export async function CompleteUserAction(data: CompleteUserInput) {
     },
     data: {
       birthdate: data.birthdate,
-      phone: data.phone,
-      document,
+      phone: data.phone?.replace(/\D/g, ""),
+      ...(!user.document && { document }),
     },
   });
 

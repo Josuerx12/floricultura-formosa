@@ -23,8 +23,10 @@ import { Controller, useForm } from "react-hook-form";
 import { IMaskInput } from "react-imask";
 
 const CompleteRegister = () => {
-  const { data } = useSession();
+  const { data, update } = useSession();
   const [isOpen, setIsOpen] = useState(false);
+
+  console.log(data?.user);
 
   const {
     control,
@@ -52,10 +54,12 @@ const CompleteRegister = () => {
       });
     },
 
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       toast({
         title: data.message,
       });
+
+      await update();
 
       setIsOpen(false);
     },
@@ -84,6 +88,7 @@ const CompleteRegister = () => {
             <Controller
               control={control}
               name="document"
+              defaultValue={data?.user.document || ""}
               render={({ field }) => (
                 <IMaskInput
                   {...field}
@@ -111,6 +116,7 @@ const CompleteRegister = () => {
             <Controller
               control={control}
               name="phone"
+              defaultValue={data?.user.phone || ""}
               render={({ field }) => (
                 <IMaskInput
                   {...field}
@@ -126,10 +132,12 @@ const CompleteRegister = () => {
           )}
 
           {/* Birthdate */}
+          <span className="font-bold text-sm">Data de aniversario: </span>
           <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
             <Calendar className="text-primary-foreground" size={20} />
             <input
               type="date"
+              defaultValue={data?.user.birthdate as any}
               {...register("birthdate", { valueAsDate: true })}
               className="w-full bg-transparent outline-none placeholder:text-neutral-500"
             />
