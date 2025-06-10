@@ -68,13 +68,10 @@ const AddCartModal = ({ product, handleClose, isOpen }: Props) => {
                       {item.bumpProduct.name}
                     </p>
                     <p className="text-muted-foreground text-xs">
-                      {fromCents(item.bumpProduct.price).toLocaleString(
-                        "pt-BR",
-                        {
-                          style: "currency",
-                          currency: "BRL",
-                        }
-                      )}
+                      {item.bumpProduct.price.toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      })}
                     </p>
                   </div>
                 </div>

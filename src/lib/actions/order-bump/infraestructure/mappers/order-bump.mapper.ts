@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { OrderBump } from "../../domain/order-bump.entity";
 import { Product } from "@/lib/actions/products";
+import { fromCents } from "@/lib/utils";
 
 export type OrderBumpPlainedObject = {
   id: number;
@@ -42,7 +43,10 @@ export class OrderBumpMapper {
       id: model.id,
       categoryId: model.category_id,
       bumpProductId: model.bump_product.id,
-      bumpProduct: model.bump_product,
+      bumpProduct: {
+        ...model.bump_product,
+        price: fromCents(model.bump_product.price),
+      },
       createdAt: model.created_at,
       updatedAt: model.updated_at,
     };

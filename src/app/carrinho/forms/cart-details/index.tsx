@@ -8,9 +8,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import CheckoutDialog from "@/components/modals/checkout";
+import { useCheckout } from "@/hooks/use-checkout";
 
 const CartDetails = ({ user }: { user?: User }) => {
-  const { products, totalPrice } = useCartStore();
+  const { products, totalPrice, clearCart } = useCartStore();
+  const { resetCheckout } = useCheckout();
   const router = useRouter();
 
   const [checkoutOpen, setCheckoutOpen] = useState(false);
@@ -51,8 +53,19 @@ const CartDetails = ({ user }: { user?: User }) => {
 
         {/* Resumo do pedido */}
         <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-6 mx-auto">
-          <h2 className="text-lg font-semibold border-b pb-3 mb-4">
+          <h2 className="text-lg font-semibold border-b pb-3 mb-4 flex items-center justify-between">
             Resumo do Pedido
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-red-600 border-red-200 hover:bg-red-50"
+              onClick={() => {
+                clearCart();
+                resetCheckout();
+              }}
+            >
+              Limpar carrinho
+            </Button>
           </h2>
 
           {/* Detalhes */}

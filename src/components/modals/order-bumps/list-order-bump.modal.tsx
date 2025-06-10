@@ -10,8 +10,6 @@ import { toast } from "@/hooks/use-toast";
 import { Category } from "@/lib/actions/category";
 import { DeleteOrderBump } from "@/lib/actions/order-bump/infraestructure/actions/delete";
 import { GetBumpsByCategoryId } from "@/lib/actions/order-bump/infraestructure/actions/get-bumps-by-category";
-import { Product } from "@/lib/actions/products";
-import { fromCents } from "@/lib/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import Image from "next/image";
@@ -77,13 +75,10 @@ const ListOrderBumpModal = ({ handleClose, isOpen, category }: ModalProps) => {
                       />
                       <span>{bump.bumpProduct.name}</span> |
                       <span>
-                        {fromCents(bump.bumpProduct.price).toLocaleString(
-                          "pt-BR",
-                          {
-                            style: "currency",
-                            currency: "BRL",
-                          }
-                        )}
+                        {bump.bumpProduct.price.toLocaleString("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        })}
                       </span>
                       <Button
                         size="sm"
