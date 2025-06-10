@@ -4,18 +4,16 @@ import useCartStore from "@/hooks/use-cart-store";
 import { GetBumpsByCategoryId } from "@/lib/actions/order-bump/infraestructure/actions/get-bumps-by-category";
 import { Product } from "@/lib/actions/products";
 import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { fromCents } from "@/lib/utils";
 
 type Props = {
   product: Product;
@@ -33,6 +31,10 @@ const AddCartModal = ({ product, handleClose, isOpen }: Props) => {
 
   const { addProduct } = useCartStore();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  if (!isPending && bumps?.length === 0) {
+    return null;
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
@@ -86,9 +88,12 @@ const AddCartModal = ({ product, handleClose, isOpen }: Props) => {
                 <h2 className="text-lg font-bold mb-2">
                   {selectedProduct.name}
                 </h2>
-                <p className="text-muted-foreground text-sm mb-2">
-                  {selectedProduct.description}
-                </p>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: selectedProduct.description,
+                  }}
+                  className="prose mb-2"
+                />
 
                 {selectedProduct.product_images?.[0]?.url && (
                   <div className="relative w-full h-48 mb-4">
