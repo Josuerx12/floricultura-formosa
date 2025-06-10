@@ -1,6 +1,6 @@
 "use client";
 import useCartStore from "@/hooks/use-cart-store";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { User } from "next-auth";
 import DeliveryForm from "../delivery-form";
 import CartProductCard from "@/components/cards/cart-product-card";
@@ -17,7 +17,14 @@ const CartDetails = ({ user }: { user?: User }) => {
 
   const [checkoutOpen, setCheckoutOpen] = useState(false);
 
-  if (!products || products.length === 0)
+  useEffect(() => {
+    if (!products || products.length === 0) {
+      clearCart();
+      resetCheckout();
+    }
+  }, [products, resetCheckout, clearCart]);
+
+  if (!products || products.length === 0) {
     return (
       <p className="text-center">
         Nenhum produto adicionado ao carrinho. Busque por seu produto na lupa de
@@ -27,6 +34,7 @@ const CartDetails = ({ user }: { user?: User }) => {
         </Link>
       </p>
     );
+  }
 
   function handleCheckoutOpen() {
     setCheckoutOpen((prev) => !prev);
