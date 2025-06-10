@@ -16,13 +16,19 @@ const CartDetails = ({ user }: { user?: User }) => {
   const router = useRouter();
 
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [wasCleared, setWasCleared] = useState(false);
 
   useEffect(() => {
     if (!products || products.length === 0) {
-      clearCart();
-      resetCheckout();
+      if (!wasCleared) {
+        clearCart();
+        resetCheckout();
+        setWasCleared(true);
+      }
+    } else {
+      setWasCleared(false);
     }
-  }, [products, resetCheckout, clearCart]);
+  }, [products, wasCleared, clearCart, resetCheckout]);
 
   if (!products || products.length === 0) {
     return (
