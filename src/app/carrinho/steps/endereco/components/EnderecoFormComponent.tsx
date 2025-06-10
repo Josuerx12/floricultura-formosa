@@ -9,7 +9,7 @@ import { getUserAddresses } from "@/lib/actions/address";
 import { User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2, CalendarIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { format } from "date-fns";
 import DatePicker from "react-datepicker";
@@ -17,15 +17,13 @@ import { useRouter } from "next/navigation";
 
 const EnderecoFormComponent = ({ user }: { user: User }) => {
   const { secondStep, resetCheckout, deliveryDate } = useCheckout();
-  const { products, removeFee } = useCartStore();
-  const [address, setAddress] = useState<any>(null);
-  const { addFee, fee_id } = useCartStore();
+  const { products, removeFee, addFee, fee_id } = useCartStore();
   const { handleSubmit } = useForm();
   const [selectedDate, setSelectedDate] = useState<Date | null>(
     deliveryDate || null
   );
-
   const router = useRouter();
+  const addressRef = useRef<HTMLInputElement | null>(null); // para capturar o endereço selecionado
 
   const exceptionList: string[] = ["2025-06-08T10:00", "2025-06-14T13:00"];
 
@@ -54,21 +52,10 @@ const EnderecoFormComponent = ({ user }: { user: User }) => {
     const day = date.getDay();
     const hour = date.getHours();
 
-    if (date < today) {
+    if (date < today) return true;
+    if (date.toDateString() === now.toDateString() && now.getHours() >= 14)
       return true;
-    }
-
-    const isSameDay =
-      date.getFullYear() === now.getFullYear() &&
-      date.getMonth() === now.getMonth() &&
-      date.getDate() === now.getDate();
-
-    if (isSameDay && now.getHours() >= 14) {
-      return true;
-    }
-
     if (day === 0) return true;
-
     if (day === 6 && hour >= 12) return true;
 
     return false;
@@ -85,8 +72,19 @@ const EnderecoFormComponent = ({ user }: { user: User }) => {
       return;
     }
 
-    secondStep(address, selectedDate);
+    const selectedId = addressRef.current?.value;
+    const selectedAddress = data?.find((a) => a.id === selectedId);
 
+    if (!selectedAddress) {
+      toast({
+        title: "Selecione um endereço",
+        description: "Você precisa escolher um endereço antes de continuar.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    secondStep(selectedAddress, selectedDate);
     router.push("/carrinho/steps/destinatario");
   };
 
@@ -115,11 +113,16 @@ const EnderecoFormComponent = ({ user }: { user: User }) => {
                   <div className="flex items-center gap-2">
                     <input
                       type="radio"
-                      value="pickup"
-                      checked={fee_id === a.id}
+                      name="address"
+                      value={a.id}
+                      defaultChecked={fee_id === a.id}
                       onChange={() => {
-                        a.delivery_fee && addFee(a.delivery_fee.fee, a.id);
-                        setAddress(a);
+                        if (a.delivery_fee) {
+                          addFee(a.delivery_fee.fee, a.id);
+                        }
+                        addressRef.current = {
+                          value: a.id,
+                        } as HTMLInputElement;
                       }}
                       className="form-radio"
                     />
@@ -148,14 +151,17 @@ const EnderecoFormComponent = ({ user }: { user: User }) => {
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium">Data e hora da entrega</label>
+          <span className="font-bold">
+            Horario da entrega de 09:00 até as 18hrs
+          </span>
+          <label className="text-sm font-medium">Data da entrega</label>
           <div className="flex items-center gap-2">
             <CalendarIcon className="h-5 w-5 text-muted-foreground" />
             <DatePicker
               selected={selectedDate}
               onChange={(date) => setSelectedDate(date)}
               dateFormat="dd/MM/yyyy"
-              placeholderText="Selecione uma data e hora"
+              placeholderText="Selecione uma data"
               minDate={new Date()}
               className="w-full border px-3 py-2 rounded-md text-sm"
               filterDate={(date) => !isDateBlocked(date)}
@@ -164,7 +170,7 @@ const EnderecoFormComponent = ({ user }: { user: User }) => {
           </div>
           {selectedDate && isDateBlocked(selectedDate) && (
             <p className="text-sm text-destructive font-medium">
-              Data/hora não permitida. Escolha outro horário ou dia.
+              Data não permitida. Escolha outro dia.
             </p>
           )}
         </div>

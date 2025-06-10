@@ -5,7 +5,6 @@ import { transporter } from "@/lib/mail/transporter";
 import { UserSchema, UserType } from "@/lib/schemas-validator/user.schema";
 import { hash } from "bcryptjs";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
-import { z } from "zod";
 
 export type UserErrorsT = {
   password?: string[];
@@ -56,8 +55,10 @@ export async function signUp({ credentials }: { credentials: UserType }) {
       throw new Error("Email informado já em uso.");
     }
 
+    const document = credentials.document.replace(/\D/g, "");
+
     const documentAlreadyInUse = await prisma.user.findFirst({
-      where: { document: credentials.document },
+      where: { document },
       select: { document: true },
     });
 
@@ -70,6 +71,8 @@ export async function signUp({ credentials }: { credentials: UserType }) {
     await prisma.user.create({
       data: {
         ...credentials,
+        phone: credentials.phone?.replace(/\D/g, ""),
+        document,
         password: hashPassword,
       },
     });

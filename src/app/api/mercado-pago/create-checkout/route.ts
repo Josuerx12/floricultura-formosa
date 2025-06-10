@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
           create: {
             delivery_date: deliveryDate,
             from: orderPreferences.from,
-            phone: orderPreferences.phone,
+            phone: orderPreferences.phone.replace(/\D/g, ""),
             message: orderPreferences.message,
             to: orderPreferences.to,
           },

@@ -82,3 +82,29 @@ export const EditUserSchema = z.object({
     .optional(),
   role: z.enum(["ADMIN", "USER", "SELLER"]).optional(),
 });
+
+export const CompleteUserSchema = z.object({
+  document: z
+    .string()
+    .transform((v) => v.replace(/\D/g, ""))
+    .refine((v) => v.length === 11 || v.length === 14, {
+      message: "Informe um CPF (11 dígitos) ou CNPJ (14 dígitos) válido.",
+    }),
+
+  phone: z
+    .string()
+    .transform((v) => v.replace(/\D/g, ""))
+    .refine((v) => v.length === 11, {
+      message: "Telefone inválido. Use o formato (DD) 90000-0000.",
+    }),
+
+  birthdate: z
+    .date({ required_error: "Data de nascimento obrigatória." })
+    .refine((date) => {
+      const today = new Date();
+      const minYear = 1900;
+      return date < today && date.getFullYear() >= minYear;
+    }, "Data de nascimento inválida."),
+});
+
+export type CompleteUserInput = z.infer<typeof CompleteUserSchema>;

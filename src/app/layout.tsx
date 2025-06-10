@@ -10,6 +10,7 @@ import { Analytics } from "@vercel/analytics/react";
 import ReactQueryProvider from "@/lib/react-query-provider";
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
+import CompleteRegisterFloatComponent from "@/components/complete-register-float/CompleteRegisterFloatComponent";
 
 const poppins = Poppins({
   subsets: ["latin"],

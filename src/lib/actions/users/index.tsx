@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/db/prisma";
 import { Prisma, UserRoles } from "@prisma/client";
 import { SessionValidation } from "../session-validation";
+import { CompleteUserInput } from "@/lib/schemas-validator/user.schema";
 
 export async function getAllUsersWithPagination({
   page,
@@ -112,5 +113,42 @@ export async function editUser({
 
   return {
     message: "Usuário editado com sucesso!",
+  };
+}
+
+export async function CompleteUserAction(data: CompleteUserInput) {
+  const session = await auth();
+
+  const user = session?.user;
+
+  if (!user) {
+    throw new Error("Para completar cadastro você deve estar conectado!");
+  }
+
+  const document = data.document.replace(/\D/g, "");
+
+  const documentAlreadyInUse = await prisma.user.findUnique({
+    where: {
+      document,
+    },
+  });
+
+  if (documentAlreadyInUse) {
+    throw new Error("Documento já em uso!");
+  }
+
+  await prisma.user.update({
+    where: {
+      id: user!.id,
+    },
+    data: {
+      birthdate: data.birthdate,
+      phone: data.phone,
+      document,
+    },
+  });
+
+  return {
+    message: "Cadastro completado com sucesso!",
   };
 }

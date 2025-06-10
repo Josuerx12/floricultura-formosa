@@ -1,5 +1,6 @@
 "use client";
 
+import CompleteRegister from "@/components/modals/complete-register/CompleteRegister";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import useCartStore from "@/hooks/use-cart-store";
@@ -211,22 +212,28 @@ const SummaryComponent = ({ user }: { user: any }) => {
         >
           Cancelar Pagamento
         </Button>
-        <Button
-          disabled={
-            !acceptedTerms.usage || !acceptedTerms.purchase || isRedirecting
-          }
-          onClick={async () =>
-            await mutateAsync({
-              cart: products,
-              user,
-              address,
-              orderPreferences: recipient,
-              deliveryDate,
-            })
-          }
-        >
-          Ir para Pagamento
-        </Button>
+        {user && !user.phone ? (
+          <Button>
+            <CompleteRegister />
+          </Button>
+        ) : (
+          <Button
+            disabled={
+              !acceptedTerms.usage || !acceptedTerms.purchase || isRedirecting
+            }
+            onClick={async () =>
+              await mutateAsync({
+                cart: products,
+                user,
+                address,
+                orderPreferences: recipient,
+                deliveryDate,
+              })
+            }
+          >
+            Ir para Pagamento
+          </Button>
+        )}
       </div>
     </div>
   );

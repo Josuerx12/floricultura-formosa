@@ -7,12 +7,13 @@ import { useCheckout } from "@/hooks/use-checkout";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import { IMaskInput } from "react-imask";
 
 const DestinatarioFormComponent = () => {
   const { thirdStep, delivery, phone, to, from, message } = useCheckout();
 
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit, control } = useForm({
     defaultValues: {
       phone,
       to,
@@ -30,11 +31,17 @@ const DestinatarioFormComponent = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
-        <Input
-          {...register("phone")}
-          type="tel"
-          placeholder="Telefone"
-          required
+        <Controller
+          control={control}
+          name="phone"
+          render={({ field }) => (
+            <IMaskInput
+              {...field}
+              mask="(00) 00000-0000"
+              placeholder="(11) 91234-5678"
+              className="w-full bg-transparent outline-none placeholder:text-neutral-500"
+            />
+          )}
         />
       </label>
       <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
@@ -62,7 +69,7 @@ const DestinatarioFormComponent = () => {
         </Link>
       </div>
 
-      <div className="flex justify-between pt-4">
+      <div className="flex gap-4 pt-4">
         <Button
           variant="outline"
           type="button"
@@ -76,9 +83,7 @@ const DestinatarioFormComponent = () => {
         >
           Voltar
         </Button>
-        <Button variant="outline" type="submit">
-          Finalizar
-        </Button>
+        <Button type="submit">Finalizar</Button>
       </div>
     </form>
   );

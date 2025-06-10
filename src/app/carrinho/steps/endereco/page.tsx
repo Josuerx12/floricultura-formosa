@@ -13,7 +13,7 @@ const EnderecoPage = async () => {
   return (
     <main className="max-w-screen-2xl w-full mx-auto py-10 px-4">
       <h2 className="text-xl font-semibold">
-        Endereços de entrega cadastrados
+        Selecione um endereço de entrega para finalizar sua compra.
       </h2>
 
       <EnderecoFormComponent user={user.user as any} />

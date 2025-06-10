@@ -4,16 +4,18 @@ import { signUp } from "@/lib/actions/auth";
 import { UserSchema, UserType } from "@/lib/schemas-validator/user.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { IdCard, Loader } from "lucide-react";
+import { FileText, IdCard, Loader, Phone } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { BiSolidUser, BiMailSend, BiSolidPhone, BiKey } from "react-icons/bi";
+import { IMaskInput } from "react-imask";
 
 const SignUpForm = () => {
   const {
     register,
+    control,
     reset,
     handleSubmit,
     formState: { errors },
@@ -84,28 +86,45 @@ const SignUpForm = () => {
         <p className="text-red-600 text-sm">{errors.email.message}</p>
       )}
 
-      <label className="flex items-center gap-3 bg-neutral-200 p-3 rounded-2xl">
-        <BiSolidPhone className="text-primary-foreground" size={20} />
-        <input
-          {...register("phone")}
-          className="w-full bg-transparent outline-none placeholder:text-neutral-600 text-sm"
-          type="tel"
+      <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
+        <Phone className="text-primary-foreground" size={20} />
+        <Controller
+          control={control}
           name="phone"
-          placeholder="Telefone"
+          render={({ field }) => (
+            <IMaskInput
+              {...field}
+              mask="(00) 00000-0000"
+              placeholder="(11) 91234-5678"
+              className="w-full bg-transparent outline-none placeholder:text-neutral-500"
+            />
+          )}
         />
       </label>
       {errors?.phone && (
         <p className="text-red-600 text-sm">{errors.phone.message}</p>
       )}
 
-      <label className="flex items-center gap-3 bg-neutral-200 p-3 rounded-2xl">
-        <IdCard />
-        <input
-          {...register("document")}
-          className="w-full bg-transparent outline-none placeholder:text-neutral-600 text-sm"
-          type="text"
+      <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
+        <FileText className="text-primary-foreground" size={20} />
+        <Controller
+          control={control}
           name="document"
-          placeholder="CPF ou CNPJ"
+          render={({ field }) => (
+            <IMaskInput
+              {...field}
+              mask={[
+                {
+                  mask: "000.000.000-00", // CPF
+                },
+                {
+                  mask: "00.000.000/0000-00", // CNPJ
+                },
+              ]}
+              placeholder="Digite seu CPF ou CNPJ"
+              className="w-full bg-transparent outline-none placeholder:text-neutral-500"
+            />
+          )}
         />
       </label>
       {errors?.document && (

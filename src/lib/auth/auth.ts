@@ -52,11 +52,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async session({ token, session }) {
       if (token) {
-        (session.user.id = token.id),
-          (session.user.email = token.email as string),
-          (session.user.image = token.picture),
-          (session.user.phone = token.phone),
-          (session.user.role = token.role);
+        session.user.id = token.id;
+        session.user.email = token.email as string;
+        session.user.image = token.picture;
+        session.user.phone = token.phone;
+        session.user.role = token.role;
+        session.user.birthdate = token.birthdate;
+        session.user.document = token.document;
       }
       return session;
     },
@@ -76,6 +78,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.email = dbUser.email;
         token.phone = dbUser.phone;
         token.role = dbUser.role;
+        token.document = dbUser.document;
+        token.birthdate = dbUser.birthdate;
       }
 
       return token;
