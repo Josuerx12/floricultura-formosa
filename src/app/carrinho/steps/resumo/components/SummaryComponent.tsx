@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import useCartStore from "@/hooks/use-cart-store";
 import { useCheckout } from "@/hooks/use-checkout";
 import useMercadoPago from "@/hooks/use-mercado-pago";
+import { toast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,8 +17,6 @@ const SummaryComponent = ({ user }: { user: any }) => {
   const { products, totalPrice, fee, clearCart } = useCartStore();
   const { getCheckoutSummary, resetCheckout } = useCheckout();
   const router = useRouter();
-
-  console.log(user);
 
   const { delivery, recipient, address, deliveryDate } = getCheckoutSummary();
 
@@ -49,6 +48,12 @@ const SummaryComponent = ({ user }: { user: any }) => {
   const { mutateAsync, isPending: isRedirecting } = useMutation({
     mutationKey: ["createMercadoPagoCheckout"],
     mutationFn: createMercadoPagoCheckout,
+    onError: (e) => {
+      toast({
+        title: "Error ao realizar pagamento, tente novamente mais tarde!",
+        variant: "destructive",
+      });
+    },
   });
 
   return (
