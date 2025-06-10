@@ -56,6 +56,7 @@ export default async function RootLayout({
           <SessionProvider>
             <ReactQueryProvider>
               <Navbar />
+              <CompleteRegisterFloatComponent />
               {children}
               <Toaster />
               <WppBtn />
