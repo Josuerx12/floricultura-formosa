@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
   Dialog,
@@ -23,24 +23,28 @@ const ProductFilter = () => {
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
+  const currentOrder = searchParams.get("order_by") as "asc" | "desc" | null;
+  const [selectedOrder, setSelectedOrder] = useState<"asc" | "desc">(
+    currentOrder || "asc"
+  );
 
-  function handleOpen() {
-    setIsOpen((prev) => !prev);
-  }
+  const handleOpen = (open: boolean) => {
+    setIsOpen(open);
+  };
 
-  const currentOrder = searchParams.get("order_by");
-
-  const handleOrderChange = (value: "asc" | "desc") => {
+  const applyFilter = () => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("order_by", value);
+    params.set("order_by", selectedOrder);
     router.replace(`?${params.toString()}`);
-    handleOpen();
+    setIsOpen(false);
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpen}>
       <DialogTrigger asChild>
-        <Button>Filtrar produtos</Button>
+        <Button variant="default" className="font-semibold">
+          Filtrar produtos
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -52,10 +56,8 @@ const ProductFilter = () => {
               Ordenar por preço
             </label>
             <Select
-              defaultValue={currentOrder ?? "asc"}
-              onValueChange={(value: "asc" | "desc") =>
-                handleOrderChange(value)
-              }
+              value={selectedOrder}
+              onValueChange={(value: "asc" | "desc") => setSelectedOrder(value)}
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Selecione a ordenação" />
@@ -65,6 +67,11 @@ const ProductFilter = () => {
                 <SelectItem value="desc">Mais caros primeiro</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+          <div className="flex justify-end pt-4">
+            <Button onClick={applyFilter} className="w-full sm:w-auto">
+              Aplicar Filtro
+            </Button>
           </div>
         </div>
       </DialogContent>
