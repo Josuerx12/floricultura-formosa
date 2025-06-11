@@ -276,6 +276,15 @@ export async function getTop20SelledProducts({
 
   // 2. Produtos mais vendidos (sem prioridade)
   const topSellingProducts = await prisma.order_item.groupBy({
+    where: {
+      order: {
+        status: {
+          not: {
+            equals: "CANCELED",
+          },
+        },
+      },
+    },
     by: ["product_id"],
     _sum: { quantity: true },
     orderBy: { _sum: { quantity: "desc" } },
