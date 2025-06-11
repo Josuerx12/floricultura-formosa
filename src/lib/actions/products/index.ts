@@ -31,7 +31,7 @@ export type Product = {
   price: number;
   description: string;
   is_visible: boolean;
-  priority: boolean;
+  priority?: boolean;
   product_images?: any[];
   promotions?: Promotion[];
   subcategory?: SubCategory;
