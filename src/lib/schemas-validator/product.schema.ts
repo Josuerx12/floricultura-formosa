@@ -7,6 +7,9 @@ export const ProductSchema = z.object({
   is_visible: z.boolean({
     message: "Informe se o produto vai ser visivel ou não.",
   }),
+  priority: z.boolean({
+    message: "Informe se o produto vai ser prioridade ou não.",
+  }),
   subcategory_id: z.coerce
     .number({
       message:
@@ -46,6 +49,9 @@ export const EditProductSchema = z.object({
     .optional(),
   is_visible: z.boolean({
     message: "Informe se o produto vai ser visivel ou não.",
+  }),
+  priority: z.boolean({
+    message: "Informe se o produto vai ser prioridade ou não.",
   }),
   description: z
     .string({

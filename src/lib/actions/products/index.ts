@@ -31,6 +31,7 @@ export type Product = {
   price: number;
   description: string;
   is_visible: boolean;
+  priority: boolean;
   product_images?: any[];
   promotions?: Promotion[];
   subcategory?: SubCategory;
@@ -52,6 +53,7 @@ export async function CreateProduct(formData: FormData) {
         description: rawObject?.description,
         name: rawObject.name,
         is_visible: rawObject.is_visible === "true",
+        priority: rawObject.priority === "true",
         stock_quantity: parseInt(rawObject.stock_quantity),
         subcategory_id: parseInt(rawObject.subcategory_id),
         price: toCents(rawObject.price),
@@ -145,6 +147,9 @@ export async function EditProduct({
       is_visible: rawObject.is_visible
         ? rawObject.is_visible === "true"
         : product.is_visible,
+      priority: rawObject.priority
+        ? rawObject.priority === "true"
+        : product.priority,
       subcategory_id: rawObject.subcategory_id
         ? Number(rawObject.subcategory_id)
         : product.subcategory_id,
@@ -249,6 +254,22 @@ export async function GetAllProductsWithPagination({
 }
 
 export async function getTop20SelledProducts() {
+  // 1. Buscar produtos com prioridade
+  let products: any[] = await prisma.product.findMany({
+    where: {
+      priority: true,
+      is_visible: true,
+      stock_quantity: { gt: 0 },
+    },
+    include: {
+      product_images: { select: { url: true, id: true } },
+    },
+    take: 20, // no máximo 20 prioritários
+  });
+
+  const priorityIds = products.map((p) => p.id);
+
+  // 2. Buscar os mais vendidos, excluindo os prioritários
   const topSellingProducts = await prisma.order_item.groupBy({
     by: ["product_id"],
     _sum: { quantity: true },
@@ -256,13 +277,14 @@ export async function getTop20SelledProducts() {
     take: 20,
   });
 
-  const productIds = topSellingProducts.map((item) => item.product_id);
+  const sellingProductIds = topSellingProducts
+    .map((item) => item.product_id)
+    .filter((id) => !priorityIds.includes(id));
 
-  let products: any[] = [];
-  if (productIds.length > 0) {
-    products = await prisma.product.findMany({
+  if (sellingProductIds.length > 0) {
+    const bestSellingProducts = await prisma.product.findMany({
       where: {
-        id: { in: productIds },
+        id: { in: sellingProductIds },
         is_visible: true,
         stock_quantity: { gt: 0 },
       },
@@ -271,15 +293,21 @@ export async function getTop20SelledProducts() {
       },
     });
 
-    products.sort(
-      (a, b) => productIds.indexOf(a.id) - productIds.indexOf(b.id)
+    // Manter a ordem original dos mais vendidos
+    bestSellingProducts.sort(
+      (a, b) =>
+        sellingProductIds.indexOf(a.id) - sellingProductIds.indexOf(b.id)
     );
+
+    products = [...products, ...bestSellingProducts];
   }
 
+  // 3. Preencher com outros produtos se ainda não tiver 20
   if (products.length < 20) {
+    const filledIds = products.map((p) => p.id);
     const moreProducts = await prisma.product.findMany({
       where: {
-        id: { notIn: productIds },
+        id: { notIn: filledIds },
         is_visible: true,
         stock_quantity: { gt: 0 },
       },
@@ -289,24 +317,11 @@ export async function getTop20SelledProducts() {
         product_images: { select: { url: true, id: true } },
       },
     });
+
     products = [...products, ...moreProducts];
   }
 
-  if (products.length === 0) {
-    products = await prisma.product.findMany({
-      where: {
-        is_visible: true,
-        stock_quantity: { gt: 0 },
-      },
-      orderBy: { created_at: "desc" },
-      take: 20,
-      include: {
-        product_images: { select: { url: true, id: true } },
-      },
-    });
-  }
-
-  return products.map((p) => ({
+  return products.slice(0, 20).map((p) => ({
     ...p,
     price: fromCents(p.price),
   }));
