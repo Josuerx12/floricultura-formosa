@@ -90,6 +90,7 @@ const DetailProductModal = ({
       stock_quantity: product.stock_quantity,
       subcategory_id: product.subcategory_id,
       is_visible: product.is_visible,
+      priority: product.priority,
     });
   }, [product, reset]);
 
@@ -125,6 +126,7 @@ const DetailProductModal = ({
     formData.append("stock_quantity", data.stock_quantity!.toString());
     formData.append("subcategory_id", data.subcategory_id!.toString());
     formData.append("is_visible", String(data.is_visible));
+    formData.append("priority", String(data.priority));
 
     photos.forEach((photo) => formData.append("photos", photo));
     await mutateAsync({ id: product.id, formData });
@@ -288,16 +290,35 @@ const DetailProductModal = ({
             <p className="text-red-600">{errors.description.message}</p>
           )}
 
+          <span className="font-semibold text-sm">Produto visivel</span>
+
           <label
             htmlFor="is-active"
-            className="flex  p-2 gap-2 items-center rounded-3xl"
+            className="flex  gap-2 items-center rounded-3xl"
           >
             <Switch
+              disabled={!isEditing}
               id="is-active"
               checked={watch("is_visible")}
               onCheckedChange={(c) => setValue("is_visible", c)}
             />
-            <span>{watch("is_visible") ? "Ativo" : "Desativado"}</span>
+            <span>{watch("is_visible") ? "Visível" : "Invisível"}</span>
+          </label>
+
+          <span className="font-semibold text-sm">Produto destaque</span>
+
+          <label
+            htmlFor="is-priority"
+            className="flex gap-2 items-center rounded-3xl"
+            title="Dar destaque ao produto, mostrar primeiro na pagina inicial."
+          >
+            <Switch
+              disabled={!isEditing}
+              id="is-priority"
+              checked={watch("priority")}
+              onCheckedChange={(c) => setValue("priority", c)}
+            />
+            <span>{watch("priority") ? "Destacado" : "Sem destaque"}</span>
           </label>
 
           {/* Previews */}

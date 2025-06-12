@@ -112,22 +112,22 @@ model subcategory {
 }
 
 model product {
-  id             Int              @id @default(autoincrement())
-  subcategory_id Int
-  name           String
-  description    String
-  price          Int
-  stock_quantity Int
-  created_at     DateTime         @default(now())
-  updated_at     DateTime         @updatedAt
-  occasions_id   Int?
-  is_visible     Boolean          @default(true)
-  order_bump     order_bump[]
-  order_item     order_item[]
-  occasions      occasions?       @relation(fields: [occasions_id], references: [id])
-  subcategory    subcategory      @relation(fields: [subcategory_id], references: [id], onDelete: NoAction)
-  product_images product_images[]
-  promotions     promotions[]
+  id                Int                 @id @default(autoincrement())
+  subcategory_id    Int
+  name              String
+  description       String
+  price             Int
+  stock_quantity    Int
+  priority          Boolean             @default(false)
+  created_at        DateTime            @default(now())
+  updated_at        DateTime            @updatedAt
+  is_visible        Boolean             @default(true)
+  order_bump        order_bump[]
+  order_item        order_item[]
+  subcategory       subcategory         @relation(fields: [subcategory_id], references: [id], onDelete: NoAction)
+  product_images    product_images[]
+  promotions        promotions[]
+  product_occasions product_occasions[]
 }
 
 model product_images {
@@ -141,9 +141,20 @@ model product_images {
 }
 
 model occasions {
-  id       Int       @id @default(autoincrement())
-  name     String
-  products product[]
+  id                Int                 @id @default(autoincrement())
+  slug              String?             @unique
+  name              String
+  product_occasions product_occasions[]
+}
+
+model product_occasions {
+  product_id  Int
+  occasion_id Int
+
+  product  product   @relation(fields: [product_id], references: [id])
+  occasion occasions @relation(fields: [occasion_id], references: [id])
+
+  @@id([product_id, occasion_id])
 }
 
 model promotions {

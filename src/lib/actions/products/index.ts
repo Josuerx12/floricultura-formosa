@@ -31,6 +31,7 @@ export type Product = {
   price: number;
   description: string;
   is_visible: boolean;
+  priority?: boolean;
   product_images?: any[];
   promotions?: Promotion[];
   subcategory?: SubCategory;
@@ -52,6 +53,7 @@ export async function CreateProduct(formData: FormData) {
         description: rawObject?.description,
         name: rawObject.name,
         is_visible: rawObject.is_visible === "true",
+        priority: rawObject.priority === "true",
         stock_quantity: parseInt(rawObject.stock_quantity),
         subcategory_id: parseInt(rawObject.subcategory_id),
         price: toCents(rawObject.price),
@@ -145,6 +147,9 @@ export async function EditProduct({
       is_visible: rawObject.is_visible
         ? rawObject.is_visible === "true"
         : product.is_visible,
+      priority: rawObject.priority
+        ? rawObject.priority === "true"
+        : product.priority,
       subcategory_id: rawObject.subcategory_id
         ? Number(rawObject.subcategory_id)
         : product.subcategory_id,
@@ -248,65 +253,95 @@ export async function GetAllProductsWithPagination({
   };
 }
 
-export async function getTop20SelledProducts() {
-  const topSellingProducts = await prisma.order_item.groupBy({
-    by: ["product_id"],
-    _sum: { quantity: true },
-    orderBy: { _sum: { quantity: "desc" } },
+export async function getTop20SelledProducts({
+  order_by = "desc",
+}: {
+  order_by?: "asc" | "desc";
+}) {
+  // 1. Produtos com prioridade
+  const priorityProducts = await prisma.product.findMany({
+    where: {
+      priority: true,
+      is_visible: true,
+      stock_quantity: { gt: 0 },
+    },
+    orderBy: { price: order_by },
+    include: {
+      product_images: { select: { url: true, id: true } },
+    },
     take: 20,
   });
 
-  const productIds = topSellingProducts.map((item) => item.product_id);
+  const priorityIds = priorityProducts.map((p) => p.id);
 
-  let products: any[] = [];
-  if (productIds.length > 0) {
-    products = await prisma.product.findMany({
+  // 2. Produtos mais vendidos (sem prioridade)
+  const topSellingProducts = await prisma.order_item.groupBy({
+    where: {
+      order: {
+        status: {
+          not: {
+            equals: "CANCELED",
+          },
+        },
+      },
+    },
+    by: ["product_id"],
+    _sum: { quantity: true },
+    orderBy: { _sum: { quantity: "desc" } },
+    take: 50, // margem de segurança
+  });
+
+  const sellingProductIds = topSellingProducts
+    .map((item) => item.product_id)
+    .filter((id) => !priorityIds.includes(id));
+
+  let bestSellingProducts: any[] = [];
+  if (sellingProductIds.length > 0) {
+    bestSellingProducts = await prisma.product.findMany({
       where: {
-        id: { in: productIds },
+        id: { in: sellingProductIds },
+        priority: false,
         is_visible: true,
         stock_quantity: { gt: 0 },
       },
-      include: {
-        product_images: { select: { url: true, id: true } },
-      },
-    });
-
-    products.sort(
-      (a, b) => productIds.indexOf(a.id) - productIds.indexOf(b.id)
-    );
-  }
-
-  if (products.length < 20) {
-    const moreProducts = await prisma.product.findMany({
-      where: {
-        id: { notIn: productIds },
-        is_visible: true,
-        stock_quantity: { gt: 0 },
-      },
-      orderBy: { created_at: "desc" },
-      take: 20 - products.length,
-      include: {
-        product_images: { select: { url: true, id: true } },
-      },
-    });
-    products = [...products, ...moreProducts];
-  }
-
-  if (products.length === 0) {
-    products = await prisma.product.findMany({
-      where: {
-        is_visible: true,
-        stock_quantity: { gt: 0 },
-      },
-      orderBy: { created_at: "desc" },
-      take: 20,
+      orderBy: { price: order_by },
       include: {
         product_images: { select: { url: true, id: true } },
       },
     });
   }
 
-  return products.map((p) => ({
+  // 3. Produtos complementares
+  const allFetchedIds = [
+    ...priorityIds,
+    ...bestSellingProducts.map((p) => p.id),
+  ];
+
+  let otherProducts: any[] = [];
+  const currentCount = priorityProducts.length + bestSellingProducts.length;
+
+  if (currentCount < 20) {
+    otherProducts = await prisma.product.findMany({
+      where: {
+        id: { notIn: allFetchedIds },
+        is_visible: true,
+        stock_quantity: { gt: 0 },
+      },
+      orderBy: { price: order_by },
+      include: {
+        product_images: { select: { url: true, id: true } },
+      },
+      take: 20 - currentCount,
+    });
+  }
+
+  const finalProducts = [
+    ...priorityProducts,
+    ...bestSellingProducts,
+    ...otherProducts,
+  ].slice(0, 20);
+
+  return finalProducts.map((p) => ({
     ...p,
     price: fromCents(p.price),
   }));

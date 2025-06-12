@@ -55,7 +55,7 @@ const CreateProductModal = () => {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(ProductSchema),
-    defaultValues: { is_visible: false },
+    defaultValues: { is_visible: false, priority: false },
   });
 
   const query = useQueryClient();
@@ -86,6 +86,7 @@ const CreateProductModal = () => {
     formData.append("stock_quantity", data.stock_quantity?.toString());
     formData.append("description", data.description);
     formData.append("is_visible", String(data.is_visible));
+    formData.append("priority", String(data.priority));
     formData.append("price", data.price);
 
     await mutateAsync(formData);
@@ -229,16 +230,33 @@ const CreateProductModal = () => {
             )}
           </div>
 
+          <span className="font-semibold text-sm">Produto visivel</span>
+
           <label
             htmlFor="is-active"
-            className="flex  p-2 gap-2 items-center rounded-3xl"
+            className="flex  gap-2 items-center rounded-3xl"
           >
             <Switch
               id="is-active"
               checked={watch("is_visible")}
               onCheckedChange={(c) => setValue("is_visible", c)}
             />
-            <span>{watch("is_visible") ? "Ativo" : "Desativado"}</span>
+            <span>{watch("is_visible") ? "Visível" : "Invisível"}</span>
+          </label>
+
+          <span className="font-semibold text-sm">Produto destaque</span>
+
+          <label
+            htmlFor="is-priority"
+            className="flex gap-2 items-center rounded-3xl"
+            title="Dar destaque ao produto, mostrar primeiro na pagina inicial."
+          >
+            <Switch
+              id="is-priority"
+              checked={watch("priority")}
+              onCheckedChange={(c) => setValue("priority", c)}
+            />
+            <span>{watch("priority") ? "Destacado" : "Sem destaque"}</span>
           </label>
 
           {/* Imagens */}
