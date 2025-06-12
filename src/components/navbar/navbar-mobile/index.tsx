@@ -76,7 +76,7 @@ const NavbarMobile = ({ user }: { user?: User }) => {
             href={"/"}
             title="Ir para pagina inicial"
           >
-            <Image
+            <img
               className="w-10 h-10 md:w-20 md:h-20 object-fill"
               src={"/images/logo-branca.webp"}
               loading="lazy"
@@ -213,7 +213,7 @@ const NavbarMobile = ({ user }: { user?: User }) => {
       </div>
       <div className="w-full mx-auto flex justify-center py-10 items-center">
         <Link href={"/"} title="Ir para pagina inicial">
-          <Image
+          <img
             src={"/images/logo-letra.webp"}
             alt="Logo floricultura"
             width={200}

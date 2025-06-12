@@ -43,7 +43,7 @@ const ProfileForm = ({ user }: { user: User & { createdAt: Date } }) => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex flex-col w-fit items-center mx-auto">
-        <Image
+        <img
           src={user?.image ? user.image : "/no-profile.svg"}
           width={100}
           height={100}

@@ -27,7 +27,7 @@ const SalesCard = ({ sale }: { sale: any }) => {
               return (
                 <div key={i.id} className="flex gap-2">
                   {i.product?.product_images[0]?.url && (
-                    <Image
+                    <img
                       src={sale.items[0].product.product_images[0].url}
                       alt={sale.items[0].product.name}
                       width={50}

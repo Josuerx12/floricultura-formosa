@@ -29,7 +29,7 @@ const UserDropdown = ({ user }: { user: User }) => {
       <DropdownMenu>
         <DropdownMenuTrigger className="outline-none">
           <div className="flex items-center gap-1">
-            <Image
+            <img
               src={user.image ? user.image : "/no-profile.svg"}
               width={40}
               height={40}

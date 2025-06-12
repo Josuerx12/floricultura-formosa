@@ -175,7 +175,7 @@ const DetailProductModal = ({
                 >
                   <X size={20} />
                 </button>
-                <Image
+                <img
                   src={i.url}
                   alt="Imagem do produto"
                   width={100}

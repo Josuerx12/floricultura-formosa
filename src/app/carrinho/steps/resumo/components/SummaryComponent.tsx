@@ -128,7 +128,7 @@ const SummaryComponent = ({ user }: { user: any }) => {
         return (
           <Card className="flex" key={p.id}>
             <CardHeader className="border-r-2">
-              <Image
+              <img
                 width={50}
                 height={50}
                 src={p.product_image as string}

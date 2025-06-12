@@ -57,7 +57,7 @@ const AddCartModal = ({ product, handleClose, isOpen }: Props) => {
                 >
                   {item.bumpProduct.product_images?.[0]?.url && (
                     <div className="relative w-12 h-12 flex-shrink-0">
-                      <Image
+                      <img
                         src={item.bumpProduct.product_images[0].url}
                         alt={item.bumpProduct.name}
                         fill
@@ -97,7 +97,7 @@ const AddCartModal = ({ product, handleClose, isOpen }: Props) => {
 
                 {selectedProduct.product_images?.[0]?.url && (
                   <div className="relative w-full h-48 mb-4">
-                    <Image
+                    <img
                       src={selectedProduct.product_images[0].url}
                       alt={selectedProduct.name}
                       fill

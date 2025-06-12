@@ -66,7 +66,7 @@ const ListOrderBumpModal = ({ handleClose, isOpen, category }: ModalProps) => {
                 {bumps &&
                   bumps.map((bump) => (
                     <div key={bump.id} className="flex gap-2 items-center">
-                      <Image
+                      <img
                         className="rounded-md"
                         src={bump.bumpProduct.product_images?.[0]?.url || ""}
                         width={50}

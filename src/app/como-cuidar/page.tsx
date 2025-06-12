@@ -22,7 +22,7 @@ const HowToCarePage = async () => {
             className="flex flex-col justify-center px-2 gap-2 w-full"
           >
             <h4 className="text-xl text-center">{m.title}</h4>
-            <Image
+            <img
               src={m.image_url}
               alt={"Foto da flor da explicação do cuidado" + m.title}
               width={500}

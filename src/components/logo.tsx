@@ -4,7 +4,7 @@ import React from "react";
 const Logo = () => {
   return (
     <div className="flex flex-col items-center  font-semibold ">
-      <Image
+      <img
         src={"/logo.svg"}
         width={60}
         height={60}

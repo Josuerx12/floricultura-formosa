@@ -22,7 +22,7 @@ const FlowerMeaningsPage = async () => {
             className="flex flex-col justify-center px-2 gap-2 w-full"
           >
             <h4 className="text-xl text-center">{m.name}</h4>
-            <Image
+            <img
               src={m.image_url}
               alt={"Foto do significado da flor" + m.name}
               width={500}

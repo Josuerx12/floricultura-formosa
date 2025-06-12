@@ -99,7 +99,7 @@ const OrderCard = ({ order }: { order: Order }) => {
               {order.items.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell width={48} className="hidden sm:block">
-                    <Image
+                    <img
                       className="!w-12"
                       src={item.product.product_images[0]!.url}
                       alt={"Foto do produto " + item.product.name}

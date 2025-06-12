@@ -13,7 +13,7 @@ const CartProductCard = ({ product }: { product: ProductCart }) => {
       {/* Produto principal */}
       <div className="flex flex-col md:flex-row gap-4 w-full">
         {product.product_image && (
-          <Image
+          <img
             src={product.product_image}
             width={400}
             height={400}

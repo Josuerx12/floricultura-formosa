@@ -45,7 +45,7 @@ export default function HomeSlider({ banners }: { banners: any[] }) {
             target="_blank"
             className="relative min-w-screen w-full h-[250px] md:min-h-[516px]"
           >
-            <Image
+            <img
               fill
               layout="fill"
               src={slide.src}

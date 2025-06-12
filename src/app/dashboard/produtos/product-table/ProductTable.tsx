@@ -10,7 +10,7 @@ const ProductTableRow = ({ prod }: { prod: any }) => {
   return (
     <TableRow key={prod.id}>
       <TableCell className="font-medium">
-        <Image
+        <img
           className="w-[50px] h-[50px]"
           src={
             prod?.product_images[0]?.url

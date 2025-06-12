@@ -66,7 +66,7 @@ const DeliverToClientModal = ({ order }: { order: Order }) => {
               return (
                 <div className="flex gap-2 items-center" key={i.id}>
                   {i.product?.product_images[0]?.url && (
-                    <Image
+                    <img
                       src={i.product.product_images[0].url}
                       alt={i.product.name}
                       width={50}
