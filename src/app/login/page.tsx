@@ -18,13 +18,7 @@ const AutentiqueSe = async () => {
       <div className="flex flex-col h-fit gap-6 mx-4 md:mx-auto p-6 py-8 max-w-md w-full bg-white shadow-lg rounded-2xl border border-gray-200">
         {/* Logo */}
         <div className="flex flex-col items-center">
-          <img
-            src="/logo.svg"
-            width={80}
-            height={80}
-            quality={100}
-            alt="Logo Floricultura"
-          />
+          <img src="/logo.svg" width={80} height={80} alt="Logo Floricultura" />
           <h2 className="mt-3 text-lg text-center font-semibold text-gray-700">
             Bem-vindo à nossa floricultura!
           </h2>

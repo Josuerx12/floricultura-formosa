@@ -33,7 +33,6 @@ const UserDropdown = ({ user }: { user: User }) => {
               src={user.image ? user.image : "/no-profile.svg"}
               width={40}
               height={40}
-              quality={100}
               alt="profile pic"
               className="rounded-full"
             />

@@ -45,7 +45,6 @@ const ProductDetails = ({ product, finalPrice, discount }: any) => {
             alt={product.name}
             width={500}
             height={500}
-            quality={100}
             className="object-contain w-full h-96 rounded-md"
           />
         </div>

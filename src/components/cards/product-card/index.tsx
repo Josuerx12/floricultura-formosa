@@ -28,7 +28,6 @@ export function ProductCard({ product }: { product: Product }) {
           src={product.product_images?.[0]?.url || "/images/placeholder.png"}
           alt={product.name}
           className="object-cover w-full"
-          priority
         />
 
         {discount > 0 && (

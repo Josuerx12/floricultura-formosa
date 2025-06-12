@@ -47,7 +47,6 @@ const ProfileForm = ({ user }: { user: User & { createdAt: Date } }) => {
           src={user?.image ? user.image : "/no-profile.svg"}
           width={100}
           height={100}
-          quality={100}
           alt="profile pic"
           className="rounded-full"
         />

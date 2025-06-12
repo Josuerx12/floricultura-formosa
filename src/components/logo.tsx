@@ -8,7 +8,6 @@ const Logo = () => {
         src={"/logo.svg"}
         width={60}
         height={60}
-        quality={100}
         alt="Logo floricultura"
         className="bg-transparent fill-current w-[40px] h-[40px] md:w-[60px] md:h-[60px] text-black"
       />

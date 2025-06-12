@@ -105,7 +105,6 @@ const OrderCard = ({ order }: { order: Order }) => {
                       alt={"Foto do produto " + item.product.name}
                       width={48}
                       height={48}
-                      quality={100}
                     />
                   </TableCell>
                   <TableCell>{item.product.name}</TableCell>

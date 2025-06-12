@@ -20,7 +20,6 @@ const ProductTableRow = ({ prod }: { prod: any }) => {
           alt="Product image"
           width={100}
           height={100}
-          quality={100}
         />
       </TableCell>
       <TableCell>{prod.name}</TableCell>

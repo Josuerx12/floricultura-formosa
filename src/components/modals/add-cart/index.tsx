@@ -60,7 +60,6 @@ const AddCartModal = ({ product, handleClose, isOpen }: Props) => {
                       <img
                         src={item.bumpProduct.product_images[0].url}
                         alt={item.bumpProduct.name}
-                        fill
                         className="object-cover rounded"
                       />
                     </div>
@@ -100,7 +99,6 @@ const AddCartModal = ({ product, handleClose, isOpen }: Props) => {
                     <img
                       src={selectedProduct.product_images[0].url}
                       alt={selectedProduct.name}
-                      fill
                       className="object-contain rounded"
                     />
                   </div>
