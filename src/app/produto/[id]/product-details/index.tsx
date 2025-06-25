@@ -126,9 +126,9 @@ const ProductDetails = ({ product, finalPrice, discount }: any) => {
             </select>
           </div>
 
-          {/* <Button className="text-btn-text bg-btn-body" type="submit">
+          <Button className="text-btn-text bg-btn-body" type="submit">
             Adicionar ao Carrinho
-          </Button> */}
+          </Button>
         </form>
 
         <div className="mt-6">

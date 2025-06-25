@@ -21,10 +21,10 @@ import { getCategories } from "@/lib/actions/category";
 import { MobileHomeSearchFilter } from "@/components/filters/mobile-home-search-filter";
 import { useQuery } from "@tanstack/react-query";
 import { User } from "next-auth";
-import Image from "next/image";
 import CategoryAccordeon from "@/components/accordeons/category-accordeon";
 import { ptBR } from "date-fns/locale";
 import { registerLocale } from "react-datepicker";
+import CartBtn from "@/components/buttons/cart-btn";
 
 const NavbarMobile = ({ user }: { user?: User }) => {
   const router = useRouter();
@@ -88,9 +88,9 @@ const NavbarMobile = ({ user }: { user?: User }) => {
 
           <div className="flex items-center gap-4">
             <MobileHomeSearchFilter />
-            {/* <div className=" p-2 rounded-full">
+            <div className=" p-2 rounded-full">
               <CartBtn />
-            </div> */}
+            </div>
           </div>
         </header>
       </div>
