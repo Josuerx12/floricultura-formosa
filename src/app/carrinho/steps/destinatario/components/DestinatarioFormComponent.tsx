@@ -7,8 +7,8 @@ import { useCheckout } from "@/hooks/use-checkout";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { Controller, useForm } from "react-hook-form";
-import { IMaskInput } from "react-imask";
+import { useForm } from "react-hook-form";
+import { useMask } from "@react-input/mask";
 
 const DestinatarioFormComponent = () => {
   const { thirdStep, delivery, phone, to, from, message } = useCheckout();
@@ -28,20 +28,20 @@ const DestinatarioFormComponent = () => {
     thirdStep(data.phone, data.message, data.to, data.from);
     router.push("/carrinho/steps/resumo");
   };
+
+  const phoneInputRef = useMask({
+    mask: "55 (__) _____-____",
+    replacement: { _: /\d/ },
+  });
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
-        <Controller
-          control={control}
-          name="phone"
-          render={({ field }) => (
-            <IMaskInput
-              {...field}
-              mask="(00) 00000-0000"
-              placeholder="(11) 91234-5678"
-              className="w-full bg-transparent outline-none placeholder:text-neutral-500"
-            />
-          )}
+        <Input
+          {...register("phone")}
+          ref={phoneInputRef}
+          placeholder="De"
+          required
         />
       </label>
       <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
