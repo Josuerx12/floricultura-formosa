@@ -52,7 +52,7 @@ const SignUpForm = () => {
 
   const cpfMask = "___.___.___-__";
   const cnpjMask = "__.___.___/____-__";
-  const currentMask = document?.length > 11 ? cnpjMask : cpfMask;
+  const currentMask = document?.length > 13 ? cnpjMask : cpfMask;
 
   const documentInputRef = useMask({
     mask: currentMask,
