@@ -19,8 +19,8 @@ import { useMutation } from "@tanstack/react-query";
 import { Calendar, FileText, Phone } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { IMaskInput } from "react-imask";
+import { Controller, useForm, useWatch } from "react-hook-form";
+import { useMask } from "@react-input/mask";
 
 const CompleteRegister = () => {
   const { data, update } = useSession();
@@ -31,6 +31,7 @@ const CompleteRegister = () => {
   const {
     control,
     register,
+    setValue,
     formState: { errors },
     handleSubmit,
   } = useForm<CompleteUserInput>({
@@ -69,6 +70,22 @@ const CompleteRegister = () => {
     await mutateAsync(data);
   }
 
+  const document = useWatch({ control, name: "document" });
+
+  const cpfMask = "___.___.___-__";
+  const cnpjMask = "__.___.___/____-__";
+  const currentMask = document?.length > 11 ? cnpjMask : cpfMask;
+
+  const documentInputRef = useMask({
+    mask: currentMask,
+    replacement: { _: /\d/ },
+  });
+
+  const phoneInputRef = useMask({
+    mask: "55 (__) _____-____",
+    replacement: { _: /\d/ },
+  });
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger>Completar Cadastro</DialogTrigger>
@@ -85,25 +102,16 @@ const CompleteRegister = () => {
           {/* Document */}
           <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
             <FileText className="text-primary-foreground" size={20} />
-            <Controller
-              control={control}
-              name="document"
-              defaultValue={data?.user.document || ""}
-              render={({ field }) => (
-                <IMaskInput
-                  {...field}
-                  mask={[
-                    {
-                      mask: "000.000.000-00", // CPF
-                    },
-                    {
-                      mask: "00.000.000/0000-00", // CNPJ
-                    },
-                  ]}
-                  placeholder="Digite seu CPF ou CNPJ"
-                  className="w-full bg-transparent outline-none placeholder:text-neutral-500"
-                />
-              )}
+            <input
+              {...register("document")}
+              ref={documentInputRef}
+              onChange={(e) => {
+                setValue("document", e.target.value);
+              }}
+              required
+              className="w-full bg-transparent outline-none placeholder:text-neutral-600 text-sm"
+              type="text"
+              placeholder="999.888.111-52 ou 12.163.577/0001-22"
             />
           </label>
           {errors.document && (
@@ -113,18 +121,16 @@ const CompleteRegister = () => {
           {/* Phone */}
           <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
             <Phone className="text-primary-foreground" size={20} />
-            <Controller
-              control={control}
-              name="phone"
-              defaultValue={data?.user.phone || ""}
-              render={({ field }) => (
-                <IMaskInput
-                  {...field}
-                  mask="(00) 00000-0000"
-                  placeholder="(11) 91234-5678"
-                  className="w-full bg-transparent outline-none placeholder:text-neutral-500"
-                />
-              )}
+            <input
+              {...register("phone")}
+              ref={phoneInputRef}
+              onChange={(e) => {
+                setValue("phone", e.target.value);
+              }}
+              required
+              className="w-full bg-transparent outline-none placeholder:text-neutral-600 text-sm"
+              type="tel"
+              placeholder="+55 (22) 99797-9797"
             />
           </label>
           {errors.phone && (
