@@ -46,11 +46,14 @@ export async function GET(request: Request) {
             ? order.user.phone
             : `55${order.user.phone}`,
           `
-          *❌ ❌ Compra não aprovada ❌ ❌*\n\n
-          *ID: * ${order.id}\n
-          Não foi possivel processar seu pagamento.\n\n
-          _Acredita que foi um erro, entre em contato com suporte imediatamente com as provas._
-          `.trim()
+*❌❌ Compra não aprovada ❌❌*
+
+*ID:* ${order.id}
+
+Não foi possível processar o seu pagamento.
+
+_Caso acredite que isso foi um erro, entre em contato com o suporte imediatamente e envie as devidas comprovações._
+  `
         );
 
         transporter.sendMail({

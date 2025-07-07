@@ -49,19 +49,24 @@ export async function GET(request: Request) {
         data: { status: "PROCESSING" },
       });
 
+      order.status = "PROCESSING";
+
       if (order.user.phone) {
         wpp.sendMessageText(
           order.user.phone.includes("55")
             ? order.user.phone
             : `55${order.user.phone}`,
           `
-           *🎉 🎉 Compra aprovada 🎉 🎉* \n\n 
-           *ID:* ${order.id} \n
-           *Status do pedido:*: ${parseOrderStatus(order).message} \n
-           *De:* ${order.order_preferences[0].from} \n
-           *Para:* ${order.order_preferences[0].to} \n
-           *Entregar:* _${order.order_preferences[0].delivery_date}_
-           `.trim()
+*🎉 Compra aprovada com sucesso! 🎉*
+
+*ID:* ${order.id}
+*Status do pedido:* ${parseOrderStatus(order).message}
+*De:* ${order.order_preferences[0].from}
+*Para:* ${order.order_preferences[0].to}
+*Entrega:* _${order.order_preferences[0].delivery_date}_
+
+Agradecemos pela sua compra! 🌷
+  `.trim()
         );
       }
 
