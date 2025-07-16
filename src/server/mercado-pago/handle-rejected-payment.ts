@@ -44,11 +44,16 @@ export async function handleRejectedPayment(
             ? order.user.phone
             : `55${order.user.phone}`,
           `
-          *❌ ❌ Compra não aprovada ❌ ❌*\n\n
-          *ID: * ${order.id}\n
-          Não foi possivel processar seu pagamento.\n\n
-          _Acredita que foi um erro, entre em contato com suporte imediatamente com as provas._
-          `.trim()
+🌷 *Floricultura Formosa*
+
+*❌ Compra não aprovada*
+
+*Id: * ${order.id}
+
+Não foi possivel processar seu pagamento.
+
+_Acredita que foi um erro, entre em contato com suporte imediatamente com as provas._
+          `
         );
       }
 

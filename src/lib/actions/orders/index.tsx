@@ -6,6 +6,8 @@ import { OrderStatus, Prisma } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { SessionValidation } from "../session-validation";
 import { User } from "next-auth";
+import { WppRepository } from "../jcwpp/infra/wpp.repository";
+import { parseOrderStatus } from "@/lib/utils";
 
 export type GetOrdersProps = {
   page?: string;
@@ -764,6 +766,7 @@ export const getPendingOrders = async ({
 };
 
 export async function DeliverOrder(id: string) {
+  const wpp = new WppRepository();
   const session = await auth();
 
   const sessionValidate = new SessionValidation(session);
@@ -774,6 +777,10 @@ export async function DeliverOrder(id: string) {
     where: {
       id,
     },
+    include: {
+      user: true,
+      order_preferences: true,
+    },
   });
 
   if (!order) {
@@ -783,18 +790,41 @@ export async function DeliverOrder(id: string) {
   order.status = OrderStatus.SHIPPED;
 
   await prisma.order.update({
-    data: order,
+    data: { status: order.status },
     where: {
       id,
     },
   });
 
+  if (order.user.phone) {
+    wpp.sendMessageText(
+      order.user.phone,
+      `
+🌷 *Floricultura Formosa*
+      
+"🚚 *Status da compra atualizado*"
+      
+*ID:* ${order.id}
+      
+*Status do pedido:*: ${parseOrderStatus(order).message}
+      
+*De:* ${order.order_preferences[0].from}
+      
+*Para:* ${order.order_preferences[0].to}
+      
+*Entregar:* _${order.order_preferences[0].delivery_date}_
+      
+_Agradecemos pela sua compra! 🌷_
+    `
+    );
+  }
   return {
     message: "Pedido enviado com sucesso!",
   };
 }
 
 export async function ReciveOrder(id: string) {
+  const wpp = new WppRepository();
   const session = await auth();
 
   new SessionValidation(session);
@@ -802,6 +832,10 @@ export async function ReciveOrder(id: string) {
   const order = await prisma.order.findUnique({
     where: {
       id,
+    },
+    include: {
+      user: true,
+      order_preferences: true,
     },
   });
 
@@ -812,11 +846,34 @@ export async function ReciveOrder(id: string) {
   order.status = OrderStatus.DELIVERED;
 
   await prisma.order.update({
-    data: order,
+    data: { status: order.status },
     where: {
       id,
     },
   });
+
+  if (order.user.phone) {
+    wpp.sendMessageText(
+      order.user.phone,
+      `
+🌷 *Floricultura Formosa*
+      
+"🚚 *Status da compra atualizado*"
+      
+*ID:* ${order.id}
+      
+*Status do pedido:*: ${parseOrderStatus(order).message}
+      
+*De:* ${order.order_preferences[0].from}
+      
+*Para:* ${order.order_preferences[0].to}
+      
+*Entregar:* _${order.order_preferences[0].delivery_date}_
+      
+_Agradecemos pela sua compra! 🌷_
+    `
+    );
+  }
 
   return {
     message: "Pedido recebido com sucesso!",

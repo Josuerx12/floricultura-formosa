@@ -57,16 +57,22 @@ export async function GET(request: Request) {
             ? order.user.phone
             : `55${order.user.phone}`,
           `
-*🎉 Compra aprovada com sucesso! 🎉*
+🌷 *Floricultura Formosa*
+
+🎉 *Compra aprovada*
 
 *ID:* ${order.id}
-*Status do pedido:* ${parseOrderStatus(order).message}
-*De:* ${order.order_preferences[0].from}
-*Para:* ${order.order_preferences[0].to}
-*Entrega:* _${order.order_preferences[0].delivery_date}_
 
-Agradecemos pela sua compra! 🌷
-  `.trim()
+*Status do pedido:*: ${parseOrderStatus(order).message}
+
+*De:* ${order.order_preferences[0].from}
+
+*Para:* ${order.order_preferences[0].to}
+
+*Entregar:* _${order.order_preferences[0].delivery_date}_
+
+_Agradecemos pela sua compra! 🌷_
+  `
         );
       }
 
@@ -76,6 +82,24 @@ Agradecemos pela sua compra! 🌷
         subject: "Pedido Processado",
         text: `Seu pedido numero: ${order?.id} foi processado com sucesso.`,
       });
+
+      wpp.sendGroupMessageText(
+        `
+🌷 *Floricultura Formosa*
+
+*✅ Venda Aprovada - Site*
+
+*ID:* ${order.id}
+
+*Status do pedido:*: ${parseOrderStatus(order).message}
+
+*De:* ${order.order_preferences[0].from}
+
+*Para:* ${order.order_preferences[0].to}
+
+*Entregar:* _${order.order_preferences[0].delivery_date}_
+     `
+      );
     }
 
     return NextResponse.redirect(

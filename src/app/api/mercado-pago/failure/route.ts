@@ -46,13 +46,15 @@ export async function GET(request: Request) {
             ? order.user.phone
             : `55${order.user.phone}`,
           `
-*❌❌ Compra não aprovada ❌❌*
+🌷 *Floricultura Formosa*
 
-*ID:* ${order.id}
+*❌ Compra não aprovada*
 
-Não foi possível processar o seu pagamento.
+*Id: * ${order.id}
 
-_Caso acredite que isso foi um erro, entre em contato com o suporte imediatamente e envie as devidas comprovações._
+Não foi possivel processar seu pagamento.
+
+_Acredita que foi um erro, entre em contato com suporte imediatamente com as provas._
   `
         );
 

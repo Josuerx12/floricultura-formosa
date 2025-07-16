@@ -4,7 +4,6 @@ import { PaymentResponse } from "mercadopago/dist/clients/payment/commonTypes";
 import { prisma } from "@/lib/db/prisma";
 import { transporter } from "@/lib/mail/transporter";
 import { WppRepository } from "@/lib/actions/jcwpp/infra/wpp.repository";
-import { triggerAsyncId } from "async_hooks";
 import { parseOrderStatus } from "@/lib/utils";
 
 export async function handleApprovedPayment(paymentData: PaymentResponse) {
@@ -46,6 +45,8 @@ export async function handleApprovedPayment(paymentData: PaymentResponse) {
     },
   });
 
+  order.status = "PROCESSING";
+
   transporter.sendMail({
     from: `Floricultura Formosa <${process.env.MAIL}>`,
     to: order.user.email,
@@ -58,24 +59,44 @@ export async function handleApprovedPayment(paymentData: PaymentResponse) {
         ? order.user.phone
         : `55${order.user.phone}`,
       `
-     *🎉 🎉 Compra aprovada 🎉 🎉* \n\n 
-     *ID:* ${order.id} \n
-     *Status do pedido:*: ${parseOrderStatus(order).message} \n
-     *De:* ${order.order_preferences[0].from} \n
-     *Para:* ${order.order_preferences[0].to} \n
-     *Entregar:* _${order.order_preferences[0].delivery_date}_
-     `.trim()
+🌷 *Floricultura Formosa*
+
+${
+  order.status === "PROCESSING"
+    ? "🎉 *Compra aprovada*"
+    : "🚚 *Status da compra atualizado*"
+}
+
+*ID:* ${order.id}
+
+*Status do pedido:*: ${parseOrderStatus(order).message}
+
+*De:* ${order.order_preferences[0].from}
+
+*Para:* ${order.order_preferences[0].to}
+
+*Entregar:* _${order.order_preferences[0].delivery_date}_
+
+_Agradecemos pela sua compra! 🌷_
+`
     );
   }
 
   wpp.sendGroupMessageText(
     `
-     *Venda Aprovada - Site* \n\n 
-     *ID:* ${order.id} \n
-     *Status do pedido:*: ${parseOrderStatus(order).message} \n
-     *De:* ${order.order_preferences[0].from} \n
-     *Para:* ${order.order_preferences[0].to} \n
-     *Entregar:* _${order.order_preferences[0].delivery_date}_
-     `.trim()
+🌷 *Floricultura Formosa*
+
+*✅ Venda Aprovada - Site*
+
+*ID:* ${order.id}
+
+*Status do pedido:*: ${parseOrderStatus(order).message}
+
+*De:* ${order.order_preferences[0].from}
+
+*Para:* ${order.order_preferences[0].to}
+
+*Entregar:* _${order.order_preferences[0].delivery_date}_
+     `
   );
 }
