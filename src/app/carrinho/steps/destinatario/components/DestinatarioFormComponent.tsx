@@ -13,7 +13,7 @@ import { useMask } from "@react-input/mask";
 const DestinatarioFormComponent = () => {
   const { thirdStep, delivery, phone, to, from, message } = useCheckout();
 
-  const { register, handleSubmit, control } = useForm({
+  const { register, handleSubmit, setValue } = useForm({
     defaultValues: {
       phone,
       to,
@@ -40,7 +40,10 @@ const DestinatarioFormComponent = () => {
         <Input
           {...register("phone")}
           ref={phoneInputRef}
-          placeholder="De"
+          onChange={(e) => {
+            setValue("phone", e.target.value);
+          }}
+          placeholder="Numero de telefone"
           required
         />
       </label>
