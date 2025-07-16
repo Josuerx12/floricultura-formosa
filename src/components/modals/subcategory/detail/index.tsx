@@ -85,7 +85,7 @@ const DetailSubCategoriaModal = ({
               name="slug"
               defaultValue={subCategory.slug}
               disabled={!isEditing}
-              placeholder="Insira o nome da categoria!"
+              placeholder="Insira o slug da categoria!"
             />
           </label>
 

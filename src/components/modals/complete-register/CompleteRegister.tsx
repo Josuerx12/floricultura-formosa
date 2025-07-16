@@ -19,7 +19,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Calendar, FileText, Phone } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
-import { Controller, useForm, useWatch } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useMask } from "@react-input/mask";
 
 const CompleteRegister = () => {

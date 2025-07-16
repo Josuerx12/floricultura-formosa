@@ -94,7 +94,7 @@ export const CompleteUserSchema = z.object({
   phone: z
     .string()
     .transform((v) => v.replace(/\D/g, ""))
-    .refine((v) => v.length === 11, {
+    .refine((v) => v.length === 13, {
       message: "Telefone inválido. Use o formato (DD) 90000-0000.",
     }),
 
