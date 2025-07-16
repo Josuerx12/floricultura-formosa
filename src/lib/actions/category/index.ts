@@ -135,7 +135,11 @@ export async function getCategories() {
           id: true,
           slug: true,
         },
+        orderBy: { name: "asc" },
       },
+    },
+    orderBy: {
+      name: "asc",
     },
   });
 
