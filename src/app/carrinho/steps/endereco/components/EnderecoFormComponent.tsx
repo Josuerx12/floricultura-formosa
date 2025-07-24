@@ -53,7 +53,7 @@ const EnderecoFormComponent = ({ user }: { user: User }) => {
     const hour = date.getHours();
 
     if (date < today) return true;
-    if (date.toDateString() === now.toDateString() && now.getHours() >= 14)
+    if (date.toDateString() === now.toDateString() && now.getHours() >= 16)
       return true;
     if (day === 0) return true;
     if (day === 6 && hour >= 12) return true;
