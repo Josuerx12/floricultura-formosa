@@ -4,6 +4,7 @@ import { getOrderById } from "@/lib/actions/orders";
 import { auth } from "@/lib/auth/auth";
 import { parseOrderStatus } from "@/lib/utils";
 import { OrderStatus, UserRoles } from "@prisma/client";
+import { PackageCheck } from "lucide-react";
 import MercadoPagoConfig, { Payment } from "mercadopago";
 import { PaymentResponse } from "mercadopago/dist/clients/payment/commonTypes";
 import { PaymentSearchResult } from "mercadopago/dist/clients/payment/search/types";
@@ -218,7 +219,11 @@ const VendaPage = async ({ params }: { params: any }) => {
           <DeliverToClientModal order={sale as any} />
         )}
         {(sale.status === OrderStatus.SHIPPED || !sale.address) && (
-          <ReciveOrderModal order={sale as any} />
+          <ReciveOrderModal
+            btnMessage="Entregar Pedido"
+            Icon={PackageCheck}
+            order={sale as any}
+          />
         )}
       </div>
     </main>
