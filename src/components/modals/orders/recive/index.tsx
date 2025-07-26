@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Order, ReciveOrder } from "@/lib/actions/orders";
-import { Info, LucideIcon, Truck } from "lucide-react";
+import { Info, LucideIcon, PackageCheck, Truck } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
 import React, { ReactNode, useState } from "react";
@@ -18,11 +18,9 @@ import { useRouter } from "next/navigation";
 const ReciveOrderModal = ({
   order,
   btnMessage,
-  Icon,
 }: {
   order: Order;
   btnMessage: string;
-  Icon?: LucideIcon;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -62,7 +60,7 @@ const ReciveOrderModal = ({
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogTrigger className="py-2 px-3 text-sm rounded-md flex items-center justify-between border bg-green-600 hover:bg-green-700 text-primary duration-200">
-        {btnMessage} {Icon && <Icon size={18} />}
+        {btnMessage} <PackageCheck />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

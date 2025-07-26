@@ -110,11 +110,7 @@ const OrderCard = ({ order }: { order: Order }) => {
           </Table>
         </CardContent>
         {order.status == "SHIPPED" && (
-          <ReciveOrderModal
-            btnMessage="Confirmar Recebimento"
-            Icon={PackageOpen}
-            order={order}
-          />
+          <ReciveOrderModal btnMessage="Confirmar Recebimento" order={order} />
         )}
       </Card>
     </>

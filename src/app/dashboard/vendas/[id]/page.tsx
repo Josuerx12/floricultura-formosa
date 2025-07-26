@@ -219,11 +219,7 @@ const VendaPage = async ({ params }: { params: any }) => {
           <DeliverToClientModal order={sale as any} />
         )}
         {(sale.status === OrderStatus.SHIPPED || !sale.address) && (
-          <ReciveOrderModal
-            btnMessage="Entregar Pedido"
-            Icon={PackageCheck}
-            order={sale as any}
-          />
+          <ReciveOrderModal btnMessage="Entregar Pedido" order={sale as any} />
         )}
       </div>
     </main>
