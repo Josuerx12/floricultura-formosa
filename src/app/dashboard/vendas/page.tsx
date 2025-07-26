@@ -4,7 +4,7 @@ import ShippedSalesInfiniteScroll from "@/components/infinite-scrolls/shipped-sa
 
 const SalesPage = () => {
   return (
-    <div className="w-max h-[90dvh] !overflow-x-visible flex p-2 md:p-5">
+    <div className="w-full gap-4 h-[90dvh] !overflow-x-visible flex justify-between p-2 md:p-5">
       <ProcessedSalesInfiniteScroll />
       <ShippedSalesInfiniteScroll />
       <DeliveredSalesInfiniteScroll />

@@ -14,6 +14,7 @@ import { Info, Truck } from "lucide-react";
 import Image from "next/image";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 const DeliverToClientModal = ({ order }: { order: Order }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +22,8 @@ const DeliverToClientModal = ({ order }: { order: Order }) => {
   function handleClose() {
     setIsOpen((prev) => !prev);
   }
+
+  const router = useRouter();
 
   const query = useQueryClient();
 
@@ -34,6 +37,7 @@ const DeliverToClientModal = ({ order }: { order: Order }) => {
       query.invalidateQueries({ queryKey: ["processedSales"] });
       query.invalidateQueries({ queryKey: ["shippedSales"] });
       handleClose();
+      router.push("/dashboard/vendas");
     },
     onError: (err) => {
       toast({

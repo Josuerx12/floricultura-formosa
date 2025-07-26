@@ -25,19 +25,19 @@ const ShippedSalesInfiniteScroll = () => {
     refetchInterval: 1000 * 60 * 5,
   });
 
-  if (data?.pages[0].data.length <= 0) return null;
-
   return (
-    <div className="flex flex-col bg-yellow-400 text-black rounded-lg shadow-md max-w-96 w-full mx-2 overflow-y-auto h-full">
-      <div className="sticky inset-0 bg-yellow-200  drop-shadow-md flex  items-center justify-between p-2 gap-2">
-        <h2 className="text-start font-semibold">Pedidos em rota de entrega</h2>
+    <div className="flex flex-col border-2 border-secondary-foreground/10 rounded-lg min-w-96 w-full overflow-y-auto h-full">
+      <div className="sticky mb-auto inset-0 drop-shadow w-full bg-primary p-3 flex border-b items-center justify-between">
+        <h2 className="text-start text-neutral-900 font-semibold">
+          Pedidos em rota de entrega
+        </h2>
 
         <RefetchBtn isRefetching={isRefetching} refetch={refetch} />
       </div>
 
       {isLoading && <p className="animate-pulse">Carregando...</p>}
 
-      <div className="flex flex-col gap-y-4 p-2">
+      <div className="flex flex-col gap-y-4 p-2 flex-1">
         {data?.pages.map((page, i) => (
           <React.Fragment key={i}>
             {page.data.map((sale: any) => (
@@ -45,6 +45,10 @@ const ShippedSalesInfiniteScroll = () => {
             ))}
           </React.Fragment>
         ))}
+
+        {data?.pages[0].data.length <= 0 && (
+          <p>Nenhum pedido em rota de entrega.</p>
+        )}
       </div>
 
       {hasNextPage && !isFetchingNextPage && (

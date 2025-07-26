@@ -120,7 +120,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const session = useSession();
   const user = session?.data?.user;
   return (
-    <Sidebar collapsible="icon" className="absolute" {...props}>
+    <Sidebar collapsible="icon" className="absolute h-full" {...props}>
       <SidebarContent>
         <NavMain items={data.navMain} />
 

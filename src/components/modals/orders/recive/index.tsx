@@ -6,22 +6,24 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Order, ReciveOrder } from "@/lib/actions/orders";
-import { Info } from "lucide-react";
-import Image from "next/image";
+import { Info, Truck } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-const ReciveOrderModal = ({
-  order,
-  handleClose,
-  isOpen,
-}: {
-  order: Order;
-  isOpen: boolean;
-  handleClose: () => void;
-}) => {
+const ReciveOrderModal = ({ order }: { order: Order }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const router = useRouter();
+
+  function handleClose() {
+    setIsOpen((prev) => !prev);
+  }
+
   const query = useQueryClient();
 
   const { mutateAsync, isPending } = useMutation({
@@ -35,6 +37,7 @@ const ReciveOrderModal = ({
       toast({
         title: data.message,
       });
+      router.push("/dashboard/vendas");
     },
     onError: (err) => {
       toast({
@@ -50,6 +53,9 @@ const ReciveOrderModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogTrigger className="py-2 px-3 text-sm rounded-md flex items-center justify-between border bg-green-600 hover:bg-green-700 text-primary duration-200">
+        Enviar para o cliente <Truck size={18} />
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Confirmar recebimento de produtos.</DialogTitle>

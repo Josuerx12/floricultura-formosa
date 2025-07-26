@@ -1,4 +1,3 @@
-import DeliverToClientModal from "@/components/modals/orders/deliver-to-client";
 import ReciveOrderModal from "@/components/modals/orders/recive";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,7 +14,6 @@ const SalesCard = ({ sale }: { sale: any }) => {
   }
   return (
     <>
-      <ReciveOrderModal handleClose={handleOpen} isOpen={isOpen} order={sale} />
       <Card>
         <CardContent className="flex flex-col gap-2 group p-2">
           <h3 className="font-semibold text-sm text-center my-3">
@@ -87,15 +85,6 @@ const SalesCard = ({ sale }: { sale: any }) => {
           >
             Detalhes da venda <Info />
           </Link>
-
-          {(sale.status === OrderStatus.SHIPPED || !sale.address) && (
-            <Button
-              onClick={handleOpen}
-              className="hover:bg-primary-foreground hover:text-primary duration-200"
-            >
-              Entregar ao cliente <PackageCheck />
-            </Button>
-          )}
         </CardContent>
       </Card>
     </>

@@ -1,10 +1,12 @@
 import DeliverToClientModal from "@/components/modals/orders/deliver-to-client";
+import ReciveOrderModal from "@/components/modals/orders/recive";
 import { getOrderById } from "@/lib/actions/orders";
 import { auth } from "@/lib/auth/auth";
 import { parseOrderStatus } from "@/lib/utils";
 import { OrderStatus, UserRoles } from "@prisma/client";
 import MercadoPagoConfig, { Payment } from "mercadopago";
 import { PaymentResponse } from "mercadopago/dist/clients/payment/commonTypes";
+import { PaymentSearchResult } from "mercadopago/dist/clients/payment/search/types";
 import { redirect } from "next/navigation";
 
 const VendaPage = async ({ params }: { params: any }) => {
@@ -30,14 +32,18 @@ const VendaPage = async ({ params }: { params: any }) => {
     accessToken: process.env.MERCADO_PAGO_ACCESS_TOKEN as string,
   });
 
-  let saleMpDetails: PaymentResponse | null = null;
+  let saleMpDetails: PaymentSearchResult | null | undefined = null;
 
   try {
     const mpPayment = new Payment(mpConfig);
 
-    saleMpDetails = await mpPayment.get({
-      id: sale.mercado_pago_preference_id!,
+    const searchResult = await mpPayment.search({
+      options: {
+        external_reference: sale.id,
+      },
     });
+
+    saleMpDetails = searchResult.results && searchResult.results[0];
   } catch (error) {
     console.log(error);
   }
@@ -47,7 +53,6 @@ const VendaPage = async ({ params }: { params: any }) => {
       <h2 className="text-center text-xl font-bold">Detalhes da venda</h2>
 
       {/* Detalhes do Pedido */}
-
       <div className="border p-2 rounded max-w-screen-xl mx-auto">
         <h6 className="font-bold mb-6">Dados do pedido</h6>
 
@@ -60,10 +65,10 @@ const VendaPage = async ({ params }: { params: any }) => {
           <p>{saleStatus.message}</p>
         </div>
 
-        {saleMpDetails && saleMpDetails.payment_method && (
+        {saleMpDetails && saleMpDetails.payment_method_id && (
           <div className="flex gap-2">
             <span className="font-bold">Metodo De Pagamento:</span>{" "}
-            <p>{saleMpDetails.payment_method.type}</p>
+            <p>{saleMpDetails.payment_method_id}</p>
           </div>
         )}
 
@@ -88,10 +93,11 @@ const VendaPage = async ({ params }: { params: any }) => {
             })}
           </p>
         </div>
+
+        {!sale.address && <h2 className="font-bold">Retirada na Loja</h2>}
       </div>
 
       {/* Endereço de entrega */}
-
       {sale.address && (
         <div className="border p-2 rounded max-w-screen-xl mx-auto">
           <h6 className="font-bold mb-6">Endereço de Entrega</h6>
@@ -124,7 +130,7 @@ const VendaPage = async ({ params }: { params: any }) => {
 
           {sale?.order_preferences[0]?.delivery_date && (
             <div className="flex gap-2">
-              <span className="font-bold">Data de Entrega:</span>{" "}
+              <span className="font-bold">Data de Entrega Desejada:</span>{" "}
               <p>
                 {new Date(
                   sale?.order_preferences[0]?.delivery_date
@@ -132,6 +138,33 @@ const VendaPage = async ({ params }: { params: any }) => {
               </p>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Preferencias Do Pedido */}
+      {sale.order_preferences && (
+        <div className="border p-2 rounded max-w-screen-xl mx-auto">
+          <h6 className="font-bold mb-6">Preferencias do Pedido</h6>
+
+          <div className="flex gap-2">
+            <span className="font-bold">De:</span>{" "}
+            <p>{sale.order_preferences[0].from}</p>
+          </div>
+
+          <div className="flex gap-2">
+            <span className="font-bold">Para:</span>{" "}
+            <p>{sale.order_preferences[0].to}</p>
+          </div>
+
+          <div className="flex gap-2">
+            <span className="font-bold">Telefone:</span>{" "}
+            <p>{sale.order_preferences[0].phone}</p>
+          </div>
+
+          <div className="flex gap-2">
+            <span className="font-bold">Mensagem:</span>{" "}
+            <p className="text-justify">{sale.order_preferences[0].message}</p>
+          </div>
         </div>
       )}
 
@@ -183,6 +216,9 @@ const VendaPage = async ({ params }: { params: any }) => {
       <div className="max-w-screen-xl mx-auto">
         {sale.status === OrderStatus.PROCESSING && sale.address && (
           <DeliverToClientModal order={sale as any} />
+        )}
+        {(sale.status === OrderStatus.SHIPPED || !sale.address) && (
+          <ReciveOrderModal order={sale as any} />
         )}
       </div>
     </main>

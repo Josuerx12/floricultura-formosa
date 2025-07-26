@@ -25,13 +25,11 @@ const ProcessedSalesInfiniteScroll = () => {
     refetchInterval: 1000 * 60 * 5,
   });
 
-  // if (data?.pages[0].data.length <= 0) return null
-
   return (
     <div className="flex flex-col border-2 border-secondary-foreground/10 rounded-lg min-w-96 w-full overflow-y-auto h-full">
       <div className="sticky mb-auto inset-0 drop-shadow w-full bg-primary p-3 flex border-b items-center justify-between">
         <h2 className="text-start text-neutral-900 font-semibold">
-          Vendas aprovadas
+          Pedidos Confirmados
         </h2>
 
         <RefetchBtn isRefetching={isRefetching} refetch={refetch} />
@@ -48,9 +46,7 @@ const ProcessedSalesInfiniteScroll = () => {
           </React.Fragment>
         ))}
 
-        {data?.pages[0].data.length <= 0 && (
-          <p>Nenhuma venda aprovada pendente de entrega.</p>
-        )}
+        {data?.pages[0].data.length <= 0 && <p>Nenhum pedido confirmado.</p>}
       </div>
 
       {hasNextPage && !isFetchingNextPage && (
