@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth/auth";
 import { parseOrderStatus } from "@/lib/utils";
 import { OrderStatus, UserRoles } from "@prisma/client";
 import MercadoPagoConfig, { Payment } from "mercadopago";
+import { PaymentResponse } from "mercadopago/dist/clients/payment/commonTypes";
 import { redirect } from "next/navigation";
 
 const VendaPage = async ({ params }: { params: any }) => {
@@ -29,11 +30,17 @@ const VendaPage = async ({ params }: { params: any }) => {
     accessToken: process.env.MERCADO_PAGO_ACCESS_TOKEN as string,
   });
 
-  const mpPayment = new Payment(mpConfig);
+  let saleMpDetails: PaymentResponse | null = null;
 
-  const saleMpDetails = await mpPayment.get({
-    id: sale.mercado_pago_preference_id!,
-  });
+  try {
+    const mpPayment = new Payment(mpConfig);
+
+    saleMpDetails = await mpPayment.get({
+      id: sale.mercado_pago_preference_id!,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 
   return (
     <main className="md:p-5 p-2 space-y-6">
@@ -173,7 +180,7 @@ const VendaPage = async ({ params }: { params: any }) => {
         })}
       </div>
 
-      <div>
+      <div className="max-w-screen-xl mx-auto">
         {sale.status === OrderStatus.PROCESSING && sale.address && (
           <DeliverToClientModal order={sale as any} />
         )}
