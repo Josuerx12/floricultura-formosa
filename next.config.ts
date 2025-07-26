@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
       "lh3.googleusercontent.com",
       "floricultura-formosa-produtos.s3.amazonaws.com",
       "floricultura-formosa-avatar.s3.amazonaws.com",
+      "floricultura-fotos-produto.s3.amazonaws.com",
     ],
   },
   experimental: {

@@ -275,88 +275,53 @@ export const getProcessedOrders = async ({
     throw new Error("Acesso negado!");
   }
 
+  const whereOptions: Prisma.orderWhereInput = {
+    status: "PROCESSING",
+    OR: [
+      {
+        id: {
+          contains: search,
+        },
+      },
+      {
+        user: {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+      },
+      {
+        items: {
+          some: {
+            product: {
+              name: {
+                contains: search,
+                mode: "insensitive",
+              },
+            },
+          },
+        },
+      },
+      {
+        address: {
+          city: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+      },
+    ],
+  };
+
   const offset = (pageParam - 1) * parseInt(perPage);
 
   const totalOrders = await prisma.order.count({
-    where: {
-      status: "PROCESSING",
-      OR: [
-        {
-          id: {
-            contains: search,
-          },
-        },
-        {
-          user: {
-            name: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-        },
-        {
-          items: {
-            some: {
-              product: {
-                name: {
-                  contains: search,
-                  mode: "insensitive",
-                },
-              },
-            },
-          },
-        },
-        {
-          address: {
-            city: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-        },
-      ],
-    },
+    where: whereOptions,
   });
 
   const orders = await prisma.order.findMany({
-    where: {
-      status: "PROCESSING",
-      OR: [
-        {
-          id: {
-            contains: search,
-          },
-        },
-        {
-          user: {
-            name: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-        },
-        {
-          items: {
-            some: {
-              product: {
-                name: {
-                  contains: search,
-                  mode: "insensitive",
-                },
-              },
-            },
-          },
-        },
-        {
-          address: {
-            city: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-        },
-      ],
-    },
+    where: whereOptions,
     take: parseInt(perPage),
     skip: offset,
     include: {
@@ -376,9 +341,6 @@ export const getProcessedOrders = async ({
         },
       },
       address: true,
-    },
-    orderBy: {
-      createdAt: "desc",
     },
   });
 
@@ -409,86 +371,51 @@ export const getDeliveredOrders = async ({
 
   const offset = (pageParam - 1) * parseInt(perPage);
 
-  const totalOrders = await prisma.order.count({
-    where: {
-      status: "DELIVERED",
-      OR: [
-        {
-          id: {
+  const whereOptions: Prisma.orderWhereInput = {
+    status: "DELIVERED",
+    OR: [
+      {
+        id: {
+          contains: search,
+        },
+      },
+      {
+        user: {
+          name: {
             contains: search,
+            mode: "insensitive",
           },
         },
-        {
-          user: {
-            name: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-        },
-        {
-          items: {
-            some: {
-              product: {
-                name: {
-                  contains: search,
-                  mode: "insensitive",
-                },
+      },
+      {
+        items: {
+          some: {
+            product: {
+              name: {
+                contains: search,
+                mode: "insensitive",
               },
             },
           },
         },
-        {
-          address: {
-            city: {
-              contains: search,
-              mode: "insensitive",
-            },
+      },
+      {
+        address: {
+          city: {
+            contains: search,
+            mode: "insensitive",
           },
         },
-      ],
-    },
+      },
+    ],
+  };
+
+  const totalOrders = await prisma.order.count({
+    where: whereOptions,
   });
 
   const orders = await prisma.order.findMany({
-    where: {
-      status: "DELIVERED",
-      OR: [
-        {
-          id: {
-            contains: search,
-          },
-        },
-        {
-          user: {
-            name: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-        },
-        {
-          items: {
-            some: {
-              product: {
-                name: {
-                  contains: search,
-                  mode: "insensitive",
-                },
-              },
-            },
-          },
-        },
-        {
-          address: {
-            city: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-        },
-      ],
-    },
+    where: whereOptions,
     take: parseInt(perPage),
     skip: offset,
     include: {

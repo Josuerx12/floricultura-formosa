@@ -49,7 +49,7 @@ const DeliverToClientModal = ({ order }: { order: Order }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogTrigger className="flex items-center gap-2 font-medium text-sm justify-center p-2 rounded-md hover:bg-primary-foreground bg-primary text-primary-foreground hover:text-primary duration-200">
+      <DialogTrigger className="py-2 px-3 text-sm rounded-md flex items-center justify-between duration-150 border hover:bg-btn-body hover:text-primary">
         Enviar para o cliente <Truck size={18} />
       </DialogTrigger>
       <DialogContent>

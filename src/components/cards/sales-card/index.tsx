@@ -2,10 +2,8 @@ import DeliverToClientModal from "@/components/modals/orders/deliver-to-client";
 import ReciveOrderModal from "@/components/modals/orders/recive";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { fromCents } from "@/lib/utils";
 import { OrderStatus } from "@prisma/client";
-import { Box, Info, PackageCheck, Truck } from "lucide-react";
-import Image from "next/image";
+import { Info, PackageCheck } from "lucide-react";
 import { useState } from "react";
 
 const SalesCard = ({ sale }: { sale: any }) => {
@@ -81,6 +79,9 @@ const SalesCard = ({ sale }: { sale: any }) => {
               })}
             </strong>
           </p>
+          <Button className="text-sm py-2 px-3 flex items-center justify-between">
+            Detalhes da venda <Info />
+          </Button>
           {sale.status === OrderStatus.PROCESSING && (
             <DeliverToClientModal order={sale} />
           )}

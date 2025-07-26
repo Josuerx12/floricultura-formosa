@@ -100,7 +100,7 @@ const SignUpForm = () => {
         <p className="text-red-600 text-sm">{errors.email.message}</p>
       )}
 
-      <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
+      <label className="flex items-center gap-3 bg-neutral-200 p-3 rounded-2xl">
         <Phone className="text-primary-foreground" size={20} />
         <input
           {...register("phone")}
@@ -111,14 +111,14 @@ const SignUpForm = () => {
           required
           className="w-full bg-transparent outline-none placeholder:text-neutral-600 text-sm"
           type="tel"
-          placeholder="+55 (22) 99797-9797"
+          placeholder="Telefone com DDD."
         />
       </label>
       {errors?.phone && (
         <p className="text-red-600 text-sm">{errors.phone.message}</p>
       )}
 
-      <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
+      <label className="flex items-center gap-3 bg-neutral-200 p-3 rounded-2xl">
         <FileText className="text-primary-foreground" size={20} />
         <input
           {...register("document")}
@@ -129,7 +129,7 @@ const SignUpForm = () => {
           required
           className="w-full bg-transparent outline-none placeholder:text-neutral-600 text-sm"
           type="text"
-          placeholder="999.888.111-52 ou 12.163.577/0001-22"
+          placeholder="CPF ou CNPJ"
         />
       </label>
       {errors?.document && (
