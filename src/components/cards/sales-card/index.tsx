@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { OrderStatus } from "@prisma/client";
 import { Info, PackageCheck } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 const SalesCard = ({ sale }: { sale: any }) => {
@@ -59,7 +60,7 @@ const SalesCard = ({ sale }: { sale: any }) => {
             </div>
           )}
 
-          {sale.delivery_fee ? (
+          {sale.delivery_fee && (
             <p>
               Frete:
               <strong className="ml-2">
@@ -69,7 +70,8 @@ const SalesCard = ({ sale }: { sale: any }) => {
                 })}
               </strong>
             </p>
-          ) : null}
+          )}
+
           <p>
             Total da compra:
             <strong className="ml-2">
@@ -79,13 +81,14 @@ const SalesCard = ({ sale }: { sale: any }) => {
               })}
             </strong>
           </p>
-          <Button className="text-sm py-2 px-3 flex items-center justify-between">
+          <Link
+            href={"/dashboard/vendas/" + sale.id}
+            className="bg-neutral-700 rounded-md text-btn-text hover:bg-neutral-800 dura text-sm py-2 px-3 flex items-center justify-between"
+          >
             Detalhes da venda <Info />
-          </Button>
-          {sale.status === OrderStatus.PROCESSING && (
-            <DeliverToClientModal order={sale} />
-          )}
-          {sale.status === OrderStatus.SHIPPED && (
+          </Link>
+
+          {(sale.status === OrderStatus.SHIPPED || !sale.address) && (
             <Button
               onClick={handleOpen}
               className="hover:bg-primary-foreground hover:text-primary duration-200"

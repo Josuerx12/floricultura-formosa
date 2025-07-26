@@ -111,6 +111,16 @@ export const getOrderById = async (id: string) => {
     },
     include: {
       order_preferences: true,
+      address: true,
+      user: {
+        select: {
+          email: true,
+          name: true,
+          phone: true,
+          image: true,
+          document: true,
+        },
+      },
       items: {
         include: {
           product: {

@@ -14,7 +14,9 @@ import Link from "next/link";
 const DashboardBreadcrumb = () => {
   const params = usePathname();
 
-  const [firstRoute, secondRoute] = params?.replace("/", "")?.split("/");
+  const [firstRoute, secondRoute, thirdRoute] = params
+    ?.replace("/", "")
+    ?.split("/");
   return (
     <Breadcrumb>
       <BreadcrumbList>
@@ -25,7 +27,22 @@ const DashboardBreadcrumb = () => {
         </BreadcrumbItem>
         <BreadcrumbSeparator className="hidden md:block" />
         <BreadcrumbItem>
-          <BreadcrumbPage className="capitalize">{secondRoute}</BreadcrumbPage>
+          <BreadcrumbPage>
+            <Link className="capitalize" href={`/${firstRoute}/${secondRoute}`}>
+              {secondRoute}
+            </Link>
+          </BreadcrumbPage>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator className="hidden md:block" />
+        <BreadcrumbItem>
+          <BreadcrumbPage>
+            <Link
+              className="capitalize"
+              href={`/${firstRoute}/${secondRoute}/${thirdRoute}`}
+            >
+              {thirdRoute}
+            </Link>
+          </BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
