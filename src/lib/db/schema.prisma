@@ -296,3 +296,23 @@ model refound_terms {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
+
+model configurations {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  delivery_configurations delivery_configurations?
+}
+
+model delivery_configurations {
+  id               String   @id @default(uuid())
+  configuration_id String   @unique
+  day_rules        Json[]   @default([])
+  exceptions_allow Json[]   @default([])
+  exceptions_block Json[]   @default([])
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  configuration configurations @relation(fields: [configuration_id], references: [id], onDelete: Cascade)
+}
