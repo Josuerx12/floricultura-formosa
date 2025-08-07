@@ -1,6 +1,7 @@
 import ReciveOrderModal from "@/components/modals/orders/recive";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { fromCents } from "@/lib/utils";
 import { OrderStatus } from "@prisma/client";
 import { Info, PackageCheck } from "lucide-react";
 import Link from "next/link";
@@ -39,12 +40,12 @@ const SalesCard = ({ sale }: { sale: any }) => {
                     <p className="text-gray-600 text-sm">
                       {i.quantity} unidades
                     </p>
-                    {/* <p className="text-gray-600 text-sm">
+                    <p className="text-gray-600 text-sm">
                       {fromCents(i.product.price).toLocaleString("pt-BR", {
                         style: "currency",
                         currency: "BRL",
                       })}
-                    </p> */}
+                    </p>
                   </div>
                 </div>
               );
@@ -69,6 +70,18 @@ const SalesCard = ({ sale }: { sale: any }) => {
               </strong>
             </p>
           )}
+
+          <p>
+            Total sem Produtos:
+            <strong className="ml-2">
+              {sale?.items
+                .reduce((acc: number, item: any) => acc + item.price, 0)
+                .toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
+            </strong>
+          </p>
 
           <p>
             Total da compra:
