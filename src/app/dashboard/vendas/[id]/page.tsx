@@ -4,9 +4,7 @@ import { getOrderById } from "@/lib/actions/orders";
 import { auth } from "@/lib/auth/auth";
 import { parseOrderStatus } from "@/lib/utils";
 import { OrderStatus, UserRoles } from "@prisma/client";
-import { PackageCheck } from "lucide-react";
 import MercadoPagoConfig, { Payment } from "mercadopago";
-import { PaymentResponse } from "mercadopago/dist/clients/payment/commonTypes";
 import { PaymentSearchResult } from "mercadopago/dist/clients/payment/search/types";
 import { redirect } from "next/navigation";
 
@@ -85,6 +83,20 @@ const VendaPage = async ({ params }: { params: any }) => {
           </div>
         )}
 
+        {sale?.items.length > 0 && (
+          <div className="flex gap-2">
+            <span className="font-bold">Total dos Produtos:</span>{" "}
+            <p>
+              {Number(
+                sale.items.reduce((acc, item) => acc + item.price, 0)
+              ).toLocaleString("pt", {
+                style: "currency",
+                currency: "BRL",
+              })}
+            </p>
+          </div>
+        )}
+
         <div className="flex gap-2">
           <span className="font-bold">Total do Pedido:</span>{" "}
           <p>
@@ -96,6 +108,28 @@ const VendaPage = async ({ params }: { params: any }) => {
         </div>
 
         {!sale.address && <h2 className="font-bold">Retirada na Loja</h2>}
+      </div>
+
+      {/* Dados do Cliente */}
+
+      <div className="border p-2 rounded max-w-screen-xl mx-auto">
+        <h6 className="font-bold mb-6">Dados do Cliente</h6>
+
+        <div className="flex gap-2">
+          <span className="font-bold">Nome:</span> <p>{sale.user.name}</p>
+        </div>
+
+        <div className="flex gap-2">
+          <span className="font-bold">Documento Cadastrado:</span>{" "}
+          <p>{sale.user.document}</p>
+        </div>
+        <div className="flex gap-2">
+          <span className="font-bold">Telefone:</span> <p>{sale.user.phone}</p>
+        </div>
+        <div className="flex gap-2">
+          <span className="font-bold">Data de Aniversario:</span>{" "}
+          <p>{sale.user.birthdate?.toLocaleDateString("pt-BR")}</p>
+        </div>
       </div>
 
       {/* Endereço de entrega */}

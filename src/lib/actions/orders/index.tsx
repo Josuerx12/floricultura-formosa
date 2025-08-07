@@ -119,6 +119,7 @@ export const getOrderById = async (id: string) => {
           phone: true,
           image: true,
           document: true,
+          birthdate: true,
         },
       },
       items: {
