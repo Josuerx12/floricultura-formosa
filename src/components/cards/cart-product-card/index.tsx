@@ -2,7 +2,6 @@
 
 import useCartStore, { ProductCart } from "@/hooks/use-cart-store";
 import React from "react";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
 const CartProductCard = ({ product }: { product: ProductCart }) => {

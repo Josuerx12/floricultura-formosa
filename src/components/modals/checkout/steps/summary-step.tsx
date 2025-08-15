@@ -8,7 +8,6 @@ import { useCheckout } from "@/hooks/use-checkout";
 import useMercadoPago from "@/hooks/use-mercado-pago";
 import { useMutation } from "@tanstack/react-query";
 import { User } from "next-auth";
-import Image from "next/image";
 
 interface SummaryProps {
   delivery: boolean;

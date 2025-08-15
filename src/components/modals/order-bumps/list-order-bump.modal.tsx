@@ -12,7 +12,6 @@ import { DeleteOrderBump } from "@/lib/actions/order-bump/infraestructure/action
 import { GetBumpsByCategoryId } from "@/lib/actions/order-bump/infraestructure/actions/get-bumps-by-category";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
-import Image from "next/image";
 
 type ModalProps = {
   isOpen: boolean;

@@ -1,7 +1,6 @@
 "use client";
 
 import { TableCell, TableRow } from "@/components/ui/table";
-import Image from "next/image";
 import ManageProductDropdown from "@/components/dropdowns/MenageProductDropdown";
 import { useState } from "react";
 const ProductTableRow = ({ prod }: { prod: any }) => {

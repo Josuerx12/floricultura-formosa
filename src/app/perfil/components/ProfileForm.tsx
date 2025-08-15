@@ -1,7 +1,6 @@
 "use client";
 
 import { FileImage, Loader, Mail, Pencil, Phone, User2 } from "lucide-react";
-import Image from "next/image";
 import { User } from "next-auth";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";

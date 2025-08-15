@@ -8,7 +8,6 @@ import { useCheckout } from "@/hooks/use-checkout";
 import useMercadoPago from "@/hooks/use-mercado-pago";
 import { toast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

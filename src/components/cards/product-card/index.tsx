@@ -2,7 +2,6 @@
 
 import { BadgePercent } from "lucide-react";
 import { Product } from "@/lib/actions/products";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export function ProductCard({ product }: { product: Product }) {
@@ -22,7 +21,7 @@ export function ProductCard({ product }: { product: Product }) {
     >
       {/* Imagem do Produto */}
       <div className="relative w-full h-full hover:opacity-80 duration-200">
-        <Image
+        <img
           width={410}
           height={410}
           src={product.product_images?.[0]?.url || "/images/placeholder.png"}

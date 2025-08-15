@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/dialog";
 import { DeliverOrder, Order } from "@/lib/actions/orders";
 import { Info, Truck } from "lucide-react";
-import Image from "next/image";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";

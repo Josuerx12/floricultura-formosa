@@ -8,7 +8,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
-import Image from "next/image";
 import ProfileModal from "../modals/profile-modal";
 import { useState } from "react";
 import { useRouter } from "next/navigation";

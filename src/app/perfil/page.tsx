@@ -1,7 +1,5 @@
 import { auth } from "@/lib/auth/auth";
 import React from "react";
-import Image from "next/image";
-import { FileImage } from "lucide-react";
 import Title from "@/components/title";
 import { getOrdersByUser } from "@/lib/actions/orders";
 import { parseOrderStatus } from "@/lib/utils";

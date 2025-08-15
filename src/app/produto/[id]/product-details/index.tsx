@@ -2,7 +2,6 @@
 
 import useCartStore, { ProductCart } from "@/hooks/use-cart-store";
 import React, { useState } from "react";
-import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import AddCartModal from "@/components/modals/add-cart";
@@ -40,7 +39,7 @@ const ProductDetails = ({ product, finalPrice, discount }: any) => {
       />
       <div className="flex flex-col gap-4">
         <div className="flex-1">
-          <Image
+          <img
             src={selectedImage}
             alt={product.name}
             width={500}
@@ -50,7 +49,7 @@ const ProductDetails = ({ product, finalPrice, discount }: any) => {
         </div>
         <div className="flex  gap-2">
           {product.product_images.map((img: any, index: number) => (
-            <Image
+            <img
               key={index}
               src={img.url}
               alt={`Imagem ${index + 1}`}

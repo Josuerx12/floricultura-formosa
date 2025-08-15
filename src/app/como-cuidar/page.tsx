@@ -1,6 +1,5 @@
 import { ListAllFlowerCares } from "@/lib/actions/flower-care/infraestructure/actions/list-all";
 import React from "react";
-import Image from "next/image";
 
 const HowToCarePage = async () => {
   const cares = await ListAllFlowerCares();

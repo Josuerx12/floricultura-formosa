@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/dialog";
 import { FileImage } from "lucide-react";
 import { User } from "next-auth";
-import Image from "next/image";
 
 const ProfileModal = ({
   onClose,

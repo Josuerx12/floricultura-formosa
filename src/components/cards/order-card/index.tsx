@@ -7,11 +7,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Image from "next/image";
-import { CheckCircle, PackageOpen, Truck, XCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { CheckCircle, Truck, XCircle } from "lucide-react";
 import { Order } from "@/lib/actions/orders";
-import { useState } from "react";
 import ReciveOrderModal from "@/components/modals/orders/recive";
 import { fromCents } from "@/lib/utils";
 

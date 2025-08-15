@@ -1,5 +1,4 @@
 import { ListAllFlowerMeanings } from "@/lib/actions/flower-meaning/infraestructure/actions/list-all";
-import Image from "next/image";
 import React from "react";
 
 const FlowerMeaningsPage = async () => {

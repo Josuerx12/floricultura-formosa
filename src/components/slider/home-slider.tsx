@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -45,12 +44,7 @@ export default function HomeSlider({ banners }: { banners: any[] }) {
             target="_blank"
             className="relative min-w-screen w-full h-[250px] md:min-h-[516px]"
           >
-            <Image
-              fill
-              src={slide.src}
-              alt={slide.alt}
-              className="object-fill"
-            />
+            <img fill src={slide.src} alt={slide.alt} className="object-fill" />
           </Link>
         ))}
       </Slider>
