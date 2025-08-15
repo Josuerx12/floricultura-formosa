@@ -14,10 +14,8 @@ const CartProductCard = ({ product }: { product: ProductCart }) => {
         {product.product_image && (
           <img
             src={product.product_image}
-            width={400}
-            height={400}
             alt="Imagem do produto"
-            className="w-24 h-24 md:w-28 md:h-28 object-cover rounded-lg shrink-0"
+            className="w-24 h-24 md:w-28 md:h-28 object-fill rounded-lg shrink-0"
           />
         )}
 

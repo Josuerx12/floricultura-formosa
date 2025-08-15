@@ -128,8 +128,7 @@ const SummaryComponent = ({ user }: { user: any }) => {
           <Card className="flex" key={p.id}>
             <CardHeader className="border-r-2">
               <img
-                width={50}
-                height={50}
+                className="w-32 h-32 rounded-lg object-fill"
                 src={p.product_image as string}
                 alt={p.name}
               />

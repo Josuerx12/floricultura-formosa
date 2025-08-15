@@ -11,8 +11,10 @@ const ResumoPage = async () => {
   }
 
   return (
-    <main className="max-w-screen-2xl mx-auto w-full space-y-6 py-6">
-      <h2 className="text-xl font-semibold">Resumo do Pedido</h2>
+    <main className="max-w-screen-2xl mx-auto w-full space-y-6 py-6 px-4">
+      <h2 className="text-xl font-semibold text-center md:text-start">
+        Resumo do Pedido
+      </h2>
 
       <SummaryComponent user={user} />
     </main>
