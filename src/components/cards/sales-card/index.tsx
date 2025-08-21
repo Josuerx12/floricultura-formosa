@@ -95,7 +95,7 @@ const SalesCard = ({ sale }: { sale: any }) => {
           <p>
             Data da compra:
             <strong className="ml-2">
-              {new Date(sale.created_at).toLocaleDateString("pt-BR")}
+              {new Date(sale.createdAt).toLocaleDateString("pt-BR")}
             </strong>
           </p>
           <Link
