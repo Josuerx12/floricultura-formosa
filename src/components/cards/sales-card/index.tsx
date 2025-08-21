@@ -21,13 +21,13 @@ const SalesCard = ({ sale }: { sale: any }) => {
             Venda nº {sale.id}
           </h3>
           <div className="flex flex-col gap-6 mb-4">
-            {sale?.items.map((i: any) => {
+            {sale?.items.map((i: any, idx: number) => {
               return (
                 <div key={i.id} className="flex gap-2">
                   {i.product?.product_images[0]?.url && (
                     <img
-                      src={sale.items[0].product.product_images[0].url}
-                      alt={sale.items[0].product.name}
+                      src={sale.items[idx].product.product_images[0].url}
+                      alt={sale.items[idx].product.name}
                       width={50}
                       height={50}
                       className="rounded-md w-12 h-12"
