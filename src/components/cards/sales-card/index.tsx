@@ -72,7 +72,7 @@ const SalesCard = ({ sale }: { sale: any }) => {
           )}
 
           <p>
-            Total sem Produtos:
+            Total em Produtos:
             <strong className="ml-2">
               {sale?.items
                 .reduce((acc: number, item: any) => acc + item.price, 0)
