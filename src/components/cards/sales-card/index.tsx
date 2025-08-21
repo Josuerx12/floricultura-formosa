@@ -92,6 +92,12 @@ const SalesCard = ({ sale }: { sale: any }) => {
               })}
             </strong>
           </p>
+          <p>
+            Data da compra:
+            <strong className="ml-2">
+              {new Date(sale.created_at).toLocaleDateString("pt-BR")}
+            </strong>
+          </p>
           <Link
             href={"/dashboard/vendas/" + sale.id}
             className="bg-neutral-700 rounded-md text-btn-text hover:bg-neutral-800 dura text-sm py-2 px-3 flex items-center justify-between"
