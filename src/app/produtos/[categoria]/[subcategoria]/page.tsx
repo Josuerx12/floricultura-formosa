@@ -22,6 +22,7 @@ const ProdutosSubcategoria = async ({
 
   const totalProducts = await prisma.product.count({
     where: {
+      is_visible: true,
       subcategory: {
         slug: {
           contains: subcategoria,
@@ -39,6 +40,7 @@ const ProdutosSubcategoria = async ({
 
   const products = await prisma.product.findMany({
     where: {
+      is_visible: true,
       subcategory: {
         slug: {
           contains: subcategoria,
