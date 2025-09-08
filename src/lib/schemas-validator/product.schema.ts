@@ -4,6 +4,12 @@ export const ProductSchema = z.object({
   name: z.string({ message: "Nome do produto deve ser informado!" }).min(3, {
     message: "Nome do produto deve conter pelo menos 3 caracteres!",
   }),
+  slug: z
+    .string({ message: "Slug do produto deve ser informado!" })
+    .min(3, {
+      message: "Slug do produto deve conter pelo menos 3 caracteres!",
+    })
+    .refine((value) => value?.replaceAll(" ", "_")?.toLowerCase()),
   is_visible: z.boolean({
     message: "Informe se o produto vai ser visivel ou não.",
   }),
@@ -35,6 +41,13 @@ export const EditProductSchema = z.object({
     .min(3, {
       message: "Nome do produto deve conter pelo menos 3 caracteres!",
     })
+    .optional(),
+  slug: z
+    .string({ message: "Nome do produto deve ser informado!" })
+    .min(3, {
+      message: "Nome do produto deve conter pelo menos 3 caracteres!",
+    })
+    .refine((value) => value.replaceAll(" ", "_")?.toLowerCase())
     .optional(),
   subcategory_id: z.coerce
     .number({

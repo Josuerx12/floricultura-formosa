@@ -73,6 +73,7 @@ const DetailProductModal = ({
     resolver: zodResolver(EditProductSchema),
     defaultValues: {
       name: product.name,
+      slug: product?.slug,
       description: product.description || "",
       price: product.price.toString().replace(".", ","),
       stock_quantity: product.stock_quantity,
@@ -84,6 +85,7 @@ const DetailProductModal = ({
   useEffect(() => {
     reset({
       name: product.name,
+      slug: product.slug,
       description: product.description,
       price: product.price.toString().replace(".", ","),
       stock_quantity: product.stock_quantity,
@@ -120,6 +122,7 @@ const DetailProductModal = ({
     const formData = new FormData();
 
     formData.append("name", data.name!);
+    formData.append("slug", data.slug!);
     formData.append("description", data.description!);
     formData.append("price", data.price!);
     formData.append("stock_quantity", data.stock_quantity!.toString());
@@ -216,6 +219,18 @@ const DetailProductModal = ({
             />
           </label>
           {errors.name && <p className="text-red-600">{errors.name.message}</p>}
+
+          {/* Slug */}
+          <label className="flex items-center gap-2 bg-neutral-200 rounded-3xl px-4 py-2">
+            <RectangleEllipsis />
+            <input
+              {...register("slug")}
+              disabled={!isEditing}
+              className="w-full bg-transparent outline-none"
+              placeholder="Slug do produto"
+            />
+          </label>
+          {errors.slug && <p className="text-red-600">{errors.slug.message}</p>}
 
           {/* Subcategoria */}
           <label className="flex items-center gap-2 bg-neutral-200 rounded-3xl px-4 py-2">

@@ -114,6 +114,7 @@ model subcategory {
 model product {
   id                Int                 @id @default(autoincrement())
   subcategory_id    Int
+  slug              String?             @unique
   name              String
   description       String
   price             Int

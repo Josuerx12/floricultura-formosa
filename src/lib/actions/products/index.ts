@@ -11,6 +11,7 @@ import { fromCents, toCents } from "@/lib/utils";
 
 export type ProductErrorsT = {
   name?: string[];
+  slug?: string;
   subcategory_id?: string[];
   description?: string[];
   price?: string[];
@@ -25,6 +26,7 @@ export type ProductStateActionT = {
 
 export type Product = {
   id: number;
+  slug?: string;
   name: string;
   subcategory_id?: number;
   stock_quantity: number;
@@ -47,11 +49,28 @@ export async function CreateProduct(formData: FormData) {
   });
 
   const images = formData.getAll("photos") as File[];
+
   await prisma.$transaction(async (tx) => {
+    if (rawObject.slug) {
+      const productSlug = await tx.product.findUnique({
+        where: {
+          slug: rawObject.slug,
+        },
+        select: {
+          slug: true,
+        },
+      });
+
+      if (productSlug) {
+        throw new Error("Slug já em uso.");
+      }
+    }
+
     const product = await tx.product.create({
       data: {
         description: rawObject?.description,
         name: rawObject.name,
+        slug: rawObject.slug,
         is_visible: rawObject.is_visible === "true",
         priority: rawObject.priority === "true",
         stock_quantity: parseInt(rawObject.stock_quantity),
@@ -130,54 +149,72 @@ export async function EditProduct({
     rawObject[key] = value?.toString();
   });
 
-  const product = await prisma.product.findFirst({
-    where: { id },
-  });
+  await prisma.$transaction(async (tx) => {
+    const product = await tx.product.findFirst({
+      where: { id },
+    });
 
-  if (!product) {
-    throw new Error(
-      "Não é possível editar a categoria selecionada pois ela não foi encontrada no banco de dados, atualize a pagina e tente novamente!"
-    );
-  }
+    if (!product) {
+      throw new Error(
+        "Não é possível editar a categoria selecionada pois ela não foi encontrada no banco de dados, atualize a pagina e tente novamente!"
+      );
+    }
 
-  await prisma.product.update({
-    where: { id: product.id },
-    data: {
-      name: rawObject.name ? rawObject.name : product.name,
-      is_visible: rawObject.is_visible
-        ? rawObject.is_visible === "true"
-        : product.is_visible,
-      priority: rawObject.priority
-        ? rawObject.priority === "true"
-        : product.priority,
-      subcategory_id: rawObject.subcategory_id
-        ? Number(rawObject.subcategory_id)
-        : product.subcategory_id,
-      price: rawObject.price ? toCents(rawObject.price) : product.price,
-      description: rawObject.description
-        ? rawObject.description
-        : product.description,
-      stock_quantity: rawObject.stock_quantity
-        ? parseInt(rawObject.stock_quantity)
-        : product.stock_quantity,
-    },
-  });
+    if (rawObject.slug) {
+      const slug = await tx.product.findUnique({
+        where: {
+          slug: rawObject.slug,
+        },
+        select: {
+          slug: true,
+        },
+      });
 
-  const images = formData.getAll("photos") as File[];
+      if (slug) {
+        throw new Error("Slug já em uso.");
+      }
+    }
 
-  const imagePromises = images?.map(async (image) => {
-    const fileData = await uploadFileAWS(image, image.type);
-    await prisma.product_images.create({
+    await tx.product.update({
+      where: { id: product.id },
       data: {
-        bucket: fileData.bucket,
-        file_key: fileData.fileKey,
-        url: fileData.url,
-        product_id: product.id,
+        name: rawObject.name ? rawObject.name : product.name,
+        slug: rawObject.slug ? rawObject.slug : product.slug,
+        is_visible: rawObject.is_visible
+          ? rawObject.is_visible === "true"
+          : product.is_visible,
+        priority: rawObject.priority
+          ? rawObject.priority === "true"
+          : product.priority,
+        subcategory_id: rawObject.subcategory_id
+          ? Number(rawObject.subcategory_id)
+          : product.subcategory_id,
+        price: rawObject.price ? toCents(rawObject.price) : product.price,
+        description: rawObject.description
+          ? rawObject.description
+          : product.description,
+        stock_quantity: rawObject.stock_quantity
+          ? parseInt(rawObject.stock_quantity)
+          : product.stock_quantity,
       },
     });
-  });
 
-  await Promise.all(imagePromises);
+    const images = formData.getAll("photos") as File[];
+
+    const imagePromises = images?.map(async (image) => {
+      const fileData = await uploadFileAWS(image, image.type);
+      await tx.product_images.create({
+        data: {
+          bucket: fileData.bucket,
+          file_key: fileData.fileKey,
+          url: fileData.url,
+          product_id: product.id,
+        },
+      });
+    });
+
+    await Promise.all(imagePromises);
+  });
 
   return {
     success: "Produto editado com sucesso!",

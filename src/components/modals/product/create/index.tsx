@@ -82,6 +82,7 @@ const CreateProductModal = () => {
     photos?.map((p) => formData.append("photos", p));
 
     formData.append("name", data.name);
+    formData.append("slug", data.slug);
     formData.append("subcategory_id", data.subcategory_id?.toString());
     formData.append("stock_quantity", data.stock_quantity?.toString());
     formData.append("description", data.description);
@@ -139,6 +140,26 @@ const CreateProductModal = () => {
             </div>
             {errors.name && (
               <p className="text-red-600 text-sm">{errors.name.message}</p>
+            )}
+          </div>
+          {/* Slug */}
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium">Slug do produto</label>
+            <div className="flex items-center bg-neutral-100 px-3 py-2 rounded-full">
+              <RectangleEllipsis
+                className="text-primary-foreground"
+                size={20}
+              />
+              <input
+                {...register("slug")}
+                className="ml-2 w-full bg-transparent outline-none placeholder:text-neutral-500"
+                type="text"
+                placeholder="Ex: Camisa Polo"
+                required
+              />
+            </div>
+            {errors.slug && (
+              <p className="text-red-600 text-sm">{errors.slug.message}</p>
             )}
           </div>
 
