@@ -16,7 +16,7 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <div
       title={`Visitar pagina do produto: ${product.name}`}
-      onClick={() => router.push("/produto/" + product.id)}
+      onClick={() => router.push("/produto/" + product.slug)}
       className="relative cursor-pointer bg-transparent transition-transform duration-300 ease-in-out flex flex-col overflow-hidden"
     >
       {/* Imagem do Produto */}

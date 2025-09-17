@@ -1,11 +1,11 @@
 import ProductDetails from "./product-details";
 import BackBtn from "@/components/buttons/back-btn";
-import { getProductById } from "@/lib/actions/products";
+import { getProductById, getProductBySlug } from "@/lib/actions/products";
 
 const ProductPage = async ({ params }: { params: any }) => {
-  const { id } = await params;
+  const { slug } = await params;
 
-  const product = await getProductById(Number(id));
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     return (

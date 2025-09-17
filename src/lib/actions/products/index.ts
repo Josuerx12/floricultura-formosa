@@ -26,7 +26,7 @@ export type ProductStateActionT = {
 
 export type Product = {
   id: number;
-  slug?: string;
+  slug?: string | null;
   name: string;
   subcategory_id?: number;
   stock_quantity: number;
@@ -431,6 +431,41 @@ export async function getAllProducts() {
 export async function getProductById(id: number) {
   const product = await prisma.product.findUnique({
     where: { id: Number(id) },
+    include: {
+      product_images: true,
+      subcategory: {
+        include: {
+          category: true,
+        },
+      },
+      promotions: {
+        where: {
+          start_date: { lte: new Date() },
+          end_date: { gte: new Date() },
+        },
+        orderBy: { start_date: "asc" },
+        take: 1,
+        select: {
+          discount_percentage: true,
+          end_date: true,
+          start_date: true,
+        },
+      },
+    },
+  });
+
+  if (!product) {
+    throw new Error("Producto não encontrado");
+  }
+
+  product.price = fromCents(product?.price);
+
+  return product;
+}
+
+export async function getProductBySlug(slug: string) {
+  const product = await prisma.product.findUnique({
+    where: { slug },
     include: {
       product_images: true,
       subcategory: {
