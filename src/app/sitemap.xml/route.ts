@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     "/rastreio",
   ];
 
-  const productsUrl = products.map((p) => `/produto/${p.id}`);
+  const productsUrl = products.map((p) => `/produto/${p.slug}`);
 
   const categoriesUrl = categories.map((c) => `/produtos/${c.slug}`);
 
