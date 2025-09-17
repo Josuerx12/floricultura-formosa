@@ -73,7 +73,7 @@ const DetailProductModal = ({
     resolver: zodResolver(EditProductSchema),
     defaultValues: {
       name: product.name,
-      slug: product?.slug,
+      slug: product?.slug as any,
       description: product.description || "",
       price: product.price.toString().replace(".", ","),
       stock_quantity: product.stock_quantity,
@@ -85,7 +85,7 @@ const DetailProductModal = ({
   useEffect(() => {
     reset({
       name: product.name,
-      slug: product.slug,
+      slug: product.slug as any,
       description: product.description,
       price: product.price.toString().replace(".", ","),
       stock_quantity: product.stock_quantity,
