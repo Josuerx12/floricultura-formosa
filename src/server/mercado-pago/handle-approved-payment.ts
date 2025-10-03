@@ -75,7 +75,9 @@ ${
 
 *Para:* ${order.order_preferences[0].to}
 
-*Entregar:* _${order.order_preferences[0].delivery_date}_
+*Entregar:* _${order.order_preferences[0].delivery_date?.toLocaleDateString(
+        "pt-BR"
+      )}_
 
 _Agradecemos pela sua compra! 🌷_
 `
