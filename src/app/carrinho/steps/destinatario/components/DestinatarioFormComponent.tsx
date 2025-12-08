@@ -48,7 +48,6 @@ const DestinatarioFormComponent = () => {
           }}
           placeholder="(22) 99999-9999"
           required
-          className="bg-white"
         />
       </label>
       <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
