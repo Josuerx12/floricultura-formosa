@@ -37,13 +37,14 @@ const DestinatarioFormComponent = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <label className="flex items-center gap-3 bg-neutral-100 hover:bg-neutral-200 p-3 rounded-xl transition">
+        <span className="font-bold text-sm">Numero de telefone</span>
         <Input
           {...register("phone")}
           ref={phoneInputRef}
           onChange={(e) => {
             setValue("phone", e.target.value);
           }}
-          placeholder="Numero de telefone"
+          placeholder="22 99999-9999"
           required
         />
       </label>
