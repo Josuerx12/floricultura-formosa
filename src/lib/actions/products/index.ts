@@ -164,6 +164,9 @@ export async function EditProduct({
       const slug = await tx.product.findUnique({
         where: {
           slug: rawObject.slug,
+          NOT: {
+            id: product.id,
+          },
         },
         select: {
           slug: true,

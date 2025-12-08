@@ -164,7 +164,7 @@ export async function EditCategoryAction(
       },
     });
     const categoryName = await prisma.category.findFirst({
-      where: { name: rawObject.name },
+      where: { name: rawObject.name, NOT: { id: Number(rawObject.id) } },
       select: {
         name: true,
       },

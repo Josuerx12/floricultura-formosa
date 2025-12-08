@@ -151,7 +151,7 @@ export async function EditSubCategoryAction(
     }
 
     const subCategorySlug = await prisma.subcategory.findFirst({
-      where: { slug: rawObject.slug },
+      where: { slug: rawObject.slug, NOT: { id: subCategory.id } },
       select: {
         name: true,
       },
