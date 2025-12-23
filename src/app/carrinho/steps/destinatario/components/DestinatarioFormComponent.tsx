@@ -25,27 +25,26 @@ const DestinatarioFormComponent = () => {
   const router = useRouter();
 
   const onSubmit = (data: any) => {
-    thirdStep(data.phone, data.message, data.to, data.from);
+    const phoneWithCountry = `55${data.phone.replace(/\D/g, "")}`;
+
+    thirdStep(phoneWithCountry, data.message, data.to, data.from);
     router.push("/carrinho/steps/resumo");
   };
 
   const phoneInputRef = useMask({
-    mask: "55 (__) _____-____",
+    mask: "(__) _____-____",
     replacement: { _: /\d/ },
   });
 
-  // Função para remover o prefixo 55 do telefone
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value;
-    // Remove qualquer espaço, parêntese ou hífen para checar o prefixo
+  const normalizePhone = (value: string) => {
     const digits = value.replace(/\D/g, "");
-    if (digits.startsWith("55")) {
-      // Remove o 55 do início
-      value = value.replace(/^55\s?/, "");
-      // Remove o 55 dos dígitos
-      value = value.replace(/^55/, "");
+
+    // Se o usuário digitou ou colou 55 + número
+    if (digits.startsWith("55") && digits.length > 11) {
+      return digits.slice(2);
     }
-    setValue("phone", value);
+
+    return digits;
   };
 
   return (
@@ -57,7 +56,10 @@ const DestinatarioFormComponent = () => {
         <Input
           {...register("phone")}
           ref={phoneInputRef}
-          onChange={handlePhoneChange}
+          onChange={(e) => {
+            const normalized = normalizePhone(e.target.value);
+            setValue("phone", normalized, { shouldDirty: true });
+          }}
           placeholder="(22) 99999-9999"
           required
         />
