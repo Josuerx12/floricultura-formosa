@@ -34,6 +34,20 @@ const DestinatarioFormComponent = () => {
     replacement: { _: /\d/ },
   });
 
+  // Função para remover o prefixo 55 do telefone
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+    // Remove qualquer espaço, parêntese ou hífen para checar o prefixo
+    const digits = value.replace(/\D/g, "");
+    if (digits.startsWith("55")) {
+      // Remove o 55 do início
+      value = value.replace(/^55\s?/, "");
+      // Remove o 55 dos dígitos
+      value = value.replace(/^55/, "");
+    }
+    setValue("phone", value);
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <label className="flex flex-col gap-2 bg-neutral-100 hover:bg-neutral-200 p-4 rounded-xl transition cursor-pointer">
@@ -43,9 +57,7 @@ const DestinatarioFormComponent = () => {
         <Input
           {...register("phone")}
           ref={phoneInputRef}
-          onChange={(e) => {
-            setValue("phone", e.target.value);
-          }}
+          onChange={handlePhoneChange}
           placeholder="(22) 99999-9999"
           required
         />
