@@ -79,7 +79,7 @@ const Footer = () => {
                 target="_blank"
                 href="https://api.whatsapp.com/send?phone=5522999712066&text=Ol%C3%A1%20estou%20acessando%20atrav%C3%A9s%20do%20site%20da%20floricultura%20e%20preciso%20de%20ajuda..."
               >
-                (22) 9 99712-0066 - 08:00 às 18:00 (Seg à Sex) e 08:00 à 12:00
+                (22) 9 9971-2066 - 08:00 às 18:00 (Seg à Sex) e 08:00 à 12:00
                 aos sábados.
               </Link>
             </li>
