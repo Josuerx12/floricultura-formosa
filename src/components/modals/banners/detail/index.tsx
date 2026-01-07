@@ -86,7 +86,7 @@ const DetailBannerModal = ({
 
     formData.append("id", banner.id?.toString());
     formData.append("title", data.title);
-    formData.append("redirect_url", data.redirect_url);
+    formData.append("redirect_url", data.url);
     formData.append("is_active", data.isActive?.toString());
     formData.append("file", photos[0]);
 
