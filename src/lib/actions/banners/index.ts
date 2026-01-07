@@ -121,7 +121,7 @@ export async function editBanner({
   }
 
   if (data.url) {
-    banner.url = data.url;
+    banner.redirect_url = data.url;
   }
 
   await prisma.banners.update({
