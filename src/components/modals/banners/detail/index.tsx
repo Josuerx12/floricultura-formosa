@@ -62,7 +62,7 @@ const DetailBannerModal = ({
     defaultValues: {
       isActive: banner.is_active,
       title: banner.title,
-      url: banner.redirect_url,
+      url: banner?.redirect_url,
     },
   });
 
