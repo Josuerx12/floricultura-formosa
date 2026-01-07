@@ -24,7 +24,7 @@ export type FileType = (typeof fileTypes)[keyof typeof fileTypes];
 export async function uploadFileAWS(file: File, type?: string) {
   const fileNameWithoutExt =
     new Date().getTime() +
-    file.name.replace(/\.[^/.]+$/, "").replace(/\s+/g, "-");
+    file.name?.replace(/\.[^/.]+$/, "")?.replace(/\s+/g, "-");
   const fileKey = `${fileNameWithoutExt}.webp`;
 
   let bucket: string;

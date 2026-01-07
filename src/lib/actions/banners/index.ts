@@ -112,7 +112,7 @@ export async function editBanner(data: FormData) {
     throw new Error("Banner com o id informado não foi encontrado.");
   }
 
-  if (file && banner.file_key) {
+  if (file && (await file.arrayBuffer()).byteLength > 0 && banner.file_key) {
     await deleteFileAWS(banner.file_key, banner.bucket);
 
     const fileData = await uploadFileAWS(file, fileTypes.BANNER);
