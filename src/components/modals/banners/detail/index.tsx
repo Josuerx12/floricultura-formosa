@@ -81,6 +81,8 @@ const DetailBannerModal = ({
 
   async function OnSubmit(data: any) {
     const formData = new FormData();
+
+    formData.append("id", banner.id.toString());
     formData.append("title", data.title);
     formData.append("redirect_url", data.redirect_url);
     formData.append("is_active", data.isActive.toString());
