@@ -60,6 +60,8 @@ const DetailBannerModal = ({
       toast({
         title: data.message,
       });
+      setPhotos([]);
+      setPreviewImages([]);
       query.invalidateQueries({ queryKey: ["banners"] });
     },
     onError: (err) => {
@@ -178,16 +180,14 @@ const DetailBannerModal = ({
                 id="photos-input"
                 type="file"
                 multiple={false}
-                required
+                required={false}
                 className="hidden"
                 placeholder="Descrição do produto!"
               />
             </label>
           )}
 
-          {previewImages.length <= 0 ? (
-            <p>Nenhuma foto selecionada para o produto!</p>
-          ) : (
+          {previewImages.length > 0 && (
             <div className="flex gap-2 mt-2">
               {previewImages.map((src, index) => (
                 <img

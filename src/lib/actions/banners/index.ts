@@ -130,7 +130,7 @@ export async function editBanner(data: FormData) {
     banner.title = title;
   }
 
-  if (redirect_url && redirect_url.length > 1) {
+  if (redirect_url) {
     banner.redirect_url = redirect_url;
   }
 
