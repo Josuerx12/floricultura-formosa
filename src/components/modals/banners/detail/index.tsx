@@ -16,6 +16,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Ban,
   Calendar,
+  CloudUpload,
   Link,
   Loader,
   Pen,
@@ -35,6 +36,18 @@ const DetailBannerModal = ({
   banner: Banner;
 }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
+
+  const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const selectedFiles = Array.from(event.target.files);
+      setPhotos(selectedFiles);
+
+      const previews = selectedFiles.map((file) => URL.createObjectURL(file));
+      setPreviewImages(previews);
+    }
+  };
 
   const query = useQueryClient();
 
@@ -67,7 +80,13 @@ const DetailBannerModal = ({
   });
 
   async function OnSubmit(data: any) {
-    await mutateAsync({ id: banner.id, data });
+    const formData = new FormData();
+    formData.append("title", data.title);
+    formData.append("redirect_url", data.redirect_url);
+    formData.append("is_active", data.isActive.toString());
+    formData.append("file", photos[0]);
+
+    await mutateAsync(formData);
   }
 
   return (
@@ -143,6 +162,41 @@ const DetailBannerModal = ({
               defaultValue={banner.created_at?.toLocaleString("pt-BR")}
             />
           </label>
+
+          {isEditing && (
+            <label
+              aria-required
+              htmlFor="photos-input"
+              className="flex flex-grow cursor-pointer bg-neutral-200 p-2 gap-2 rounded-3xl"
+            >
+              <CloudUpload className="text-primary-foreground" size={24} />
+              <p>Clique aqui para adicionar o banner</p>
+              <input
+                onChange={handlePhotoChange}
+                id="photos-input"
+                type="file"
+                multiple={false}
+                required
+                className="hidden"
+                placeholder="Descrição do produto!"
+              />
+            </label>
+          )}
+
+          {previewImages.length <= 0 ? (
+            <p>Nenhuma foto selecionada para o produto!</p>
+          ) : (
+            <div className="flex gap-2 mt-2">
+              {previewImages.map((src, index) => (
+                <img
+                  key={index}
+                  src={src}
+                  alt={`Preview ${index}`}
+                  className="w-20 h-20 object-cover rounded-md"
+                />
+              ))}
+            </div>
+          )}
 
           {isEditing && (
             <div className="flex gap-2 items-center">

@@ -1,6 +1,6 @@
 "use server";
 import { dataTagErrorSymbol } from "@tanstack/react-query";
-import { fileTypes, uploadFileAWS } from "../aws";
+import { deleteFileAWS, fileTypes, uploadFileAWS } from "../aws";
 import { prisma } from "@/lib/db/prisma";
 import { auth } from "@/lib/auth/auth";
 import { Prisma, UserRoles } from "@prisma/client";
@@ -83,13 +83,13 @@ export async function deleteBanner({ id }: { id: number }) {
   };
 }
 
-export async function editBanner({
-  id,
-  data,
-}: {
-  id: number;
-  data: { isActive: boolean; title: string; url: string };
-}) {
+export async function editBanner(data: FormData) {
+  const id = Number(data.get("id")) || 0;
+  const title = data.get("title") as string;
+  const redirect_url = data.get("redirect_url") as string;
+  const isActive = data.get("isActive") as string;
+  const file = data.get("file") as File | null | undefined;
+
   const session = await auth();
 
   if (!session) {
@@ -112,16 +112,26 @@ export async function editBanner({
     throw new Error("Banner com o id informado não foi encontrado.");
   }
 
-  if (typeof data.isActive == "boolean") {
-    banner.is_active = data.isActive;
+  if (file && banner.file_key) {
+    await deleteFileAWS(banner.file_key, banner.bucket);
+
+    const fileData = await uploadFileAWS(file, fileTypes.BANNER);
+
+    banner.file_key = fileData.fileKey;
+    banner.bucket = fileData.bucket;
+    banner.url = fileData.url;
   }
 
-  if (data.title && data.title.length > 1) {
-    banner.title = data.title;
+  if (typeof isActive == "boolean") {
+    banner.is_active = isActive;
   }
 
-  if (data.url) {
-    banner.redirect_url = data.url;
+  if (title && title.length > 1) {
+    banner.title = title;
+  }
+
+  if (redirect_url && redirect_url.length > 1) {
+    banner.redirect_url = redirect_url;
   }
 
   await prisma.banners.update({
