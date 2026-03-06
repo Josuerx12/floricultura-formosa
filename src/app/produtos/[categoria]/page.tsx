@@ -63,10 +63,10 @@ const CategoryPage = async ({
     },
     take: perPage,
     skip: (page - 1) * perPage,
-    orderBy: {
-      priority: "asc",
-      created_at: "desc",
-    },
+    orderBy: [
+      { priority: "desc" },
+      { created_at: "desc" },
+    ],
   });
 
   if (!products || products.length <= 0) {

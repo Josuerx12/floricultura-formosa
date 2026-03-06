@@ -73,7 +73,7 @@ const ProdutosSubcategoria = async ({
     take: perPage,
     skip: (page - 1) * perPage,
     orderBy: {
-      priority: "asc",
+      priority: "desc",
       created_at: "desc",
     },
   });
