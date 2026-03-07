@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Loader2, CalendarIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { format } from "date-fns";
+import { format, isBefore, startOfDay } from "date-fns";
 import DatePicker from "react-datepicker";
 import { useRouter } from "next/navigation";
 
@@ -27,6 +27,8 @@ const EnderecoFormComponent = ({ user }: { user: User }) => {
 
   const exceptionList: string[] = ["2025-06-08T10:00", "2025-06-14T13:00"];
 
+  const exceptionDates = ["2026-03-07", "2026-03-08"];
+
   useEffect(() => {
     if (products.length <= 0) {
       router.push("/");
@@ -34,32 +36,35 @@ const EnderecoFormComponent = ({ user }: { user: User }) => {
   }, [products, router]);
 
   const isDateBlocked = (date: Date) => {
-    const now = new Date();
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+  const now = new Date();
+  const today = startOfDay(now);
 
-    for (const exception of exceptionList) {
-      const [exceptionDate, exceptionHour] = exception.split("T");
-      const exceptionDateTime = new Date(exception);
+  const selectedDate = format(date, "yyyy-MM-dd");
 
-      const selectedDate = format(date, "yyyy-MM-dd");
+  // ✅ EXCEÇÕES (prioridade máxima)
+  if (exceptionDates.includes(selectedDate)) {
+    return now.getHours() >= 18;
+  }
 
-      if (selectedDate === exceptionDate && date <= exceptionDateTime) {
-        return false;
-      }
-    }
+  const day = date.getDay();
+  const hour = date.getHours();
 
-    const day = date.getDay();
-    const hour = date.getHours();
+  // ❌ datas passadas
+  if (isBefore(date, today)) return true;
 
-    if (date < today) return true;
-    if (date.toDateString() === now.toDateString() && now.getHours() >= 16)
-      return true;
-    if (day === 0) return true;
-    if (day === 6 && hour >= 12) return true;
+  // ❌ pedidos no mesmo dia após 16h
+  if (date.toDateString() === now.toDateString() && now.getHours() >= 16) {
+    return true;
+  }
 
-    return false;
-  };
+  // ❌ domingo bloqueado
+  if (day === 0) return true;
+
+  // ❌ sábado após meio dia
+  if (day === 6 && hour >= 12) return true;
+
+  return false;
+};
 
   const onSubmit = () => {
     if (!selectedDate || isDateBlocked(selectedDate)) {
