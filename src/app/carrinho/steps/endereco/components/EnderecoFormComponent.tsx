@@ -39,29 +39,30 @@ const isDateBlocked = (date: Date) => {
 
   const todayStr = format(now, "yyyy-MM-dd");
 
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tomorrow = new Date(now);
+  tomorrow.setDate(now.getDate() + 1);
   const tomorrowStr = format(tomorrow, "yyyy-MM-dd");
 
-  const exceptionDates = [todayStr, tomorrowStr];
-
-  // ✅ EXCEÇÃO: hoje e amanhã liberados até 18h
-  if (exceptionDates.includes(selectedDate)) {
+  // 🚨 EXCEÇÃO TEMPORÁRIA
+  if (selectedDate === todayStr || selectedDate === tomorrowStr) {
     return now.getHours() >= 18;
   }
 
   const day = date.getDay();
-  const hour = date.getHours();
 
+  // datas passadas
   if (isBefore(date, today)) return true;
 
+  // regra normal do sistema
   if (date.toDateString() === now.toDateString() && now.getHours() >= 16) {
     return true;
   }
 
+  // domingo bloqueado
   if (day === 0) return true;
 
-  if (day === 6 && hour >= 12) return true;
+  // sábado bloqueado
+  if (day === 6) return true;
 
   return false;
 };
