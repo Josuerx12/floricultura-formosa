@@ -35,13 +35,21 @@ const EnderecoFormComponent = ({ user }: { user: User }) => {
     }
   }, [products, router]);
 
-  const isDateBlocked = (date: Date) => {
+const isDateBlocked = (date: Date) => {
   const now = new Date();
   const today = startOfDay(now);
 
   const selectedDate = format(date, "yyyy-MM-dd");
 
-  // ✅ EXCEÇÕES (prioridade máxima)
+  const todayStr = format(now, "yyyy-MM-dd");
+
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tomorrowStr = format(tomorrow, "yyyy-MM-dd");
+
+  const exceptionDates = [todayStr, tomorrowStr];
+
+  // ✅ EXCEÇÃO: hoje e amanhã liberados até 18h
   if (exceptionDates.includes(selectedDate)) {
     return now.getHours() >= 18;
   }
@@ -49,18 +57,14 @@ const EnderecoFormComponent = ({ user }: { user: User }) => {
   const day = date.getDay();
   const hour = date.getHours();
 
-  // ❌ datas passadas
   if (isBefore(date, today)) return true;
 
-  // ❌ pedidos no mesmo dia após 16h
   if (date.toDateString() === now.toDateString() && now.getHours() >= 16) {
     return true;
   }
 
-  // ❌ domingo bloqueado
   if (day === 0) return true;
 
-  // ❌ sábado após meio dia
   if (day === 6 && hour >= 12) return true;
 
   return false;
