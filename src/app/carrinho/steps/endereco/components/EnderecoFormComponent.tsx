@@ -25,10 +25,6 @@ const EnderecoFormComponent = ({ user }: { user: User }) => {
   const router = useRouter();
   const addressRef = useRef<HTMLInputElement | null>(null); // para capturar o endereço selecionado
 
-  const exceptionList: string[] = ["2025-06-08T10:00", "2025-06-14T13:00"];
-
-  const exceptionDates = ["2026-03-07", "2026-03-08"];
-
   useEffect(() => {
     if (products.length <= 0) {
       router.push("/");
