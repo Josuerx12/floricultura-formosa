@@ -35,18 +35,6 @@ const isDateBlocked = (date: Date) => {
   const now = new Date();
   const today = startOfDay(now);
 
-  const selectedDate = format(date, "yyyy-MM-dd");
-
-  const todayStr = format(now, "yyyy-MM-dd");
-
-  const tomorrow = new Date(now);
-  tomorrow.setDate(now.getDate() + 1);
-  const tomorrowStr = format(tomorrow, "yyyy-MM-dd");
-
-  // 🚨 EXCEÇÃO TEMPORÁRIA
-  if (selectedDate === todayStr || selectedDate === tomorrowStr) {
-    return now.getHours() >= 18;
-  }
 
   const day = date.getDay();
 
@@ -62,7 +50,7 @@ const isDateBlocked = (date: Date) => {
   if (day === 0) return true;
 
   // sábado bloqueado
-  if (day === 6) return true;
+  if (day === 6) return date?.getHours() >= 12;
 
   return false;
 };
